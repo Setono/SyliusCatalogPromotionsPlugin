@@ -6,9 +6,11 @@ namespace Setono\SyliusCatalogPromotionPlugin\Command;
 
 use DateTimeInterface;
 use Doctrine\ORM\EntityRepository;
-use function Safe\file_get_contents;
-use function Safe\file_put_contents;
-use function Safe\sprintf;
+use Setono\JobStatusBundle\Entity\JobInterface;
+use Setono\JobStatusBundle\Entity\Spec\LastJobWithType;
+use Setono\JobStatusBundle\Factory\JobFactoryInterface;
+use Setono\JobStatusBundle\Manager\JobManagerInterface;
+use Setono\JobStatusBundle\Repository\JobRepositoryInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\ChannelPricingRepositoryInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\ProductRepositoryInterface;
@@ -22,49 +24,59 @@ use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Container;
 use Webmozart\Assert\Assert;
 
 final class ProcessPromotionsCommand extends Command
 {
     use LockableTrait;
 
+    private const JOB_TYPE = 'sscp_process_promotions';
+
     protected static $defaultName = 'setono:sylius-catalog-promotion:process';
 
-    /** @var ChannelPricingRepositoryInterface */
-    private $channelPricingRepository;
+    private JobRepositoryInterface $jobRepository;
 
-    /** @var ProductRepositoryInterface */
-    private $productRepository;
+    private JobFactoryInterface $jobFactory;
 
-    /** @var ProductVariantRepositoryInterface */
-    private $productVariantRepository;
+    private JobManagerInterface $jobManager;
 
-    /** @var PromotionRepositoryInterface */
-    private $promotionRepository;
+    private ChannelPricingRepositoryInterface $channelPricingRepository;
 
-    /** @var ServiceRegistryInterface */
-    private $ruleRegistry;
+    private ProductRepositoryInterface $productRepository;
 
-    /** @var string */
-    private $logsDir;
+    private ProductVariantRepositoryInterface $productVariantRepository;
 
+    private PromotionRepositoryInterface $promotionRepository;
+
+    private ServiceRegistryInterface $ruleRegistry;
+
+    private int $jobTtl;
+
+    /**
+     * @param int $jobTtl the ttl we set for the job (in seconds)
+     */
     public function __construct(
+        JobRepositoryInterface $jobRepository,
+        JobFactoryInterface $jobFactory,
+        JobManagerInterface $jobManager,
         ChannelPricingRepositoryInterface $channelPricingRepository,
         ProductRepositoryInterface $productRepository,
         ProductVariantRepositoryInterface $productVariantRepository,
         PromotionRepositoryInterface $promotionRepository,
         ServiceRegistryInterface $ruleRegistry,
-        string $logsDir
+        int $jobTtl
     ) {
         parent::__construct();
 
+        $this->jobRepository = $jobRepository;
+        $this->jobFactory = $jobFactory;
+        $this->jobManager = $jobManager;
         $this->channelPricingRepository = $channelPricingRepository;
         $this->productRepository = $productRepository;
         $this->productVariantRepository = $productVariantRepository;
         $this->promotionRepository = $promotionRepository;
         $this->ruleRegistry = $ruleRegistry;
-        $this->logsDir = $logsDir;
+        $this->jobTtl = $jobTtl;
     }
 
     protected function configure(): void
@@ -79,26 +91,48 @@ final class ProcessPromotionsCommand extends Command
     {
         Assert::isInstanceOf($this->productVariantRepository, EntityRepository::class);
 
-        if (!$this->lock()) {
-            $output->writeln('The command is already running in another process.');
+        /** @var JobInterface|mixed|null $lastJob */
+        $lastJob = $this->jobRepository->matchOneOrNullResult(new LastJobWithType(self::JOB_TYPE));
+        Assert::nullOrIsInstanceOf($lastJob, JobInterface::class);
+
+        if (null !== $lastJob && $lastJob->isRunning()) {
+            $output->writeln('The job is already running');
 
             return 0;
         }
 
-        /** @var bool $force */
-        $force = $input->getOption('force');
-        $startTime = new \DateTime();
+        $force = true === $input->getOption('force');
 
-        /** @var PromotionInterface[] $promotions */
         $promotions = $this->promotionRepository->findForProcessing();
-
         $promotionIds = array_map(static function (PromotionInterface $promotion): int {
             return (int) $promotion->getId();
         }, $promotions);
 
+        if (!$force && !$this->isProcessingAllowed($promotionIds, $lastJob)) {
+            $output->writeln(
+                'Nothing to process at the moment. Run command with --force option to force process',
+                OutputInterface::VERBOSITY_VERBOSE
+            );
+
+            return 0;
+        }
+
+        $job = $this->jobFactory->createNew();
+        $job->setExclusive(true);
+        $job->setType(self::JOB_TYPE);
+        $job->setName('Sylius Catalog Promotion plugin: Process promotions');
+        $job->setTtl($this->jobTtl);
+        $job->setMetadataEntry('promotions', $promotionIds);
+
+        $this->jobManager->start($job, 3);
+
+        $startTime = $job->getStartedAt();
+        Assert::notNull($startTime);
+
         $bulkIdentifier = uniqid('bulk-', true);
 
-        $this->channelPricingRepository->resetMultiplier($startTime);
+        $this->channelPricingRepository->resetMultiplier($startTime, $bulkIdentifier);
+        $this->jobManager->advance($job);
 
         foreach ($promotions as $promotion) {
             $qb = $this->productVariantRepository->createQueryBuilder('o');
@@ -114,13 +148,13 @@ final class ProcessPromotionsCommand extends Command
                     continue;
                 }
 
-                if (!$this->ruleRegistry->has($rule->getType())) {
+                if (!$this->ruleRegistry->has((string) $rule->getType())) {
                     // todo should this throw an exception or give an error somewhere?
                     continue;
                 }
 
                 /** @var RuleInterface $ruleQueryBuilder */
-                $ruleQueryBuilder = $this->ruleRegistry->get($rule->getType());
+                $ruleQueryBuilder = $this->ruleRegistry->get((string) $rule->getType());
 
                 $ruleQueryBuilder->filter($qb, $rule->getConfiguration());
             }
@@ -131,9 +165,12 @@ final class ProcessPromotionsCommand extends Command
 
             do {
                 $qb->setFirstResult($i * $bulkSize);
+
+                /** @var array<array-key, int> $productVariantIds */
                 $productVariantIds = $qb->getQuery()->getResult();
 
                 $this->channelPricingRepository->updateMultiplier(
+                    (string) $promotion->getCode(),
                     $promotion->getMultiplier(),
                     $productVariantIds,
                     $promotion->getChannelCodes(),
@@ -147,33 +184,37 @@ final class ProcessPromotionsCommand extends Command
             } while (count($productVariantIds) !== 0);
         }
 
-        $this->channelPricingRepository->updatePrices($startTime, $bulkIdentifier);
+        $this->jobManager->advance($job);
 
-        $this->setExecution([
-            'start' => $startTime,
-            'end' => new \DateTime(),
-            'promotions' => $promotionIds,
-        ]);
+        $this->channelPricingRepository->updatePrices($bulkIdentifier);
+
+        $this->jobManager->advance($job);
+        $this->jobManager->finish($job);
 
         return 0;
     }
 
-    private function isProcessingAllowed(array $promotionIds): bool
+    private function isProcessingAllowed(array $promotionIds, ?JobInterface $lastJob): bool
     {
-        // If there was no executions - we can process
-        $lastExecution = $this->getLastExecution();
-        if (null === $lastExecution) {
+        // if there isn't no last job we can just process
+        if (null === $lastJob) {
             return true;
         }
+
+        $lastPromotionIds = $lastJob->getMetadataEntry('promotions');
+        Assert::isArray($lastPromotionIds);
 
         // If last execution promotions not exact same as found for processing
         // or not at the same order - we can process
-        if ($lastExecution['promotions'] !== $promotionIds) {
+        if ($lastPromotionIds !== $promotionIds) {
             return true;
         }
 
+        $lastJobStartedAt = $lastJob->getStartedAt();
+        Assert::notNull($lastJobStartedAt);
+
         // If any relevant entities were updated - we can process
-        if ($this->hasAnyBeenUpdatedSince($lastExecution['start'])) {
+        if ($this->hasAnyBeenUpdatedSince($lastJobStartedAt)) {
             return true;
         }
 
@@ -188,45 +229,6 @@ final class ProcessPromotionsCommand extends Command
             $this->productVariantRepository->hasAnyBeenUpdatedSince($dateTime) ||
             $this->channelPricingRepository->hasAnyBeenUpdatedSince($dateTime) ||
             $this->promotionRepository->hasAnyBeenUpdatedSince($dateTime)
-        ;
-    }
-
-    // @todo Move storing last execution data to some memory storage / cache?
-    private function getLastExecution(): ?array
-    {
-        $filename = $this->getExecutionLogFilename();
-
-        if (!file_exists($filename)) {
-            return null;
-        }
-
-        $execution = unserialize(file_get_contents($filename), [
-            'allowed_classes' => true,
-        ]);
-
-        if (false === $execution) {
-            return null;
-        }
-
-        // validate contents
-        if (!isset($execution['start'], $execution['end'], $execution['promotions'])) {
-            return null;
-        }
-
-        return $execution;
-    }
-
-    private function setExecution(array $execution): void
-    {
-        $filename = $this->getExecutionLogFilename();
-
-        file_put_contents($filename, serialize($execution));
-    }
-
-    private function getExecutionLogFilename(): string
-    {
-        return sprintf('%s/%s.log',
-            $this->logsDir, Container::underscore(str_replace('\\', '', get_class($this)))
-        );
+            ;
     }
 }

@@ -8,8 +8,8 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use RuntimeException;
-use function Safe\sprintf;
 use Setono\SyliusCatalogPromotionPlugin\Model\ChannelPricingInterface;
+use function sprintf;
 
 final class AddChannelPricingIndicesSubscriber implements EventSubscriber
 {
@@ -34,6 +34,7 @@ final class AddChannelPricingIndicesSubscriber implements EventSubscriber
 
         $columnName = $metadata->getColumnName('multiplier');
 
+        /** @psalm-suppress PropertyTypeCoercion */
         $metadata->table = array_merge_recursive([
             'indexes' => [
                 [

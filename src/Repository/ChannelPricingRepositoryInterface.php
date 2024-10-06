@@ -9,14 +9,15 @@ use DateTimeInterface;
 interface ChannelPricingRepositoryInterface extends HasAnyBeenUpdatedSinceRepositoryInterface
 {
     /**
-     * This could reset the multiplier on ALL channel pricing
+     * This resets the multiplier on all channel pricings
      */
-    public function resetMultiplier(DateTimeInterface $dateTime): void;
+    public function resetMultiplier(DateTimeInterface $dateTime, string $bulkIdentifier): void;
 
     /**
      * @param bool $exclusive If true this method will overwrite the multiplier instead of multiplying it
      */
     public function updateMultiplier(
+        string $promotionCode,
         float $multiplier,
         array $productVariantIds,
         array $channelCodes,
@@ -27,7 +28,7 @@ interface ChannelPricingRepositoryInterface extends HasAnyBeenUpdatedSinceReposi
     ): void;
 
     /**
-     * This method will update ALL channel prices based on the multiplier and updated after $dateTime
+     * This method will update ALL channel prices in the given bulk
      */
-    public function updatePrices(DateTimeInterface $dateTime, string $bulkIdentifier): void;
+    public function updatePrices(string $bulkIdentifier): void;
 }

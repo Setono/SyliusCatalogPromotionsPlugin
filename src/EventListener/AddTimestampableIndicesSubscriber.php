@@ -9,14 +9,17 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use RuntimeException;
-use function Safe\sprintf;
+use function sprintf;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 
 final class AddTimestampableIndicesSubscriber implements EventSubscriber
 {
-    /** @var array */
-    private $classes;
+    /** @var array<array-key, class-string> */
+    private array $classes;
 
+    /**
+     * @param array<array-key, class-string> $classes
+     */
     public function __construct(array $classes)
     {
         $this->classes = $classes;
@@ -48,7 +51,9 @@ final class AddTimestampableIndicesSubscriber implements EventSubscriber
 
         if (!is_subclass_of($metadata->name, TimestampableInterface::class, true)) {
             throw new RuntimeException(sprintf(
-                'The class %s must implement the interface, %s', $metadata->name, TimestampableInterface::class
+                'The class %s must implement the interface, %s',
+                $metadata->name,
+                TimestampableInterface::class
             ));
         }
 
@@ -65,6 +70,7 @@ final class AddTimestampableIndicesSubscriber implements EventSubscriber
             ];
         }
 
+        /** @psalm-suppress PropertyTypeCoercion */
         $metadata->table = array_merge_recursive([
             'indexes' => $indices,
         ], $metadata->table);

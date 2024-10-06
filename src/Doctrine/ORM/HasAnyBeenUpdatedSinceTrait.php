@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM;
 
 use DateTimeInterface;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityRepository;
 
+/**
+ * @mixin EntityRepository
+ */
 trait HasAnyBeenUpdatedSinceTrait
 {
-    /**
-     * @return QueryBuilder
-     */
-    abstract public function createQueryBuilder($alias, $indexBy = null);
-
     public function hasAnyBeenUpdatedSince(DateTimeInterface $dateTime): bool
     {
         $qb = $this->createQueryBuilder('o')
@@ -29,9 +27,9 @@ trait HasAnyBeenUpdatedSinceTrait
          */
 
         $updated = (int) $qb
-            ->andWhere('o.updatedAt is not null', 'o.updatedAt > :date')
-            ->getQuery()
-            ->getSingleScalarResult() > 0
+                ->andWhere('o.updatedAt is not null', 'o.updatedAt > :date')
+                ->getQuery()
+                ->getSingleScalarResult() > 0
         ;
 
         if ($updated) {
@@ -44,6 +42,6 @@ trait HasAnyBeenUpdatedSinceTrait
                 ->andWhere('o.createdAt is not null', 'o.createdAt > :date')
                 ->getQuery()
                 ->getSingleScalarResult() > 0
-        ;
+            ;
     }
 }

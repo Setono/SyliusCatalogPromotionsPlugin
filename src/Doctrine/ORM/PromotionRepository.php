@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM;
 
-use Safe\DateTime;
+use DateTime;
+use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Webmozart\Assert\Assert;
 
 class PromotionRepository extends EntityRepository implements PromotionRepositoryInterface
 {
@@ -16,7 +18,7 @@ class PromotionRepository extends EntityRepository implements PromotionRepositor
     {
         $dt = new DateTime();
 
-        return $this->createQueryBuilder('o')
+        $res = $this->createQueryBuilder('o')
             ->andWhere('o.enabled = true')
             ->andWhere('SIZE(o.channels) > 0')
             ->andWhere('o.startsAt is null OR o.startsAt <= :date')
@@ -27,5 +29,10 @@ class PromotionRepository extends EntityRepository implements PromotionRepositor
             ->getQuery()
             ->getResult()
         ;
+
+        Assert::isArray($res);
+        Assert::allIsInstanceOf($res, PromotionInterface::class);
+
+        return $res;
     }
 }
