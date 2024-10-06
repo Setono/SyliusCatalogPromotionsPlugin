@@ -24,6 +24,9 @@ trait ChannelPricingTrait
      */
     protected $manuallyDiscounted = false;
 
+    /** @ORM\Column(type="text", nullable=true) */
+    protected ?string $manuallyDiscountedOrigin = null;
+
     /**
      * @ORM\Column(type="decimal", precision=8, scale=4, options={"default": 1})
      *
@@ -90,6 +93,16 @@ trait ChannelPricingTrait
     public function setManuallyDiscounted(bool $manuallyDiscounted): void
     {
         $this->manuallyDiscounted = $manuallyDiscounted;
+    }
+
+    public function getManuallyDiscountedOrigin(): ?string
+    {
+        return $this->manuallyDiscountedOrigin;
+    }
+
+    public function setManuallyDiscountedOrigin(?string $manuallyDiscountedOrigin): void
+    {
+        $this->manuallyDiscountedOrigin = $manuallyDiscountedOrigin;
     }
 
     public function getMultiplier(): float

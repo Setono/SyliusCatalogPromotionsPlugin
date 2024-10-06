@@ -20,7 +20,10 @@
         </service>
 
         <service id="setono_sylius_catalog_promotion.event_listener.update_manually_discounted_property"
-                 class="Setono\SyliusCatalogPromotionPlugin\EventListener\UpdateManuallyDiscountedPropertySubscriber">
+                 class="Setono\SyliusCatalogPromotionPlugin\EventListener\UpdateManuallyDiscountedPropertySubscriber"
+        >
+            <argument type="service" id="request_stack"/>
+
             <tag name="doctrine.event_subscriber"/>
         </service>
     </services>
