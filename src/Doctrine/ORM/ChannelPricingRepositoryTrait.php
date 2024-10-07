@@ -47,7 +47,7 @@ trait ChannelPricingRepositoryTrait
                             'o.bulkIdentifier is not null',
 
                             // if the applied promotions is not null we know that it was discounted before, and we reset it
-                            'o.appliedPromotions is not null'
+                            'o.usedPromotions is not null'
                         )
                     )
                     ->setParameter('bulkIdentifier', $bulkIdentifier)
@@ -62,7 +62,7 @@ trait ChannelPricingRepositoryTrait
                     ->set('o.multiplier', 1)
                     ->set('o.updatedAt', ':updatedAt')
                     ->set('o.bulkIdentifier', ':bulkIdentifier')
-                    ->set('o.appliedPromotions', ':null')
+                    ->set('o.usedPromotions', ':null')
                     ->andWhere('o.id IN (:ids)')
                     ->setParameter('updatedAt', $dateTime)
                     ->setParameter('bulkIdentifier', $bulkIdentifier)
@@ -114,15 +114,15 @@ trait ChannelPricingRepositoryTrait
             // here is another safety check. If the promotion code is already applied,
             // do not select this pricing for a discount
             ->andWhere($qb->expr()->orX(
-                'channelPricing.appliedPromotions IS NULL',
+                'channelPricing.usedPromotions IS NULL',
                 $qb->expr()->andX(
-                    'channelPricing.appliedPromotions NOT LIKE :promotionEnding',
-                    'channelPricing.appliedPromotions NOT LIKE :promotionMiddle',
+                    'channelPricing.usedPromotions NOT LIKE :promotionEnding',
+                    'channelPricing.usedPromotions NOT LIKE :promotionMiddle',
                 )
             ))
             ->set('channelPricing.updatedAt', ':date')
             ->set('channelPricing.bulkIdentifier', ':bulkIdentifier')
-            ->set('channelPricing.appliedPromotions', "CONCAT(COALESCE(channelPricing.appliedPromotions, ''), CONCAT(',', :promotion))")
+            ->set('channelPricing.usedPromotions', "CONCAT(COALESCE(channelPricing.usedPromotions, ''), CONCAT(',', :promotion))")
             ->setParameter('productVariantIds', $productVariantIds)
             ->setParameter('channelCodes', $channelCodes)
             ->setParameter('date', $dateTime)

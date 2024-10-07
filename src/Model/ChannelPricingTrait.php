@@ -57,6 +57,13 @@ trait ChannelPricingTrait
      */
     protected $updatedAt;
 
+    /**
+     * @ORM\Column(type="simple_array", nullable=true)
+     *
+     * @var array<array-key, string>
+     */
+    protected array $usedPromotions = [];
+
     public function hasDiscount(): bool
     {
         return null !== $this->getOriginalPrice()
@@ -118,5 +125,16 @@ trait ChannelPricingTrait
     public function resetBulkIdentifier(): void
     {
         $this->bulkIdentifier = null;
+    }
+
+
+    public function getUsedPromotions(): array
+    {
+        return $this->usedPromotions;
+    }
+
+    public function setUsedPromotions(array $usedPromotions): void
+    {
+        $this->usedPromotions = $usedPromotions;
     }
 }

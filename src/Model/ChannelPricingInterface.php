@@ -37,4 +37,8 @@ interface ChannelPricingInterface extends BaseChannelPricingInterface, Timestamp
     public function getBulkIdentifier(): ?string;
 
     public function resetBulkIdentifier(): void;
+
+    public function getUsedPromotions(): array;
+
+    public function addUsedPromotions(string $promotionCode): void;
 }
