@@ -40,5 +40,5 @@ interface ChannelPricingInterface extends BaseChannelPricingInterface, Timestamp
 
     public function getUsedPromotions(): array;
 
-    public function addUsedPromotions(string $promotionCode): void;
+    public function addUsedPromotion(string $usedPromotion): void;
 }

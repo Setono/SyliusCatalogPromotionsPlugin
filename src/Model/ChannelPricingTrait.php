@@ -133,8 +133,8 @@ trait ChannelPricingTrait
         return $this->usedPromotions;
     }
 
-    public function setUsedPromotions(array $usedPromotions): void
+    public function addUsedPromotion(string $usedPromotion): void
     {
-        $this->usedPromotions = $usedPromotions;
+        $this->usedPromotions[] = $usedPromotion;
     }
 }
