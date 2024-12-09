@@ -21,13 +21,11 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('setono_sylius_catalog_promotion');
+
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
-        /**
-         * @psalm-suppress MixedMethodCall
-         * @psalm-suppress PossiblyUndefinedMethod
-         * @psalm-suppress PossiblyNullReference
-         */
+        /** @psalm-suppress MixedMethodCall,PossiblyUndefinedMethod,UndefinedInterfaceMethod,PossiblyNullReference,UndefinedMethod */
         $rootNode
             ->addDefaultsIfNotSet()
             ->children()
@@ -42,11 +40,7 @@ final class Configuration implements ConfigurationInterface
 
     private function addResourcesSection(ArrayNodeDefinition $node): void
     {
-        /**
-         * @psalm-suppress MixedMethodCall
-         * @psalm-suppress PossiblyUndefinedMethod
-         * @psalm-suppress PossiblyNullReference
-         */
+        /** @psalm-suppress MixedMethodCall,PossiblyUndefinedMethod,UndefinedInterfaceMethod,PossiblyNullReference,UndefinedMethod */
         $node
             ->children()
                 ->arrayNode('resources')
@@ -80,13 +74,6 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('repository')->cannotBeEmpty()->end()
                                         ->scalarNode('factory')->defaultValue(Factory::class)->end()
                                         ->scalarNode('form')->defaultValue(PromotionRuleType::class)->cannotBeEmpty()->end()
-                                    ->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
         ;
     }
 }

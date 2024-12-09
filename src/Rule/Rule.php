@@ -25,10 +25,7 @@ abstract class Rule implements RuleInterface
             throw new RuntimeException('No root aliases');
         }
 
-        $rootAlias = $rootAliases[0];
-        Assert::string($rootAlias);
-
-        return $rootAlias;
+        return $rootAliases[0];
     }
 
     /**
@@ -36,16 +33,15 @@ abstract class Rule implements RuleInterface
      */
     protected function join(QueryBuilder $queryBuilder, string $join, string $aliasPrefix): string
     {
-        /** @psalm-var array<array-key, array<Join>> $existingJoins */
+        /** @var array<string, list<Join>> $existingJoins */
         $existingJoins = $queryBuilder->getDQLPart('join');
 
         $rootAlias = $this->getRootAlias($queryBuilder);
         Assert::keyExists($existingJoins, $rootAlias);
 
-        /** @var Join $existingJoin */
         foreach ($existingJoins[$rootAlias] as $existingJoin) {
             if ($existingJoin->getJoin() === $join) {
-                return $existingJoin->getAlias();
+                return (string) $existingJoin->getAlias();
             }
         }
 
@@ -55,10 +51,7 @@ abstract class Rule implements RuleInterface
         return $alias;
     }
 
-    /**
-     * @return mixed|null
-     */
-    protected static function getConfigurationValue(string $key, array $configuration, bool $optional = false)
+    protected static function getConfigurationValue(string $key, array $configuration, bool $optional = false): mixed
     {
         if (!$optional && !array_key_exists($key, $configuration)) {
             throw new InvalidArgumentException(sprintf('The key "%s" does not exist in the configuration', $key));

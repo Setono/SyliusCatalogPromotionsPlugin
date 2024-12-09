@@ -21,6 +21,7 @@
     </projectFiles>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
     </plugins>
     <forbiddenFunctions>
         <function name="dd"/>
@@ -29,4 +30,47 @@
         <function name="var_dump"/>
         <function name="print_r"/>
     </forbiddenFunctions>
+    <issueHandlers>
+        <MixedArgument>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MixedArgument>
+        <MixedReturnTypeCoercion>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MixedReturnTypeCoercion>
+        <MixedAssignment>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MixedAssignment>
+        <MixedReturnStatement>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MixedReturnStatement>
+        <MixedOperand>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MixedOperand>
+        <MissingClosureParamType>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MissingClosureParamType>
+        <MixedInferredReturnType>
+            <errorLevel type="suppress">
+                <directory name="src/Fixture"/>
+            </errorLevel>
+        </MixedInferredReturnType>
+        <MissingTemplateParam>
+            <errorLevel type="suppress">
+                <directory name="src/Form"/>
+            </errorLevel>
+        </MissingTemplateParam>
+        <PluginIssue name="QueryBuilderSetParameter" errorLevel="suppress"/>
+    </issueHandlers>
 </psalm>

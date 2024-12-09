@@ -1,11 +1,14 @@
 {
-    "name": "setono/sylius-plugin-skeleton",
-    "description": "Acme example plugin for Sylius.",
+    "name": "setono/sylius-catalog-promotion-plugin",
+    "description": "Catalog promotion plugin for Sylius",
     "license": "MIT",
     "type": "sylius-plugin",
     "keywords": [
         "sylius",
-        "sylius-plugin"
+        "sylius-plugin",
+        "catalog",
+        "setono",
+        "promotions"
     ],
     "require": {
         "php": ">=8.1",
@@ -26,6 +29,7 @@
         "matthiasnoback/symfony-dependency-injection-test": "^4.3 || ^5.1",
         "phpunit/phpunit": "^9.6.20",
         "psalm/plugin-phpunit": "^0.18.4",
+        "psalm/plugin-symfony": "^5.2",
         "setono/code-quality-pack": "^2.8.1",
         "shipmonk/composer-dependency-analyser": "^1.6",
         "sylius/sylius": "~1.12.19",
@@ -41,12 +45,12 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Acme\\SyliusExamplePlugin\\": "src/"
+            "Setono\\SyliusCatalogPromotionPlugin\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Acme\\SyliusExamplePlugin\\Tests\\": "tests/"
+            "Setono\\SyliusCatalogPromotionPlugin\\Tests\\": "tests/"
         },
         "classmap": [
             "tests/Application/Kernel.php"
@@ -60,11 +64,6 @@
             "symfony/thanks": false
         },
         "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
     },
     "scripts": {
         "analyse": "psalm",

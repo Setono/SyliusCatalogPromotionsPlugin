@@ -50,7 +50,9 @@ abstract class AbstractConfigurablePromotionElementType extends AbstractResource
                 $event->getForm()->get('type')->setData($type);
             })
             ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+                /** @var mixed $data */
                 $data = $event->getData();
+                Assert::isArray($data);
 
                 if (!isset($data['type'])) {
                     return;

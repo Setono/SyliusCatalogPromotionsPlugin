@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Model;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,23 +40,17 @@ class Promotion implements PromotionInterface
 
     protected bool $enabled = true;
 
-    /**
-     * @var Collection|PromotionRuleInterface[]
-     * @psalm-var Collection<array-key, PromotionRuleInterface>
-     */
+    /** @var Collection<array-key, PromotionRuleInterface> */
     protected Collection $rules;
 
     protected float $discount = 0.0;
 
-    /**
-     * @var BaseChannelInterface[]|Collection
-     * @psalm-var Collection<array-key, BaseChannelInterface>
-     */
+    /** @var Collection<array-key, BaseChannelInterface> */
     protected Collection $channels;
 
     public function __construct()
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = new \DateTimeImmutable();
 
         $this->rules = new ArrayCollection();
         $this->channels = new ArrayCollection();
@@ -212,8 +205,7 @@ class Promotion implements PromotionInterface
 
     public function getDiscount(): float
     {
-        // Doctrine converts decimal values to string, so we cast to float
-        return (float) $this->discount;
+        return $this->discount;
     }
 
     public function getDisplayableDiscount(): float

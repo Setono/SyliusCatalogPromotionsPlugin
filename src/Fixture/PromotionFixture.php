@@ -16,6 +16,7 @@ final class PromotionFixture extends AbstractResourceFixture
 
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
+        /** @psalm-suppress MixedMethodCall,UndefinedInterfaceMethod,PossiblyNullReference */
         $resourceNode
             ->children()
                 ->scalarNode('code')->cannotBeEmpty()->end()
@@ -35,7 +36,6 @@ final class PromotionFixture extends AbstractResourceFixture
                 ->scalarNode('updated_at')->cannotBeEmpty()->end()
 
                 ->arrayNode('rules')
-                    ->requiresAtLeastOneElement()
                     ->arrayPrototype()
                         ->children()
                             ->scalarNode('type')->cannotBeEmpty()->end()
@@ -43,7 +43,7 @@ final class PromotionFixture extends AbstractResourceFixture
                         ->end()
                     ->end()
                 ->end()
-                ->arrayNode('channels')->scalarPrototype()->end()->end()
+                ->arrayNode('channels')->scalarPrototype()->end()
         ;
     }
 }

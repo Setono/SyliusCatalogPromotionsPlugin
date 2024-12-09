@@ -23,6 +23,9 @@ interface ChannelPricingInterface extends BaseChannelPricingInterface, Timestamp
      */
     public function isManuallyDiscounted(): bool;
 
+    /**
+     * todo we need to update this via the resource controller events
+     */
     public function setManuallyDiscounted(bool $manuallyDiscounted): void;
 
     public function getMultiplier(): float;

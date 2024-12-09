@@ -59,10 +59,7 @@ interface PromotionInterface extends ChannelsAwareInterface, CodeAwareInterface,
 
     public function setEnabled(bool $enabled): void;
 
-    /**
-     * @return Collection|PromotionRuleInterface[]
-     * @psalm-return Collection<array-key, PromotionRuleInterface>
-     */
+    /** @return Collection<array-key, PromotionRuleInterface> */
     public function getRules(): Collection;
 
     public function hasRules(): bool;
