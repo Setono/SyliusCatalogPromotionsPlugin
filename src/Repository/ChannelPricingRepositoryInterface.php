@@ -24,7 +24,7 @@ interface ChannelPricingRepositoryInterface extends HasAnyBeenUpdatedSinceReposi
         DateTimeInterface $dateTime,
         string $bulkIdentifier,
         bool $exclusive = false,
-        bool $manuallyDiscountedProductsExcluded = true
+        bool $manuallyDiscountedProductsExcluded = true,
     ): void;
 
     /**

@@ -22,7 +22,7 @@ final class PromotionRuleFactory implements PromotionRuleFactoryInterface
 
     public function __construct(
         FactoryInterface $decoratedFactory,
-        array $rules
+        array $rules,
     ) {
         $this->decoratedFactory = $decoratedFactory;
         $this->rules = $rules;
@@ -64,7 +64,7 @@ final class PromotionRuleFactory implements PromotionRuleFactoryInterface
         if ($strict) {
             throw new InvalidArgumentException(sprintf(
                 'Type must be one of: %s',
-                implode(', ', array_keys($this->rules))
+                implode(', ', array_keys($this->rules)),
             ));
         }
 
@@ -77,7 +77,7 @@ final class PromotionRuleFactory implements PromotionRuleFactoryInterface
 
         return $this->createPromotionRule(
             HasTaxonRule::TYPE,
-            ['taxons' => $taxonCodes]
+            ['taxons' => $taxonCodes],
         );
     }
 
@@ -87,7 +87,7 @@ final class PromotionRuleFactory implements PromotionRuleFactoryInterface
 
         return $this->createPromotionRule(
             HasNotTaxonRule::TYPE,
-            ['taxons' => $taxonCodes]
+            ['taxons' => $taxonCodes],
         );
     }
 
@@ -95,7 +95,7 @@ final class PromotionRuleFactory implements PromotionRuleFactoryInterface
     {
         return $this->createPromotionRule(
             ContainsProductRule::TYPE,
-            ['product' => $productCode]
+            ['product' => $productCode],
         );
     }
 
@@ -105,7 +105,7 @@ final class PromotionRuleFactory implements PromotionRuleFactoryInterface
 
         return $this->createPromotionRule(
             ContainsProductsRule::TYPE,
-            ['products' => $productCodes]
+            ['products' => $productCodes],
         );
     }
 

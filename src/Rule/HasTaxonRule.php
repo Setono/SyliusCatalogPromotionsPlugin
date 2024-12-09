@@ -46,7 +46,7 @@ final class HasTaxonRule extends Rule
             sprintf('SELECT %s.id ', $productVariantAlias) .
             sprintf('FROM %s AS %s ', ProductVariant::class, $productVariantAlias) .
             sprintf('LEFT JOIN %s AS %s WITH %s.product=%s.product ', ProductTaxon::class, $productTaxonAlias, $productTaxonAlias, $productVariantAlias) .
-            sprintf('WHERE %s.taxon IN (:%s)', $productTaxonAlias, $parameter)
+            sprintf('WHERE %s.taxon IN (:%s)', $productTaxonAlias, $parameter),
         );
 
         /** @psalm-suppress PossiblyNullArgument */

@@ -34,8 +34,8 @@ trait ChannelPricingRepositoryTrait
                     ->andWhere(
                         $qb->expr()->orX(
                             'o.bulkIdentifier != :bulkIdentifier',
-                            'o.bulkIdentifier is null'
-                        )
+                            'o.bulkIdentifier is null',
+                        ),
                     )
                     ->andWhere(
                         $qb->expr()->orX(
@@ -47,8 +47,8 @@ trait ChannelPricingRepositoryTrait
                             'o.bulkIdentifier is not null',
 
                             // if the applied promotions is not null we know that it was discounted before, and we reset it
-                            'o.appliedPromotions is not null'
-                        )
+                            'o.appliedPromotions is not null',
+                        ),
                     )
                     ->setParameter('bulkIdentifier', $bulkIdentifier)
                     ->setMaxResults(100)
@@ -91,7 +91,7 @@ trait ChannelPricingRepositoryTrait
         DateTimeInterface $dateTime,
         string $bulkIdentifier,
         bool $exclusive = false,
-        bool $manuallyDiscountedProductsExcluded = true
+        bool $manuallyDiscountedProductsExcluded = true,
     ): void {
         \assert($this instanceof EntityRepository);
 
@@ -118,7 +118,7 @@ trait ChannelPricingRepositoryTrait
                 $qb->expr()->andX(
                     'channelPricing.appliedPromotions NOT LIKE :promotionEnding',
                     'channelPricing.appliedPromotions NOT LIKE :promotionMiddle',
-                )
+                ),
             ))
             ->set('channelPricing.updatedAt', ':date')
             ->set('channelPricing.bulkIdentifier', ':bulkIdentifier')

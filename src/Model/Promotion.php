@@ -43,7 +43,6 @@ class Promotion implements PromotionInterface
 
     /**
      * @var Collection|PromotionRuleInterface[]
-     *
      * @psalm-var Collection<array-key, PromotionRuleInterface>
      */
     protected Collection $rules;
@@ -52,7 +51,6 @@ class Promotion implements PromotionInterface
 
     /**
      * @var BaseChannelInterface[]|Collection
-     *
      * @psalm-var Collection<array-key, BaseChannelInterface>
      */
     protected Collection $channels;

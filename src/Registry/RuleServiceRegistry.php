@@ -13,7 +13,7 @@ class RuleServiceRegistry extends ServiceRegistry
     {
         parent::__construct(
             RuleInterface::class,
-            'rule'
+            'rule',
         );
     }
 }

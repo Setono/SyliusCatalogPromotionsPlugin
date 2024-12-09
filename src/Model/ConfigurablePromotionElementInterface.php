@@ -8,9 +8,6 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface ConfigurablePromotionElementInterface extends ResourceInterface
 {
-    /**
-     * @return string
-     */
     public function getType(): ?string;
 
     public function getConfiguration(): array;

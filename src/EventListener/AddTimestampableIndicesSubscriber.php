@@ -53,7 +53,7 @@ final class AddTimestampableIndicesSubscriber implements EventSubscriber
             throw new RuntimeException(sprintf(
                 'The class %s must implement the interface, %s',
                 $metadata->name,
-                TimestampableInterface::class
+                TimestampableInterface::class,
             ));
         }
 

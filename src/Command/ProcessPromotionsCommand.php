@@ -64,7 +64,7 @@ final class ProcessPromotionsCommand extends Command
         ProductVariantRepositoryInterface $productVariantRepository,
         PromotionRepositoryInterface $promotionRepository,
         ServiceRegistryInterface $ruleRegistry,
-        int $jobTtl
+        int $jobTtl,
     ) {
         parent::__construct();
 
@@ -111,7 +111,7 @@ final class ProcessPromotionsCommand extends Command
         if (!$force && !$this->isProcessingAllowed($promotionIds, $lastJob)) {
             $output->writeln(
                 'Nothing to process at the moment. Run command with --force option to force process',
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
 
             return 0;
@@ -177,7 +177,7 @@ final class ProcessPromotionsCommand extends Command
                     $startTime,
                     $bulkIdentifier,
                     $promotion->isExclusive(),
-                    $promotion->isManuallyDiscountedProductsExcluded()
+                    $promotion->isManuallyDiscountedProductsExcluded(),
                 );
 
                 ++$i;

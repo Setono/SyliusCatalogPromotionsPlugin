@@ -29,7 +29,7 @@ final class ContainsProductConfigurationType extends AbstractType
         ;
 
         $builder->get('product')->addModelTransformer(
-            new ReversedTransformer(new ResourceToIdentifierTransformer($this->productRepository, 'code'))
+            new ReversedTransformer(new ResourceToIdentifierTransformer($this->productRepository, 'code')),
         );
     }
 

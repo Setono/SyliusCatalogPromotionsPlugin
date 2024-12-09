@@ -46,15 +46,15 @@ final class UpdateManuallyDiscountedPropertySubscriber implements EventSubscribe
             return;
         }
 
-        if ($event instanceof PreUpdateEventArgs
-            && !$event->hasChangedField('price')
-            && !$event->hasChangedField('originalPrice')
+        if ($event instanceof PreUpdateEventArgs &&
+            !$event->hasChangedField('price') &&
+            !$event->hasChangedField('originalPrice')
         ) {
             return;
         }
 
         $channelPricing->setManuallyDiscounted(
-            $channelPricing->hasDiscount()
+            $channelPricing->hasDiscount(),
         );
     }
 }

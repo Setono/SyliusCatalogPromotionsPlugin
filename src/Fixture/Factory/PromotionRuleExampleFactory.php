@@ -33,7 +33,7 @@ class PromotionRuleExampleFactory extends AbstractExampleFactory
 
         return $this->promotionRuleFactory->createByType(
             $options['type'],
-            $options['configuration']
+            $options['configuration'],
         );
     }
 

@@ -16,6 +16,7 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
     {
         /**
          * @var array{driver: string, resources: array<string, mixed>} $config
+         *
          * @psalm-suppress PossiblyNullArgument
          */
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);

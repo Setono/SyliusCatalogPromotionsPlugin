@@ -37,7 +37,7 @@ class PromotionExampleFactory extends AbstractExampleFactory
         ChannelRepositoryInterface $channelRepository,
         PromotionRepositoryInterface $promotionRepository,
         Factory $promotionFactory,
-        PromotionRuleExampleFactory $promotionRuleExampleFactory
+        PromotionRuleExampleFactory $promotionRuleExampleFactory,
     ) {
         $this->channelRepository = $channelRepository;
         $this->promotionRepository = $promotionRepository;

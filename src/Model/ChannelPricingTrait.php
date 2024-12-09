@@ -39,6 +39,7 @@ trait ChannelPricingTrait
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     *
      * @Gedmo\Timestampable(on="create")
      *
      * @var DateTimeInterface|null
@@ -47,6 +48,7 @@ trait ChannelPricingTrait
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     *
      * @Gedmo\Timestampable(on="update")
      *
      * @var DateTimeInterface|null
@@ -55,10 +57,10 @@ trait ChannelPricingTrait
 
     public function hasDiscount(): bool
     {
-        return null !== $this->getOriginalPrice()
-            && null !== $this->getPrice()
-            && $this->getOriginalPrice() > $this->getPrice()
-            ;
+        return null !== $this->getOriginalPrice() &&
+            null !== $this->getPrice() &&
+            $this->getOriginalPrice() > $this->getPrice()
+        ;
     }
 
     public function getDiscountAmount(): ?int
