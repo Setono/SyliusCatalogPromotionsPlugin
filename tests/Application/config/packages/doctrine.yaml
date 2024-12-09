@@ -13,12 +13,12 @@ doctrine:
 
         url: '%env(resolve:DATABASE_URL)%'
     orm:
-        auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_generate_proxy_classes: '%kernel.debug%'
         auto_mapping: true
         mappings:
             App:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/Entity'
-                prefix: 'Setono\SyliusCatalogPromotionPlugin\Tests\Application\Entity'
+                dir: '%kernel.project_dir%/Model'
+                prefix: 'Setono\SyliusCatalogPromotionPlugin\Tests\Application\Model'
+                alias: App

@@ -13,3 +13,10 @@ sylius_shop:
 
 sylius_api:
     enabled: true
+    
+    
+sylius_core:
+    resources:
+        channel_pricing:
+            classes:
+                model: Setono\SyliusCatalogPromotionPlugin\Tests\Application\Model\ChannelPricing
