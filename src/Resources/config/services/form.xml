@@ -14,58 +14,60 @@
     </parameters>
 
     <services>
-        <service id="setono_sylius_catalog_promotion.form_registry.rule" class="Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistry" />
+        <service id="setono_sylius_catalog_promotion.form_registry.rule"
+                 class="Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistry"/>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionType">
             <argument>%setono_sylius_catalog_promotion.model.promotion.class%</argument>
             <argument>%setono_sylius_catalog_promotion.form.type.promotion.validation_groups%</argument>
-            <tag name="form.type" />
+            <tag name="form.type"/>
         </service>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionRuleType">
+            <argument type="service" id="setono_sylius_catalog_promotion.form_registry.rule"/>
             <argument>%setono_sylius_catalog_promotion.model.promotion_rule.class%</argument>
-            <argument type="service" id="setono_sylius_catalog_promotion.form_registry.rule" />
             <argument>%setono_sylius_catalog_promotion.form.type.promotion_rule.validation_groups%</argument>
-            <tag name="form.type" />
+
+            <tag name="form.type"/>
         </service>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule.collection"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionRuleCollectionType">
-            <argument type="service" id="setono_sylius_catalog_promotion.registry.rule" />
-            <tag name="form.type" />
+            <argument type="service" id="setono_sylius_catalog_promotion.registry.rule"/>
+            <tag name="form.type"/>
         </service>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule_choice"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionRuleChoiceType">
             <argument>%setono_sylius_catalog_promotion.promotion_rules%</argument>
-            <tag name="form.type" />
+            <tag name="form.type"/>
         </service>
 
         <!-- Rules -->
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule.has_taxon_configuration"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\Rule\HasTaxonConfigurationType">
-            <argument type="service" id="sylius.form.type.data_transformer.taxons_to_codes" />
-            <tag name="form.type" />
+            <argument type="service" id="sylius.form.type.data_transformer.taxons_to_codes"/>
+            <tag name="form.type"/>
         </service>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule.has_not_taxon_configuration"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\Rule\HasNotTaxonConfigurationType">
-            <argument type="service" id="sylius.form.type.data_transformer.taxons_to_codes" />
-            <tag name="form.type" />
+            <argument type="service" id="sylius.form.type.data_transformer.taxons_to_codes"/>
+            <tag name="form.type"/>
         </service>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule.contains_products_configuration"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\Rule\ContainsProductsConfigurationType">
-            <argument type="service" id="sylius.form.type.data_transformer.products_to_codes" />
-            <tag name="form.type" />
+            <argument type="service" id="sylius.form.type.data_transformer.products_to_codes"/>
+            <tag name="form.type"/>
         </service>
 
         <service id="setono_sylius_catalog_promotion.form.type.promotion_rule.contains_product_configuration"
                  class="Setono\SyliusCatalogPromotionPlugin\Form\Type\Rule\ContainsProductConfigurationType">
-            <argument type="service" id="sylius.repository.product" />
-            <tag name="form.type" />
+            <argument type="service" id="sylius.repository.product"/>
+            <tag name="form.type"/>
         </service>
     </services>
 </container>

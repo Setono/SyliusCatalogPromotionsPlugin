@@ -4,14 +4,28 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Form\Type;
 
+use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface;
+use Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistryInterface;
+use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
-final class PromotionRuleType extends AbstractConfigurablePromotionElementType
+final class PromotionRuleType extends AbstractResourceType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options = []): void
+    /**
+     * @param array<array-key, string> $validationGroups
+     */
+    public function __construct(private readonly FormTypeRegistryInterface $formTypeRegistry, string $dataClass, array $validationGroups = [])
     {
-        parent::buildForm($builder, $options);
+        parent::__construct($dataClass, $validationGroups);
+    }
 
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
         $builder
             ->add('type', PromotionRuleChoiceType::class, [
                 'label' => 'setono_sylius_catalog_promotion.form.promotion_rule.type',
@@ -19,11 +33,76 @@ final class PromotionRuleType extends AbstractConfigurablePromotionElementType
                     'data-form-collection' => 'update',
                 ],
             ])
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
+                $type = $this->getRegistryIdentifier($event->getForm(), $event->getData());
+                if (null === $type) {
+                    return;
+                }
+
+                $this->addConfigurationFields($event->getForm(), (string) $this->formTypeRegistry->get($type, 'default'));
+            })
+            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event): void {
+                $type = $this->getRegistryIdentifier($event->getForm(), $event->getData());
+                if (null === $type) {
+                    return;
+                }
+
+                $event->getForm()->get('type')->setData($type);
+            })
+            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+                /** @var mixed $data */
+                $data = $event->getData();
+                Assert::isArray($data);
+
+                if (!isset($data['type'])) {
+                    return;
+                }
+
+                Assert::string($data['type']);
+
+                $this->addConfigurationFields($event->getForm(), (string) $this->formTypeRegistry->get($data['type'], 'default'));
+            })
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+
+        $resolver
+            ->setDefault('configuration_type', null)
+            ->setAllowedTypes('configuration_type', ['string', 'null'])
         ;
     }
 
     public function getBlockPrefix(): string
     {
         return 'setono_sylius_catalog_promotion_promotion_rule';
+    }
+
+    protected function addConfigurationFields(FormInterface $form, string $configurationType): void
+    {
+        $form->add('configuration', $configurationType, [
+            'label' => false,
+        ]);
+    }
+
+    /**
+     * @param mixed $data
+     */
+    protected function getRegistryIdentifier(FormInterface $form, $data = null): ?string
+    {
+        if ($data instanceof PromotionRuleInterface && null !== $data->getType()) {
+            return $data->getType();
+        }
+
+        if ($form->getConfig()->hasOption('configuration_type')) {
+            $res = $form->getConfig()->getOption('configuration_type');
+            Assert::nullOrString($res);
+
+            return $res;
+        }
+
+        return null;
     }
 }
