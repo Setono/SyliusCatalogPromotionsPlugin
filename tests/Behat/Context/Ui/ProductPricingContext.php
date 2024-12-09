@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Context\Ui;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Ui;
 
 use Behat\Behat\Context\Context;
 use Doctrine\ORM\EntityManagerInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Application\Doctrine\ORM;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Application\Doctrine\ORM;
 
 use Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM\ProductRepositoryTrait as CatalogPromotionProductRepositoryTrait;
 use Setono\SyliusCatalogPromotionPlugin\Repository\ProductRepositoryInterface as CatalogPromotionProductRepositoryInterface;

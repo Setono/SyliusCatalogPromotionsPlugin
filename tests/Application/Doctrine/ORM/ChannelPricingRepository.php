@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Application\Doctrine\ORM;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Application\Doctrine\ORM;
 
 use Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM\ChannelPricingRepositoryTrait as CatalogPromotionChannelPricingRepositoryTrait;
 use Setono\SyliusCatalogPromotionPlugin\Repository\ChannelPricingRepositoryInterface as CatalogPromotionChannelPricingRepositoryInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Context\Setup;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
 use DateTime;

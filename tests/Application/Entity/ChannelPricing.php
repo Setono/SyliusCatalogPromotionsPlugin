@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Application\Entity;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setono\SyliusCatalogPromotionPlugin\Model\ChannelPricingInterface as CatalogPromotionChannelPricingInterface;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Page\Admin\Promotion;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion;
 
 use Behat\Mink\Element\NodeElement;
+use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Behaviour\SpecifiesItsDiscount;
 use Sylius\Behat\Behaviour\ChecksCodeImmutability;
 use Sylius\Behat\Behaviour\NamesIt;
 use Sylius\Behat\Page\Admin\Crud\UpdatePage as BaseUpdatePage;
-use Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Behaviour\SpecifiesItsDiscount;
 use Webmozart\Assert\Assert;
 
 class UpdatePage extends BaseUpdatePage implements UpdatePageInterface

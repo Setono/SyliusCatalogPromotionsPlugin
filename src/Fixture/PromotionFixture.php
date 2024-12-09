@@ -11,7 +11,7 @@ final class PromotionFixture extends AbstractResourceFixture
 {
     public function getName(): string
     {
-        return 'catalog_promotion';
+        return 'setono_catalog_promotion';
     }
 
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void

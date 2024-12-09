@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Context\Transform;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Transform;
 
 use Behat\Behat\Context\Context;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;

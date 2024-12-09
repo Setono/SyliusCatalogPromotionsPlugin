@@ -2,7 +2,6 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
-
                 catalog_promotion_taxons:
                     name: taxon
                     options:
@@ -58,7 +57,7 @@ sylius_fixtures:
                                     - "FASHION_WEB"
 
                 catalog_promotion_random:
-                    name: catalog_promotion
+                    name: setono_catalog_promotion
                     options:
                         random: 10
                         prototype:
@@ -69,7 +68,7 @@ sylius_fixtures:
                                           - "jeans"
 
                 catalog_promotion_tshirts:
-                    name: catalog_promotion
+                    name: setono_catalog_promotion
                     options:
                         custom:
                             thirts:
@@ -94,7 +93,7 @@ sylius_fixtures:
                                     - "FASHION_WEB"
 
                 catalog_promotion_caps:
-                    name: catalog_promotion
+                    name: setono_catalog_promotion
                     options:
                         custom:
                             accidentally_enabled:

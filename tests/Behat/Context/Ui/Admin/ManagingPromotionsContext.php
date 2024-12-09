@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Context\Ui\Admin;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
 use DateTimeInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion\CreatePageInterface;
+use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion\IndexPageInterface;
+use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion\UpdatePageInterface;
 use function sprintf;
 use Sylius\Behat\NotificationType;
 use Sylius\Behat\Service\NotificationCheckerInterface;
 use Sylius\Behat\Service\Resolver\CurrentPageResolverInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
-use Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Page\Admin\Promotion\CreatePageInterface;
-use Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Page\Admin\Promotion\IndexPageInterface;
-use Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Page\Admin\Promotion\UpdatePageInterface;
 use Webmozart\Assert\Assert;
 
 final class ManagingPromotionsContext implements Context

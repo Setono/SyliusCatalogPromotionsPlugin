@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Context\Domain;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Context\Cli;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Cli;
 
 use Behat\Behat\Context\Context;
 use Setono\SyliusCatalogPromotionPlugin\Command\ProcessPromotionsCommand;

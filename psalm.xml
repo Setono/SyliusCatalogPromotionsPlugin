@@ -15,6 +15,7 @@
         <directory name="tests"/>
         <ignoreFiles>
             <directory name="tests/Application"/>
+            <directory name="tests/Behat"/> <!-- todo readd this when we readd Behat -->
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>

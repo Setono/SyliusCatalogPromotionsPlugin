@@ -31,13 +31,6 @@ trait ChannelPricingTrait
     protected ?string $bulkIdentifier = null;
 
     /**
-     * @ORM\Column(type="simple_array", nullable=true)
-     *
-     * @var array<array-key, string>
-     */
-    protected array $appliedPromotions = [];
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @Gedmo\Timestampable(on="create")
@@ -110,15 +103,5 @@ trait ChannelPricingTrait
     public function resetBulkIdentifier(): void
     {
         $this->bulkIdentifier = null;
-    }
-
-    public function getAppliedPromotions(): array
-    {
-        return $this->appliedPromotions;
-    }
-
-    public function addAppliedPromotion(string $promotionCode): void
-    {
-        $this->appliedPromotions[] = $promotionCode;
     }
 }

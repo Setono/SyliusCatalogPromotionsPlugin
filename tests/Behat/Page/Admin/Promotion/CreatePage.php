@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Page\Admin\Promotion;
+namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion;
 
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Behaviour\SpecifiesItsDiscount;
 use function sprintf;
 use Sylius\Behat\Behaviour\NamesIt;
 use Sylius\Behat\Behaviour\SpecifiesItsCode;
 use Sylius\Behat\Page\Admin\Crud\CreatePage as BaseCreatePage;
 use Sylius\Behat\Service\AutocompleteHelper;
-use Tests\Setono\SyliusCatalogPromotionPlugin\Behat\Behaviour\SpecifiesItsDiscount;
 use Webmozart\Assert\Assert;
 
 class CreatePage extends BaseCreatePage implements CreatePageInterface

@@ -19,7 +19,7 @@
             {# @var \Sylius\Component\Core\Model\ProductVariant variant #}
             {% set variant = product|sylius_resolve_variant %}
 
-            {# @var \Tests\Setono\SyliusCatalogPromotionPlugin\Application\Entity\ChannelPricing price #}
+            {# @var \Setono\SyliusCatalogPromotionPlugin\Tests\Application\Entity\ChannelPricing price #}
             {% set price = variant.channelPricingForChannel(sylius.channel) %}
 
             {% if price.hasDiscount %}
