@@ -18,10 +18,5 @@
             </argument>
             <tag name="doctrine.event_subscriber"/>
         </service>
-
-        <service id="setono_sylius_catalog_promotion.event_listener.update_manually_discounted_property"
-                 class="Setono\SyliusCatalogPromotionPlugin\EventListener\UpdateManuallyDiscountedPropertySubscriber">
-            <tag name="doctrine.event_subscriber"/>
-        </service>
     </services>
 </container>
