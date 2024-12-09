@@ -43,7 +43,7 @@ final class ManagingPromotionsContext implements Context
         CreatePageInterface $createPage,
         UpdatePageInterface $updatePage,
         CurrentPageResolverInterface $currentPageResolver,
-        NotificationCheckerInterface $notificationChecker
+        NotificationCheckerInterface $notificationChecker,
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->indexPage = $indexPage;
@@ -332,7 +332,7 @@ final class ManagingPromotionsContext implements Context
     {
         $this->notificationChecker->checkNotification(
             'Cannot delete, the promotion is in use.',
-            NotificationType::failure()
+            NotificationType::failure(),
         );
     }
 
@@ -378,7 +378,7 @@ final class ManagingPromotionsContext implements Context
     {
         Assert::same(
             $this->createPage->getValidationMessageForAction(),
-            'This value should not be blank.'
+            'This value should not be blank.',
         );
     }
 
@@ -403,7 +403,7 @@ final class ManagingPromotionsContext implements Context
         Assert::same(
             $count,
             $actualCount,
-            'There should be %s promotion, but there\'s %2$s.'
+            'There should be %s promotion, but there\'s %2$s.',
         );
     }
 
@@ -418,7 +418,7 @@ final class ManagingPromotionsContext implements Context
         Assert::same(
             $actualValue,
             $value,
-            sprintf('Expected first promotion\'s %s to be "%s", but it is "%s".', $field, $value, $actualValue)
+            sprintf('Expected first promotion\'s %s to be "%s", but it is "%s".', $field, $value, $actualValue),
         );
     }
 
@@ -433,7 +433,7 @@ final class ManagingPromotionsContext implements Context
         Assert::same(
             $actualValue,
             $value,
-            sprintf('Expected last promotion\'s %s to be "%s", but it is "%s".', $field, $value, $actualValue)
+            sprintf('Expected last promotion\'s %s to be "%s", but it is "%s".', $field, $value, $actualValue),
         );
     }
 

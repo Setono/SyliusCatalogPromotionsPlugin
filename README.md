@@ -1,220 +1,53 @@
-# Sylius Catalog Promotion Plugin
+# Setono Sylius Plugin Skeleton
 
 [![Latest Version][ico-version]][link-packagist]
-[![Latest Unstable Version][ico-unstable-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
 [![Build Status][ico-github-actions]][link-github-actions]
+[![Code Coverage][ico-code-coverage]][link-code-coverage]
+[![Mutation testing][ico-infection]][link-infection]
 
-Plugin for Sylius to define permanent or time-limited promotions for products and automatically update prices.
+[Setono](https://setono.com) have made a bunch of [plugins for Sylius](https://github.com/Setono?q=plugin&sort=stargazers), and we have some guidelines
+which we try to follow when developing plugins. These guidelines are used in this repository, and it gives you a very
+solid base when developing plugins.
 
-![Screenshot showing catalog promotions admin page](docs/admin-create.png)
+Enjoy! 
 
-## Install
+## Quickstart
 
-### Add plugin to composer.json
+1. Run
+    ```shell
+    composer create-project --prefer-source --no-install --remove-vcs setono/sylius-plugin-skeleton:1.12.x-dev ProjectName
+    ``` 
+    or just click the `Use this template` button at the right corner of this repository.
+2. Run
+   ```shell
+   cd ProjectName && composer install
+   ```
+3. From the plugin skeleton root directory, run the following commands:
 
-```bash
-composer require setono/sylius-catalog-promotion-plugin
-```
+    ```bash
+    php init
+    (cd tests/Application && yarn install)
+    (cd tests/Application && yarn build)
+    (cd tests/Application && bin/console assets:install)
+    
+    (cd tests/Application && bin/console doctrine:database:create)
+    (cd tests/Application && bin/console doctrine:schema:create)
+   
+    (cd tests/Application && bin/console sylius:fixtures:load -n)
+    ```
+   
+4. Start your local PHP server: `symfony serve` (see https://symfony.com/doc/current/setup/symfony_server.html for docs)
 
-### Register plugin
+To be able to set up a plugin's database, remember to configure you database credentials in `tests/Application/.env` and `tests/Application/.env.test`.
 
-```php
-<?php
-# config/bundles.php
+[ico-version]: https://poser.pugx.org/setono/sylius-plugin-skeleton/v/stable
+[ico-license]: https://poser.pugx.org/setono/sylius-plugin-skeleton/license
+[ico-github-actions]: https://github.com/Setono/SyliusPluginSkeleton/workflows/build/badge.svg
+[ico-code-coverage]: https://codecov.io/gh/Setono/SyliusPluginSkeleton/branch/1.12.x/graph/badge.svg
+[ico-infection]: https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FSetono%2FSyliusPluginSkeleton%2F1.12.x
 
-return [
-    // ...
-    Setono\JobStatusBundle\SetonoJobStatusBundle::class => ['all' => true],
-    Setono\SyliusCatalogPromotionPlugin\SetonoSyliusCatalogPromotionPlugin::class => ['all' => true],
-    Sylius\Bundle\GridBundle\SyliusGridBundle::class => ['all' => true],
-    // ...
-];
-
-```
-
-**Note**, that we MUST define `SetonoSyliusCatalogPromotionPlugin` BEFORE `SyliusGridBundle`.
-Otherwise you'll see exception like this:
-
-```bash
-You have requested a non-existent parameter "setono_sylius_catalog_promotion.model.promotion.class".  
-```
-
-### Add config
-
-```yaml
-# config/packages/setono_sylius_catalog_promotion.yaml
-imports:
-    - { resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/app/config.yaml" }
-    # Uncomment if you want to add some catalog promotion fixtures to default suite
-    # - { resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/app/fixtures.yaml" }
-```
-
-### Add routing
-
-```yaml
-# config/routes/setono_sylius_catalog_promotion.yaml
-setono_sylius_catalog_promotion_admin:
-    resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/admin_routing.yaml"
-    prefix: /admin
-```
-
-### Extend core classes
-#### Extend `ChannelPricing`
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Entity\Channel;
-
-use Doctrine\ORM\Mapping as ORM;
-use Setono\SyliusCatalogPromotionPlugin\Model\ChannelPricingInterface as CatalogPromotionChannelPricingInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\ChannelPricingTrait as CatalogPromotionChannelPricingTrait;
-use Sylius\Component\Core\Model\ChannelPricing as BaseChannelPricing;
-
-/**
- * @ORM\Table(name="sylius_channel_pricing")
- * @ORM\Entity()
- */
-class ChannelPricing extends BaseChannelPricing implements CatalogPromotionChannelPricingInterface
-{
-    use CatalogPromotionChannelPricingTrait;
-}
-```
-
-#### Extend `ChannelPricingRepository`
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Repository;
-
-use Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM\ChannelPricingRepositoryTrait as CatalogPromotionChannelPricingRepositoryTrait;
-use Setono\SyliusCatalogPromotionPlugin\Repository\ChannelPricingRepositoryInterface as CatalogPromotionChannelPricingRepositoryInterface;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-
-class ChannelPricingRepository extends EntityRepository implements CatalogPromotionChannelPricingRepositoryInterface
-{
-    use CatalogPromotionChannelPricingRepositoryTrait;
-}
-```
-
-#### Extend `ProductRepository`
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Repository;
-
-use Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM\ProductRepositoryTrait as CatalogPromotionProductRepositoryTrait;
-use Setono\SyliusCatalogPromotionPlugin\Repository\ProductRepositoryInterface as CatalogPromotionProductRepositoryInterface;
-use Sylius\Bundle\CoreBundle\Doctrine\ORM\ProductRepository as BaseProductRepository;
-
-class ProductRepository extends BaseProductRepository implements CatalogPromotionProductRepositoryInterface
-{
-    use CatalogPromotionProductRepositoryTrait;
-}
-```
-
-#### Extend `ProductVariantRepository`
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Repository;
-
-use Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM\ProductVariantRepositoryTrait as CatalogPromotionProductVariantRepositoryTrait;
-use Setono\SyliusCatalogPromotionPlugin\Repository\ProductVariantRepositoryInterface as CatalogPromotionProductVariantRepositoryInterface;
-use Sylius\Bundle\CoreBundle\Doctrine\ORM\ProductVariantRepository as BaseProductVariantRepository;
-
-class ProductVariantRepository extends BaseProductVariantRepository implements CatalogPromotionProductVariantRepositoryInterface
-{
-    use CatalogPromotionProductVariantRepositoryTrait;
-}
-```
-
-#### Update config with extended classes
-In your `config/packages/_sylius.yaml` file update the configured classes:
-
-```yaml
-# config/packages/_sylius.yaml
-sylius_core:
-    resources:
-        channel_pricing:
-            classes:
-                model: App\Entity\ChannelPricing
-                repository: App\Repository\ChannelPricingRepository
-
-sylius_product:
-    resources:
-        product:
-            classes:
-                repository: App\Repository\ProductRepository
-        product_variant:
-            classes:
-                repository: App\Repository\ProductVariantRepository
-
-```
-
-### Update your schema
-
-Create a migration file:
-
-```bash
-$ php bin/console doctrine:migrations:diff
-```
-
-If you have existing discounted products you should append this line to the `up` method in the migration file:
-```php
-<?php
-namespace DoctrineMigrations;
-
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
-
-final class Version20191028134956 extends AbstractMigration
-{
-    public function up(Schema $schema) : void
-    {
-        // The generated SQL will be here
-        // ...
-        
-        // append this line
-        $this->addSql('UPDATE sylius_channel_pricing SET manually_discounted = 1 WHERE original_price IS NOT NULL AND price != original_price');
-    }
-
-    public function down(Schema $schema) : void
-    {
-        // ...
-    }
-}
-```
-
-Execute migration file:
-```bash
-$ php bin/console doctrine:migrations:migrate
-```
-
-### Install assets
-
-```bash
-bin/console sylius:install:assets
-```
-
-### Configure CRON to run next command every minute
-
-```bash
-$ php bin/console setono:sylius-catalog-promotion:process
-```
-
-[ico-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/stable
-[ico-unstable-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/unstable
-[ico-license]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/license
-[ico-github-actions]: https://github.com/Setono/SyliusCatalogPromotionPlugin/workflows/build/badge.svg
-
-[link-packagist]: https://packagist.org/packages/setono/sylius-catalog-promotion-plugin
-[link-github-actions]: https://github.com/Setono/SyliusCatalogPromotionPlugin/actions
+[link-packagist]: https://packagist.org/packages/setono/sylius-plugin-skeleton
+[link-github-actions]: https://github.com/Setono/SyliusPluginSkeleton/actions
+[link-code-coverage]: https://codecov.io/gh/Setono/SyliusPluginSkeleton
+[link-infection]: https://dashboard.stryker-mutator.io/reports/github.com/Setono/SyliusPluginSkeleton/1.12.x

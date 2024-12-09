@@ -1,58 +1,52 @@
 {
-    "name": "setono/sylius-catalog-promotion-plugin",
-    "description": "Catalog promotion plugin for Sylius",
+    "name": "setono/sylius-plugin-skeleton",
+    "description": "Acme example plugin for Sylius.",
     "license": "MIT",
     "type": "sylius-plugin",
     "keywords": [
         "sylius",
-        "sylius-plugin",
-        "catalog",
-        "setono",
-        "promotions"
+        "sylius-plugin"
     ],
     "require": {
         "php": ">=8.1",
-        "beberlei/doctrineextensions": "^1.2",
-        "doctrine/collections": "^1.6",
-        "doctrine/dbal": "^2.13",
-        "doctrine/event-manager": "^1.1",
-        "doctrine/orm": "^2.7",
-        "knplabs/knp-menu": "^3.2",
-        "setono/job-status-bundle": "^0.2.3",
-        "sylius/registry": "^1.6",
-        "sylius/resource-bundle": "^1.6",
-        "symfony/config": "^5.4 || ^6.0",
-        "symfony/console": "^5.4 || ^6.0",
-        "symfony/dependency-injection": "^5.4 || ^6.0",
-        "symfony/form": "^5.4 || ^6.0",
-        "symfony/lock": "^5.4 || ^6.0",
-        "symfony/options-resolver": "^5.4 || ^6.0",
-        "symfony/validator": "^5.4 || ^6.0",
-        "webmozart/assert": "^1.10"
+        "sylius/core-bundle": "^1.0",
+        "symfony/config": "^5.4 || ^6.4 || ^7.0",
+        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
+        "symfony/http-kernel": "^5.4 || ^6.4 || ^7.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^7.1",
-        "phpunit/phpunit": "^9.5",
-        "psalm/plugin-phpunit": "^0.16.1",
-        "psalm/plugin-symfony": "^3.0",
-        "setono/code-quality-pack": "^2.1.2",
-        "setono/sylius-behat-pack": "^0.2.1",
-        "sylius/sylius": "~1.10.14",
-        "symfony/debug-bundle": "^5.4 || ^6.0",
-        "symfony/dotenv": "^5.4 || ^6.0",
-        "symfony/intl": "^5.4 || ^6.0",
-        "symfony/web-profiler-bundle": "^5.4 || ^6.0",
-        "weirdan/doctrine-psalm-plugin": "^1.0"
+        "api-platform/core": "^2.7.16",
+        "babdev/pagerfanta-bundle": "^3.8",
+        "behat/behat": "^3.14",
+        "doctrine/doctrine-bundle": "^2.11",
+        "infection/infection": "^0.27.11",
+        "jms/serializer-bundle": "^4.2",
+        "lexik/jwt-authentication-bundle": "^2.17",
+        "matthiasnoback/symfony-config-test": "^4.3 || ^5.1",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.3 || ^5.1",
+        "phpunit/phpunit": "^9.6.20",
+        "psalm/plugin-phpunit": "^0.18.4",
+        "setono/code-quality-pack": "^2.8.1",
+        "shipmonk/composer-dependency-analyser": "^1.6",
+        "sylius/sylius": "~1.12.19",
+        "symfony/debug-bundle": "^5.4 || ^6.4 || ^7.0",
+        "symfony/dotenv": "^5.4 || ^6.4 || ^7.0",
+        "symfony/intl": "^5.4 || ^6.4 || ^7.0",
+        "symfony/property-info": "^5.4 || ^6.4 || ^7.0",
+        "symfony/serializer": "^5.4 || ^6.4 || ^7.0",
+        "symfony/web-profiler-bundle": "^5.4 || ^6.4 || ^7.0",
+        "symfony/webpack-encore-bundle": "^1.17.2",
+        "willdurand/negotiation": "^3.1"
     },
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Setono\\SyliusCatalogPromotionPlugin\\": "src/"
+            "Acme\\SyliusExamplePlugin\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Setono\\SyliusCatalogPromotionPlugin\\": "tests/"
+            "Acme\\SyliusExamplePlugin\\Tests\\": "tests/"
         },
         "classmap": [
             "tests/Application/Kernel.php"
@@ -62,6 +56,7 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": false,
             "ergebnis/composer-normalize": true,
+            "infection/extension-installer": true,
             "symfony/thanks": false
         },
         "sort-packages": true
@@ -69,64 +64,12 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "unused": [
-            "beberlei/doctrineextensions"
-        ]
+        }
     },
     "scripts": {
-        "all": [
-            "@checks",
-            "@tests"
-        ],
-        "analyse": [
-            "@ensure-test-container-exists",
-            "psalm --threads=8"
-        ],
-        "assets": [
-            "@ensure-assets-installed",
-            "@ensure-assets-compiled"
-        ],
-        "behat": [
-            "APP_ENV=test composer ensure-database-created",
-            "APP_ENV=test composer ensure-schema-updated",
-            "./vendor/bin/behat --tags=\"~@javascript\" --no-interaction --format=progress"
-        ],
-        "behat-js": [
-            "APP_ENV=test composer ensure-database-created",
-            "APP_ENV=test composer ensure-schema-updated",
-            "./vendor/bin/behat --tags=\"@javascript\" --no-interaction --format=progress"
-        ],
+        "analyse": "psalm",
         "check-style": "ecs check",
-        "checks": [
-            "composer check-style",
-            "composer analyse"
-        ],
-        "ensure-assets-compiled": "[[ -d tests/Application/public/assets ]] || (cd tests/Application && yarn build && bin/console assets:install public)",
-        "ensure-assets-installed": "[[ -d tests/Application/node_modules ]] || (cd tests/Application && yarn install)",
-        "ensure-database-created": "(cd tests/Application && bin/console doctrine:database:create --if-not-exists)",
-        "ensure-schema-updated": "(cd tests/Application && bin/console doctrine:schema:update --force)",
-        "ensure-test-container-exists": "[[ -f tests/Application/var/cache/test/ApplicationTests_Setono_SyliusCatalogPromotionPlugin_Application_KernelTestDebugContainer.xml ]] || tests/Application/bin/console cache:warmup --env=test",
-        "ensure-vendors-installed": "[[ -f vendor/autoload.php ]] || COMPOSER_MEMORY_LIMIT=-1 composer install",
         "fix-style": "ecs check --fix",
-        "fixtures": [
-            "composer ensure-database-created",
-            "composer ensure-schema-updated",
-            "(cd tests/Application && bin/console sylius:fixtures:load default --no-interaction)"
-        ],
-        "phpspec": "phpspec run",
-        "phpunit": "phpunit",
-        "run": "(cd tests/Application && symfony server:start --port=8000)",
-        "tests": [
-            "@phpspec",
-            "@behat",
-            "@behat-js"
-        ],
-        "try": [
-            "@ensure-vendors-installed",
-            "@assets",
-            "@fixtures",
-            "@run"
-        ]
+        "phpunit": "phpunit"
     }
 }

@@ -17,11 +17,8 @@ use Webmozart\Assert\Assert;
 class CreatePage extends BaseCreatePage implements CreatePageInterface
 {
     use NamesIt;
-
     use SpecifiesItsCode;
-
     use SpecifiesItsDiscount;
-
     use PageDefinedElements;
 
     public function addRule(string $ruleName): void
@@ -53,7 +50,7 @@ class CreatePage extends BaseCreatePage implements CreatePageInterface
         $element = $this
             ->getLastCollectionItem('rules')
             ->find('css', sprintf('input[type="hidden"][name*="[%s]"]', $option))
-            ;
+        ;
         Assert::notNull($element);
 
         $ruleAutocomplete = $element->getParent();

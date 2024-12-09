@@ -1,10 +1,8 @@
 imports:
     - { resource: "@SyliusCoreBundle/Resources/config/app/config.yml" }
-
     - { resource: "@SyliusAdminBundle/Resources/config/app/config.yml" }
-    - { resource: "@SyliusAdminApiBundle/Resources/config/app/config.yml" }
-
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
+    - { resource: "@SyliusApiBundle/Resources/config/app/config.yaml" }
 
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
@@ -13,18 +11,5 @@ sylius_shop:
     product_grid:
         include_all_descendants: true
 
-sylius_core:
-    resources:
-        channel_pricing:
-            classes:
-                model: Tests\Setono\SyliusCatalogPromotionPlugin\Application\Entity\ChannelPricing
-                repository: Tests\Setono\SyliusCatalogPromotionPlugin\Application\Doctrine\ORM\ChannelPricingRepository
-
-sylius_product:
-    resources:
-        product:
-            classes:
-                repository: Tests\Setono\SyliusCatalogPromotionPlugin\Application\Doctrine\ORM\ProductRepository
-        product_variant:
-            classes:
-                repository: Tests\Setono\SyliusCatalogPromotionPlugin\Application\Doctrine\ORM\ProductVariantRepository
+sylius_api:
+    enabled: true
