@@ -1,8 +1,2 @@
 imports:
     - { resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/grids/promotion.yaml" }
-
-doctrine:
-    orm:
-        dql:
-            numeric_functions:
-                round: DoctrineExtensions\Query\Mysql\Round
