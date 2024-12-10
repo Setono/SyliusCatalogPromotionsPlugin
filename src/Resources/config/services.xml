@@ -3,6 +3,9 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <imports>
+        <import resource="services/applicator.xml"/>
+        <import resource="services/calculator.xml"/>
+        <import resource="services/checker.xml"/>
         <import resource="services/factory.xml"/>
         <import resource="services/fixture.xml"/>
         <import resource="services/form.xml"/>

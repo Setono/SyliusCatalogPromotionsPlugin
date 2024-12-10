@@ -7,17 +7,12 @@ namespace Setono\SyliusCatalogPromotionPlugin\Repository;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-interface PromotionRepositoryInterface extends RepositoryInterface, HasAnyBeenUpdatedSinceRepositoryInterface
+interface PromotionRepositoryInterface extends RepositoryInterface
 {
     /**
-     * This is the method used for processing of promotions
-     * It should return promotions with these properties
-     * - Enabled
-     * - At least one enabled channel
-     * - Sorted by exclusive ascending and thereafter priority
-     * - The current time should be within the respective promotions time interval
-     *
-     * @return PromotionInterface[]
+     * @return list<PromotionInterface>
      */
     public function findForProcessing(): array;
+
+    public function findOneByCode(string $code): ?PromotionInterface;
 }

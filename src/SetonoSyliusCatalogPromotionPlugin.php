@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin;
 
+use Setono\CompositeCompilerPass\CompositeCompilerPass;
+use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\CompositeRuntimeChecker;
 use Setono\SyliusCatalogPromotionPlugin\DependencyInjection\Compiler\RegisterRulesPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
@@ -26,5 +28,6 @@ final class SetonoSyliusCatalogPromotionPlugin extends AbstractResourceBundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterRulesPass());
+        $container->addCompilerPass(new CompositeCompilerPass(CompositeRuntimeChecker::class, 'setono_sylius_catalog_promotion.runtime_checker'));
     }
 }

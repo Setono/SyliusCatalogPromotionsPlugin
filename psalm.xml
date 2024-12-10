@@ -31,6 +31,11 @@
         <function name="print_r"/>
     </forbiddenFunctions>
     <issueHandlers>
+        <DeprecatedInterface>
+            <errorLevel type="suppress">
+                <referencedClass name="Sylius\Component\Core\Calculator\ProductVariantPriceCalculatorInterface"/>
+            </errorLevel>
+        </DeprecatedInterface>
         <MixedArgument>
             <errorLevel type="suppress">
                 <directory name="src/Fixture"/>

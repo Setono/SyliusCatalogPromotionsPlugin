@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\DependencyInjection;
 
-use Setono\SyliusCatalogPromotionPlugin\Doctrine\ORM\PromotionRepository;
 use Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionRuleType;
 use Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionType;
 use Setono\SyliusCatalogPromotionPlugin\Model\Promotion;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRule;
+use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepository;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\Factory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
