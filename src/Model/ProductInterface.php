@@ -17,7 +17,7 @@ interface ProductInterface extends BaseProductInterface
     public function getPreQualifiedCatalogPromotions(): array;
 
     /**
-     * @param list<string>|null $preQualifiedCatalogPromotions
+     * @param array<array-key, string>|null $preQualifiedCatalogPromotions
      */
     public function setPreQualifiedCatalogPromotions(?array $preQualifiedCatalogPromotions): void;
 

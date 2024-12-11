@@ -25,7 +25,7 @@ trait ProductTrait
     }
 
     /**
-     * @param list<string>|null $preQualifiedCatalogPromotions
+     * @param list<array-key, string>|null $preQualifiedCatalogPromotions
      */
     public function setPreQualifiedCatalogPromotions(?array $preQualifiedCatalogPromotions): void
     {
@@ -44,7 +44,7 @@ trait ProductTrait
     }
 
     /**
-     * @param list<string> $codes
+     * @param array<array-key, string> $codes
      *
      * @return list<string>
      */

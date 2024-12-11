@@ -10,10 +10,19 @@ use Webmozart\Assert\Assert;
 
 class PromotionRepository extends EntityRepository implements PromotionRepositoryInterface
 {
-    public function findForProcessing(): array
+    public function findForProcessing(array $catalogPromotions = []): array
     {
-        $objs = $this->findAll();
+        $qb = $this->createQueryBuilder('o');
+        if ([] !== $catalogPromotions) {
+            $qb->andWhere('o.code IN (:catalogPromotions)')
+                ->setParameter('catalogPromotions', $catalogPromotions)
+            ;
+        }
+
+        $objs = $qb->getQuery()->getResult();
+        Assert::isArray($objs);
         Assert::allIsInstanceOf($objs, PromotionInterface::class);
+        Assert::isList($objs);
 
         return $objs;
     }

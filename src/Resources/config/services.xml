@@ -6,6 +6,7 @@
         <import resource="services/applicator.xml"/>
         <import resource="services/calculator.xml"/>
         <import resource="services/checker.xml"/>
+        <import resource="services/data_provider.xml"/>
         <import resource="services/factory.xml"/>
         <import resource="services/fixture.xml"/>
         <import resource="services/form.xml"/>
