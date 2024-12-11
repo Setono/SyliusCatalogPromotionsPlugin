@@ -1,18 +1,8 @@
 setono_sylius_catalog_promotion:
     promotion:
         code:
-            unique: The promotion with given code already exists.
-            regex: Promotion code can only be comprised of letters, numbers, dashes and underscores.
-            not_blank: Please enter promotion code.
-        name:
-            max_length: Promotion name must not be longer than 1 character.|Promotion name must not be longer than {{ limit }} characters.
-            min_length: Promotion name must be at least 1 character long.|Promotion name must be at least {{ limit }} characters long.
-            not_blank: Please enter promotion name.
-        description:
-            max_length: Promotion description must not be longer than 1 character.|Promotion description must not be longer than {{ limit }} characters.
-            min_length: Promotion description must be at least 1 character long.|Promotion description must be at least {{ limit }} characters long.
-            not_blank: Please enter promotion description.
+            unique: A promotion with given code already exists.
+            regex: Promotion code can only be comprised of letters (a-z), numbers (0-9), dashes (-) and underscores (_).
         discount:
-            not_blank: Please enter discount.
             range: Please enter value between 0% and 100%.
         end_date_cannot_be_set_prior_start_date: End date cannot be set prior start date.
