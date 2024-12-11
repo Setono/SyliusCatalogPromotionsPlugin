@@ -1,3 +1,2 @@
 imports:
-    - { resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/app/config.yaml" }
     - { resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/app/fixtures.yaml" }
