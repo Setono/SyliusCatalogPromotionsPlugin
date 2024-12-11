@@ -35,6 +35,16 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
 
     public function prepend(ContainerBuilder $container): void
     {
+        $container->prependExtensionConfig('framework', [
+            'messenger' => [
+                'buses' => [
+                    'setono_sylius_catalog_promotion.command_bus' => [
+                        'middleware' => null,
+                    ],
+                ],
+            ],
+        ]);
+
         $container->prependExtensionConfig('sylius_grid', [
             'grids' => [
                 'setono_sylius_catalog_promotion_admin_promotion' => [
