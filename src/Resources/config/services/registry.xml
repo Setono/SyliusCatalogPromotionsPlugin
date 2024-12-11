@@ -4,7 +4,9 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_catalog_promotion.registry.rule"
-                 class="Setono\SyliusCatalogPromotionPlugin\Registry\RuleServiceRegistry"/>
+        <service id="setono_sylius_catalog_promotion.registry.rule_checker" class="Sylius\Component\Registry\ServiceRegistry">
+            <argument>Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\Rule\RuleCheckerInterface</argument>
+            <argument>Catalog promotion rule checker</argument>
+        </service>
     </services>
 </container>

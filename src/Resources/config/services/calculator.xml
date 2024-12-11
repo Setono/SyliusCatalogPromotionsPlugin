@@ -4,11 +4,8 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Setono\SyliusCatalogPromotionPlugin\Calculator\ProductVariantPricesCalculator"
-                 decorates="sylius.calculator.product_variant_price"
-                 decoration-priority="64">
-            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Calculator\ProductVariantPricesCalculator.inner"/>
-            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
+        <service id="Setono\SyliusCatalogPromotionPlugin\Calculator\ProductVariantPricesCalculator">
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicatorInterface"/>
         </service>
     </services>
 </container>

@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\Rule;
-
 
 use Sylius\Component\Core\Model\ProductInterface;
 

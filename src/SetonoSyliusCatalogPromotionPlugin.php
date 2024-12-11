@@ -6,7 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin;
 
 use Setono\CompositeCompilerPass\CompositeCompilerPass;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\CompositeRuntimeChecker;
-use Setono\SyliusCatalogPromotionPlugin\DependencyInjection\Compiler\RegisterRulesPass;
+use Setono\SyliusCatalogPromotionPlugin\DependencyInjection\Compiler\RegisterRulesAndRuleCheckersPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -27,7 +27,7 @@ final class SetonoSyliusCatalogPromotionPlugin extends AbstractResourceBundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new RegisterRulesPass());
+        $container->addCompilerPass(new RegisterRulesAndRuleCheckersPass());
         $container->addCompilerPass(new CompositeCompilerPass(CompositeRuntimeChecker::class, 'setono_sylius_catalog_promotion.runtime_checker'));
     }
 }

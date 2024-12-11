@@ -4,6 +4,9 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicatorInterface"
+                 alias="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicator"/>
+
         <service id="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicator">
             <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface"/>
