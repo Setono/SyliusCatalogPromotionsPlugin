@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification;
-
 
 use Setono\CompositeCompilerPass\CompositeService;
 use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
@@ -14,7 +13,6 @@ use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
  */
 final class CompositePreQualificationChecker extends CompositeService implements PreQualificationCheckerInterface
 {
-
     public function isPreQualified(ProductInterface $product, PromotionInterface $catalogPromotion): bool
     {
         foreach ($this->services as $service) {
