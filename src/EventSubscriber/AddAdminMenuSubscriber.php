@@ -2,14 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusCatalogPromotionPlugin\Menu;
+namespace Setono\SyliusCatalogPromotionPlugin\EventSubscriber;
 
 use Knp\Menu\ItemInterface;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class AdminMenuListener
+final class AddAdminMenuSubscriber implements EventSubscriberInterface
 {
-    public function addAdminMenuItems(MenuBuilderEvent $event): void
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            'sylius.menu.admin.main' => 'add',
+        ];
+    }
+
+    public function add(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
 
@@ -19,6 +27,7 @@ final class AdminMenuListener
         }
 
         $marketingSubmenu
+            // This will override the Sylius menu item with the same name
             ->addChild('catalog_promotions', [
                 'route' => 'setono_sylius_catalog_promotion_admin_promotion_index',
             ])
