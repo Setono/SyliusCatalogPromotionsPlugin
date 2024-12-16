@@ -30,7 +30,7 @@
             <gedmo:timestampable on="update"/>
         </field>
 
-        <many-to-many field="channels" target-entity="Sylius\Component\Channel\Model\ChannelInterface">
+        <many-to-many field="channels" target-entity="Sylius\Component\Channel\Model\ChannelInterface" fetch="EXTRA_LAZY">
             <join-table name="setono_sylius_catalog_promotion__promotion_channels">
                 <join-columns>
                     <join-column name="promotion_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
@@ -41,8 +41,7 @@
             </join-table>
         </many-to-many>
 
-        <one-to-many field="rules" target-entity="Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface"
-                     mapped-by="promotion" orphan-removal="true">
+        <one-to-many field="rules" target-entity="Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface" mapped-by="promotion" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>
