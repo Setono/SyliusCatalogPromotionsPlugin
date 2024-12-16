@@ -58,7 +58,9 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
      */
     private function getEligiblePromotions(array $catalogPromotions, bool $manuallyDiscounted): \Generator
     {
-        // todo check if any of the promotions are exclusive
+        $eligiblePromotions = [];
+        $eligibleExclusivePromotions = [];
+
         foreach ($catalogPromotions as $catalogPromotion) {
             if (!array_key_exists($catalogPromotion, $this->catalogPromotionCache)) {
                 $this->catalogPromotionCache[$catalogPromotion] = $this->promotionRepository->findOneByCode($catalogPromotion);
@@ -76,7 +78,18 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
                 continue;
             }
 
-            yield $this->catalogPromotionCache[$catalogPromotion];
+            $eligiblePromotions[] = $this->catalogPromotionCache[$catalogPromotion];
+
+            if ($this->catalogPromotionCache[$catalogPromotion]->isExclusive()) {
+                $eligibleExclusivePromotions[$this->catalogPromotionCache[$catalogPromotion]->getPriority()] = $this->catalogPromotionCache[$catalogPromotion];
+            }
+        }
+
+        if ([] !== $eligibleExclusivePromotions) {
+            krsort($eligibleExclusivePromotions, \SORT_NUMERIC);
+            yield reset($eligibleExclusivePromotions);
+        } else {
+            yield from $eligiblePromotions;
         }
     }
 }
