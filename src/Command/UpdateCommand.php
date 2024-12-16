@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class ProcessCommand extends Command
+final class UpdateCommand extends Command
 {
-    protected static $defaultName = 'setono:sylius-catalog-promotion:process';
+    protected static $defaultName = 'setono:sylius-catalog-promotion:update';
 
-    protected static $defaultDescription = 'Process catalog promotions';
+    protected static $defaultDescription = 'Run a catalog promotion update';
 
     public function __construct(private readonly MessageBusInterface $commandBus)
     {
