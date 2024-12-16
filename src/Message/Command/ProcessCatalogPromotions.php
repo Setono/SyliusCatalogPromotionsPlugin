@@ -6,7 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Message\Command;
 
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 
-final class ProcessCatalogPromotions implements CommandInterface
+final class ProcessCatalogPromotions implements AsyncCommandInterface
 {
     /**
      * A list of catalog promotion codes to process. If empty, all catalog promotions will be processed
