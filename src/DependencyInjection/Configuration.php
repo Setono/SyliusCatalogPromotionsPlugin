@@ -6,6 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\DependencyInjection;
 
 use Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionRuleType;
 use Setono\SyliusCatalogPromotionPlugin\Form\Type\PromotionType;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Model\Promotion;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRule;
 use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepository;
@@ -37,6 +38,21 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('resources')
                     ->addDefaultsIfNotSet()
                     ->children()
+                        ->arrayNode('catalog_promotion_update')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(CatalogPromotionUpdate::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
                         ->arrayNode('promotion')
                             ->addDefaultsIfNotSet()
                             ->children()

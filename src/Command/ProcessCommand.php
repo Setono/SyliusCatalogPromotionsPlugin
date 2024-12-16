@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Command;
 
-use Setono\SyliusCatalogPromotionPlugin\Message\Command\ProcessCatalogPromotions;
+use Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpdate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +23,7 @@ final class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->commandBus->dispatch(new ProcessCatalogPromotions());
+        $this->commandBus->dispatch(new StartCatalogPromotionUpdate());
 
         return 0;
     }
