@@ -1,0 +1,13 @@
+framework:
+    messenger:
+        transports:
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    delay: 1000
+                    max_retries: 4
+                    max_delay: 86400000 # 1 day
+                    multiplier: 1
+# Remove the comment if you want to test the plugin with async commands
+#        routing:
+#            'Setono\SyliusCatalogPromotionPlugin\Message\Command\AsyncCommandInterface': async

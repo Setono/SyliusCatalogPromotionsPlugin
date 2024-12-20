@@ -7,6 +7,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler;
 use Doctrine\Persistence\ManagerRegistry;
 use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface;
+use Setono\SyliusCatalogPromotionPlugin\Message\Command\CheckCatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\ProcessCatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\UpdateProducts;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
@@ -50,7 +51,7 @@ final class ProcessCatalogPromotionUpdateHandler
              * @var MessageBuffer<int> $buffer
              */
             $buffer = new MessageBuffer(
-                100,
+                10, // todo change to 100 or higher
                 fn (array $productIds) => $this->commandBus->dispatch(new UpdateProducts(
                     catalogPromotionUpdate: $catalogPromotionUpdate,
                     productIds: $productIds,
@@ -68,6 +69,7 @@ final class ProcessCatalogPromotionUpdateHandler
             $buffer->flush();
 
             // Because we re-fetch the catalog promotion update below, we will save the message ids here
+            // todo would be more clean to do it with middleware I guess, but would require $bufferSize times more calls to the database...
             $messageIds = $catalogPromotionUpdate->getMessageIds();
 
             // We need to re-fetch the catalog promotion update because it might
@@ -75,6 +77,8 @@ final class ProcessCatalogPromotionUpdateHandler
             $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
             $catalogPromotionUpdate->setProductsEligibleForUpdate($i);
             $catalogPromotionUpdate->setMessageIds($messageIds);
+
+            $this->commandBus->dispatch(new CheckCatalogPromotionUpdate($catalogPromotionUpdate));
         } catch (\Throwable $e) {
             $this->catalogPromotionUpdateWorkflow->apply($catalogPromotionUpdate, CatalogPromotionUpdateWorkflow::TRANSITION_FAIL);
             $catalogPromotionUpdate->setError($e->getMessage());

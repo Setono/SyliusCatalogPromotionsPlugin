@@ -31,7 +31,7 @@ final class ProductDataProvider implements ProductDataProviderInterface
         $qb = $this->createQueryBuilder($ids)->select('DISTINCT product.id');
 
         /** @var SelectBatchIteratorAggregate<array-key, int> $iterator */
-        $iterator = SelectBatchIteratorAggregate::fromQuery($qb->getQuery(), 100);
+        $iterator = SelectBatchIteratorAggregate::fromQuery($qb->getQuery(), 500);
 
         yield from $iterator;
     }
