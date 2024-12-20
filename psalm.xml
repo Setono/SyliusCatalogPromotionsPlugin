@@ -14,8 +14,9 @@
         <directory name="src"/>
         <directory name="tests"/>
         <ignoreFiles>
+            <directory name="src/Fixture"/>
             <directory name="tests/Application"/>
-            <directory name="tests/Behat"/> <!-- todo readd this when we readd Behat -->
+            <directory name="tests/Behat"/>
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
@@ -36,41 +37,6 @@
                 <referencedClass name="Sylius\Component\Core\Calculator\ProductVariantPriceCalculatorInterface"/>
             </errorLevel>
         </DeprecatedInterface>
-        <MixedArgument>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MixedArgument>
-        <MixedReturnTypeCoercion>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MixedReturnTypeCoercion>
-        <MixedAssignment>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MixedAssignment>
-        <MixedReturnStatement>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MixedReturnStatement>
-        <MixedOperand>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MixedOperand>
-        <MissingClosureParamType>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MissingClosureParamType>
-        <MixedInferredReturnType>
-            <errorLevel type="suppress">
-                <directory name="src/Fixture"/>
-            </errorLevel>
-        </MixedInferredReturnType>
         <MissingTemplateParam>
             <errorLevel type="suppress">
                 <directory name="src/Form"/>
