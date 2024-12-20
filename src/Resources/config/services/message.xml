@@ -7,6 +7,7 @@
         <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\ProcessCatalogPromotionUpdateHandler">
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface"/>
             <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
+            <argument type="service" id="state_machine.setono_sylius_catalog_promotion__catalog_promotion_update"/>
             <argument type="service" id="doctrine"/>
             <argument>%setono_sylius_catalog_promotion.model.catalog_promotion_update.class%</argument>
 

@@ -6,6 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\DependencyInjection;
 
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\Rule\RuleCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
+use Setono\SyliusCatalogPromotionPlugin\Workflow\CatalogPromotionUpdateWorkflow;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Symfony\Component\Config\FileLocator;
@@ -43,6 +44,7 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                     ],
                 ],
             ],
+            'workflows' => CatalogPromotionUpdateWorkflow::getConfig(),
         ]);
 
         $container->prependExtensionConfig('sylius_grid', [

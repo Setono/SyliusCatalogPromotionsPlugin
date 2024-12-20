@@ -16,12 +16,20 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 
     protected string $state = self::STATE_PENDING;
 
+    protected ?string $error = null;
+
     /** @var list<string> */
     protected array $catalogPromotions = [];
 
     protected ?int $productsEligibleForUpdate = null;
 
     protected int $productsUpdated = 0;
+
+    /** @var list<string> */
+    protected ?array $messageIds = null;
+
+    /** @var list<string> */
+    protected ?array $processedMessageIds = null;
 
     public function getId(): ?int
     {
@@ -46,6 +54,16 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     public function setState(string $state): void
     {
         $this->state = $state;
+    }
+
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    public function setError(?string $error): void
+    {
+        $this->error = $error;
     }
 
     public function getCatalogPromotions(): array
@@ -81,5 +99,41 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     public function incrementProductsUpdated(int $increment = 1): void
     {
         $this->productsUpdated += $increment;
+    }
+
+    public function getMessageIds(): array
+    {
+        return $this->messageIds ?? [];
+    }
+
+    public function setMessageIds(array $messageIds): void
+    {
+        if ([] === $messageIds) {
+            $messageIds = null;
+        }
+
+        $this->messageIds = $messageIds;
+    }
+
+    public function addProcessedMessageId(string $messageId): void
+    {
+        if (null === $this->processedMessageIds) {
+            $this->processedMessageIds = [];
+        }
+
+        $this->processedMessageIds[] = $messageId;
+    }
+
+    public function hasAllMessagesBeenProcessed(): bool
+    {
+        if (null === $this->messageIds || [] === $this->messageIds) {
+            return true;
+        }
+
+        if (null === $this->processedMessageIds || [] === $this->processedMessageIds) {
+            return false;
+        }
+
+        return [] === array_diff($this->messageIds, $this->processedMessageIds);
     }
 }

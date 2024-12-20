@@ -24,6 +24,10 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
 
     public function setState(string $state): void;
 
+    public function setError(?string $error): void;
+
+    public function getError(): ?string;
+
     /**
      * A list of catalog promotions codes that the update is for
      *
@@ -48,4 +52,27 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
     public function setProductsUpdated(int $productsUpdated): void;
 
     public function incrementProductsUpdated(int $increment = 1): void;
+
+    /**
+     * Holds a list of ids that represent the messages responsible for updating the products.
+     * This way we can track when the processing of a catalog promotion update is done.
+     *
+     * @return list<string>
+     */
+    public function getMessageIds(): array;
+
+    /**
+     * @param list<string> $messageIds
+     */
+    public function setMessageIds(array $messageIds): void;
+
+    /**
+     * Adds a message id to the list of processed message ids. Should only be added when a message was successfully processed
+     */
+    public function addProcessedMessageId(string $messageId): void;
+
+    /**
+     * Returns true if the processed list of message ids is equal to the list of message ids
+     */
+    public function hasAllMessagesBeenProcessed(): bool;
 }
