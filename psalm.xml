@@ -39,6 +39,7 @@
         </DeprecatedInterface>
         <MissingTemplateParam>
             <errorLevel type="suppress">
+                <directory name="src/Factory"/>
                 <directory name="src/Form"/>
             </errorLevel>
         </MissingTemplateParam>
