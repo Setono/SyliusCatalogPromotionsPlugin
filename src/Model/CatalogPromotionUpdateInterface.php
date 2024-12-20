@@ -24,10 +24,6 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
 
     public function setState(string $state): void;
 
-    public function getCorrelationId(): string;
-
-    public function setCorrelationId(string $correlationId): void;
-
     /**
      * A list of catalog promotions codes that the update is for
      *
@@ -50,4 +46,6 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
     public function getProductsUpdated(): int;
 
     public function setProductsUpdated(int $productsUpdated): void;
+
+    public function incrementProductsUpdated(int $increment = 1): void;
 }

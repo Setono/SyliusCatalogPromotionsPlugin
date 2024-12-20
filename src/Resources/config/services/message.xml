@@ -4,11 +4,31 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\ProcessCatalogPromotionsHandler">
+        <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\ProcessCatalogPromotionUpdateHandler">
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
+            <argument type="service" id="doctrine"/>
+            <argument>%setono_sylius_catalog_promotion.model.catalog_promotion_update.class%</argument>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\StartCatalogPromotionUpdateHandler">
+            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.factory.catalog_promotion_update"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
+            <argument type="service" id="doctrine"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\UpdateProductsHandler">
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface"/>
             <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\PreQualificationCheckerInterface"/>
             <argument type="service" id="doctrine"/>
+            <argument>%sylius.model.product.class%</argument>
+            <argument>%setono_sylius_catalog_promotion.model.catalog_promotion_update.class%</argument>
 
             <tag name="messenger.message_handler"/>
         </service>

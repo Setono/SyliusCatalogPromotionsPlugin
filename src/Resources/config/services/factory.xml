@@ -4,11 +4,16 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionUpdateFactory"
+                 decorates="setono_sylius_catalog_promotion.factory.catalog_promotion_update"
+                 decoration-priority="64">
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionUpdateFactory.inner"/>
+        </service>
+
         <service id="setono_sylius_catalog_promotion.custom_factory.promotion_rule"
                  class="Setono\SyliusCatalogPromotionPlugin\Factory\PromotionRuleFactory"
                  decorates="setono_sylius_catalog_promotion.factory.promotion_rule"
-                 decoration-priority="256"
-                 public="false">
+                 decoration-priority="64">
             <argument type="service" id="setono_sylius_catalog_promotion.custom_factory.promotion_rule.inner"/>
             <argument>%setono_sylius_catalog_promotion.promotion_rules%</argument>
         </service>

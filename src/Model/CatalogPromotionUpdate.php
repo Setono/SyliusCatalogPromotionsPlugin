@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Model;
 
 use Sylius\Component\Resource\Model\TimestampableTrait;
-use Symfony\Component\Uid\Uuid;
 
 class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 {
@@ -17,19 +16,12 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 
     protected string $state = self::STATE_PENDING;
 
-    protected string $correlationId;
-
     /** @var list<string> */
     protected array $catalogPromotions = [];
 
     protected ?int $productsEligibleForUpdate = null;
 
     protected int $productsUpdated = 0;
-
-    public function __construct()
-    {
-        $this->correlationId = (string) Uuid::v7();
-    }
 
     public function getId(): ?int
     {
@@ -54,16 +46,6 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     public function setState(string $state): void
     {
         $this->state = $state;
-    }
-
-    public function getCorrelationId(): string
-    {
-        return $this->correlationId;
-    }
-
-    public function setCorrelationId(string $correlationId): void
-    {
-        $this->correlationId = $correlationId;
     }
 
     public function getCatalogPromotions(): array

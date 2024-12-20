@@ -8,11 +8,13 @@ use Doctrine\Persistence\ManagerRegistry;
 use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\PreQualificationCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface;
-use Setono\SyliusCatalogPromotionPlugin\Message\Command\ProcessCatalogPromotions;
+use Setono\SyliusCatalogPromotionPlugin\Message\Command\UpdateProducts;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
-// todo refactor this by dividing the processing into chunks of x products much like we do in the Meilisearch plugin
-final class ProcessCatalogPromotionsHandler
+final class UpdateProductsHandler
 {
     use ORMTrait;
 
@@ -21,20 +23,29 @@ final class ProcessCatalogPromotionsHandler
         private readonly PromotionRepositoryInterface $promotionRepository,
         private readonly PreQualificationCheckerInterface $preQualificationChecker,
         ManagerRegistry $managerRegistry,
+        /** @var class-string<ProductInterface> $productClass */
+        private readonly string $productClass,
+        /** @var class-string<CatalogPromotionUpdateInterface> $catalogPromotionUpdateClass */
+        private readonly string $catalogPromotionUpdateClass,
     ) {
         $this->managerRegistry = $managerRegistry;
     }
 
-    public function __invoke(ProcessCatalogPromotions $message): void
+    // todo check state of the catalog promotion update
+    // todo catch errors and transition the catalog promotion update to an error state
+    public function __invoke(UpdateProducts $message): void
     {
+        /** @var CatalogPromotionUpdateInterface|null $catalogPromotionUpdate */
+        $catalogPromotionUpdate = $this->getManager($this->catalogPromotionUpdateClass)->find($this->catalogPromotionUpdateClass, $message->catalogPromotionUpdate);
+
+        if (null === $catalogPromotionUpdate) {
+            throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s not found', $message->catalogPromotionUpdate));
+        }
+
         $catalogPromotions = $this->promotionRepository->findForProcessing($message->catalogPromotions);
 
-        $manager = null;
-
         $i = 0;
-        foreach ($this->productDataProvider->getProducts() as $product) {
-            ++$i;
-
+        foreach ($this->productDataProvider->getProducts($message->ids) as $product) {
             // If we check all catalog promotions, we need to reset the pre-qualified catalog promotions on the product.
             // Otherwise, we only need to reset the pre-qualified catalog promotions for the catalog promotions we are processing
             $preQualifiedCatalogPromotions = [];
@@ -52,14 +63,11 @@ final class ProcessCatalogPromotionsHandler
             }
 
             $product->setPreQualifiedCatalogPromotions($preQualifiedCatalogPromotions);
-
-            if ($i % 100 === 0) {
-                $manager = $this->getManager($product);
-                $manager->flush();
-                $manager->clear();
-            }
+            ++$i;
         }
 
-        $manager?->flush();
+        $catalogPromotionUpdate->incrementProductsUpdated($i);
+
+        $this->getManager($this->productClass)->flush();
     }
 }

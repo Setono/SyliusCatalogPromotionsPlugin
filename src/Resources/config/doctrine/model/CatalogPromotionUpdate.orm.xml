@@ -13,9 +13,8 @@
 
         <field name="version" type="integer" version="true"/>
         <field name="state"/>
-        <field name="correlationId"/>
         <field name="catalogPromotions" type="json"/>
-        <field name="productsEligibleForUpdate" type="integer"/>
+        <field name="productsEligibleForUpdate" type="integer" nullable="true"/>
         <field name="productsUpdated" type="integer"/>
 
         <field name="createdAt" column="created_at" type="datetime">

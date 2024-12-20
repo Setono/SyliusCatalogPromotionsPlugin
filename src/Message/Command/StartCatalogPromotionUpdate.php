@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Message\Command;
 
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 
+/**
+ * This is the message you should dispatch when you want to update catalog promotions
+ */
 final class StartCatalogPromotionUpdate
 {
     /**
@@ -16,14 +20,28 @@ final class StartCatalogPromotionUpdate
     public readonly array $catalogPromotions;
 
     /**
+     * A list of product ids to process. If empty, all products will be processed
+     *
+     * @var list<int>
+     */
+    public readonly array $products;
+
+    /**
      * @param list<string|PromotionInterface> $catalogPromotions
+     * @param list<int|ProductInterface> $products
      */
     public function __construct(
         array $catalogPromotions = [],
+        array $products = [],
     ) {
         $this->catalogPromotions = array_map(
             static fn (string|PromotionInterface $catalogPromotion) => $catalogPromotion instanceof PromotionInterface ? (string) $catalogPromotion->getCode() : $catalogPromotion,
             $catalogPromotions,
+        );
+
+        $this->products = array_map(
+            static fn (int|ProductInterface $product) => $product instanceof ProductInterface ? (int) $product->getId() : $product,
+            $products,
         );
     }
 }
