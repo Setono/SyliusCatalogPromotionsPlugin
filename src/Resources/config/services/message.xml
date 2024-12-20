@@ -7,7 +7,7 @@
         <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\CheckCatalogPromotionUpdateHandler">
             <argument type="service" id="state_machine.setono_sylius_catalog_promotion__catalog_promotion_update"/>
             <argument type="service" id="doctrine"/>
-            <argument type="service" id="Psr\Clock\ClockInterface"/>
+            <argument type="service" id="Psr\Clock\ClockInterface" on-invalid="null"/>
             <argument>%setono_sylius_catalog_promotion.model.catalog_promotion_update.class%</argument>
 
             <tag name="messenger.message_handler"/>

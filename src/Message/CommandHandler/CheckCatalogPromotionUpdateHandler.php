@@ -22,7 +22,7 @@ final class CheckCatalogPromotionUpdateHandler
     public function __construct(
         private readonly WorkflowInterface $catalogPromotionUpdateWorkflow,
         ManagerRegistry $managerRegistry,
-        private readonly ClockInterface $clock,
+        private readonly ?ClockInterface $clock,
         /** @var class-string<CatalogPromotionUpdateInterface> $catalogPromotionUpdateClass */
         private readonly string $catalogPromotionUpdateClass,
         private readonly int $maxTries = 10,
@@ -57,7 +57,7 @@ final class CheckCatalogPromotionUpdateHandler
                 Assert::notNull($createdAt);
                 $createdAt = \DateTimeImmutable::createFromInterface($createdAt);
 
-                if ($this->clock->now() >= $createdAt->add(new \DateInterval(sprintf('PT%dS', $this->maxRetrySeconds)))) {
+                if (($this->clock?->now() ?? new \DateTimeImmutable()) >= $createdAt->add(new \DateInterval(sprintf('PT%dS', $this->maxRetrySeconds)))) {
                     // todo transition to failed state on the catalog promotion update
                     throw new UnrecoverableMessageHandlingException(sprintf(
                         'Catalog promotion update with id %s has not processed all messages after %s',

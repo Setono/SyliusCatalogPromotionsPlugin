@@ -60,7 +60,7 @@
         </service>
 
         <service id="Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\DateRuntimeChecker">
-            <argument type="service" id="Psr\Clock\ClockInterface"/>
+            <argument type="service" id="Psr\Clock\ClockInterface" on-invalid="null"/>
 
             <tag name="setono_sylius_catalog_promotion.runtime_checker"/>
         </service>

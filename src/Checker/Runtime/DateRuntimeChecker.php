@@ -9,13 +9,13 @@ use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 
 final class DateRuntimeChecker implements RuntimeCheckerInterface
 {
-    public function __construct(private readonly ClockInterface $clock)
+    public function __construct(private readonly ?ClockInterface $clock)
     {
     }
 
     public function isEligible(PromotionInterface $catalogPromotion): bool
     {
-        $now = $this->clock->now();
+        $now = $this->clock?->now() ?? new \DateTimeImmutable();
 
         $startsAt = $catalogPromotion->getStartsAt();
         if (null !== $startsAt && $startsAt > $now) {
