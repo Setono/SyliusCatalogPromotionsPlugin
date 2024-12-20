@@ -35,26 +35,17 @@ final class UpdateProductsHandler
     // todo catch errors and transition the catalog promotion update to an error state
     public function __invoke(UpdateProducts $message): void
     {
-        /** @var CatalogPromotionUpdateInterface|null $catalogPromotionUpdate */
-        $catalogPromotionUpdate = $this->getManager($this->catalogPromotionUpdateClass)->find($this->catalogPromotionUpdateClass, $message->catalogPromotionUpdate);
-
-        if (null === $catalogPromotionUpdate) {
-            throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s not found', $message->catalogPromotionUpdate));
-        }
+        $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
 
         $catalogPromotions = $this->promotionRepository->findForProcessing($message->catalogPromotions);
 
         $i = 0;
-        foreach ($this->productDataProvider->getProducts($message->ids) as $product) {
-            // If we check all catalog promotions, we need to reset the pre-qualified catalog promotions on the product.
-            // Otherwise, we only need to reset the pre-qualified catalog promotions for the catalog promotions we are processing
-            $preQualifiedCatalogPromotions = [];
-            if ([] !== $message->catalogPromotions) {
-                $preQualifiedCatalogPromotions = array_filter(
-                    $product->getPreQualifiedCatalogPromotions(),
-                    static fn (string $code) => !in_array($code, $message->catalogPromotions, true),
-                );
-            }
+        foreach ($this->productDataProvider->getProducts($message->productIds) as $product) {
+            // Reset the pre-qualified catalog promotions for the catalog promotions we are processing
+            $preQualifiedCatalogPromotions = array_filter(
+                $product->getPreQualifiedCatalogPromotions(),
+                static fn (string $code) => !in_array($code, $message->catalogPromotions, true),
+            );
 
             foreach ($catalogPromotions as $catalogPromotion) {
                 if ($this->preQualificationChecker->isPreQualified($product, $catalogPromotion)) {
@@ -69,5 +60,15 @@ final class UpdateProductsHandler
         $catalogPromotionUpdate->incrementProductsUpdated($i);
 
         $this->getManager($this->productClass)->flush();
+    }
+
+    private function getCatalogPromotionUpdate(int $id): CatalogPromotionUpdateInterface
+    {
+        $catalogPromotionUpdate = $this->getManager($this->catalogPromotionUpdateClass)->find($this->catalogPromotionUpdateClass, $id);
+        if (null === $catalogPromotionUpdate) {
+            throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s not found', $id));
+        }
+
+        return $catalogPromotionUpdate;
     }
 }

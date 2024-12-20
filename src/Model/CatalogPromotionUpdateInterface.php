@@ -36,7 +36,7 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
     public function getCatalogPromotions(): array;
 
     /**
-     * @param list<string> $catalogPromotions
+     * @param non-empty-list<string> $catalogPromotions
      */
     public function setCatalogPromotions(array $catalogPromotions): void;
 
@@ -60,6 +60,8 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
      * @return list<string>
      */
     public function getMessageIds(): array;
+
+    public function addMessageId(string $messageId): void;
 
     /**
      * @param list<string> $messageIds

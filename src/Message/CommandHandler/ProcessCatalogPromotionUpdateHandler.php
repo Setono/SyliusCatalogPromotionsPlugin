@@ -51,10 +51,10 @@ final class ProcessCatalogPromotionUpdateHandler
              */
             $buffer = new MessageBuffer(
                 100,
-                fn (array $ids, string $callbackId) => $this->commandBus->dispatch(new UpdateProducts(
-                    $catalogPromotionUpdate,
-                    $ids,
-                    $catalogPromotionUpdate->getCatalogPromotions(),
+                fn (array $productIds) => $this->commandBus->dispatch(new UpdateProducts(
+                    catalogPromotionUpdate: $catalogPromotionUpdate,
+                    productIds: $productIds,
+                    catalogPromotions: $catalogPromotionUpdate->getCatalogPromotions(),
                 )),
             );
 
@@ -67,11 +67,14 @@ final class ProcessCatalogPromotionUpdateHandler
 
             $buffer->flush();
 
+            // Because we re-fetch the catalog promotion update below, we will save the message ids here
+            $messageIds = $catalogPromotionUpdate->getMessageIds();
+
             // We need to re-fetch the catalog promotion update because it might
             // have become detached from the UnitOfWork inside the data provider above
             $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
             $catalogPromotionUpdate->setProductsEligibleForUpdate($i);
-            $catalogPromotionUpdate->setMessageIds($buffer->getCallbackIds());
+            $catalogPromotionUpdate->setMessageIds($messageIds);
         } catch (\Throwable $e) {
             $this->catalogPromotionUpdateWorkflow->apply($catalogPromotionUpdate, CatalogPromotionUpdateWorkflow::TRANSITION_FAIL);
             $catalogPromotionUpdate->setError($e->getMessage());

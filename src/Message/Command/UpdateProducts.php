@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Message\Command;
 
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @internal Use the \Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpdate to update products
@@ -13,15 +14,28 @@ final class UpdateProducts implements AsyncCommandInterface
 {
     public readonly int $catalogPromotionUpdate;
 
+    public readonly string $messageId;
+
+    /** @var non-empty-list<string> */
+    public readonly array $catalogPromotions;
+
+    /**
+     * @param list<string> $catalogPromotions
+     */
     public function __construct(
-        int|CatalogPromotionUpdateInterface $catalogPromotionUpdate,
-
-        /** @var list<int> $ids */
-        public readonly array $ids,
-
-        /** @var list<string> $catalogPromotions */
-        public readonly array $catalogPromotions = [],
+        CatalogPromotionUpdateInterface $catalogPromotionUpdate,
+        /** @var list<int> $productIds */
+        public readonly array $productIds,
+        array $catalogPromotions,
     ) {
-        $this->catalogPromotionUpdate = $catalogPromotionUpdate instanceof CatalogPromotionUpdateInterface ? (int) $catalogPromotionUpdate->getId() : $catalogPromotionUpdate;
+        $this->catalogPromotionUpdate = (int) $catalogPromotionUpdate->getId();
+        $this->messageId = (string) Uuid::v7();
+        $catalogPromotionUpdate->addMessageId($this->messageId);
+
+        if ([] === $catalogPromotions) {
+            throw new \InvalidArgumentException('The catalog promotions array must not be empty');
+        }
+
+        $this->catalogPromotions = $catalogPromotions;
     }
 }

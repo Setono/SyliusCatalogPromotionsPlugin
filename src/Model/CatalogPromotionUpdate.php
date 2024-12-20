@@ -18,8 +18,8 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 
     protected ?string $error = null;
 
-    /** @var list<string> */
-    protected array $catalogPromotions = [];
+    /** @var list<string>|null */
+    protected ?array $catalogPromotions = null;
 
     protected ?int $productsEligibleForUpdate = null;
 
@@ -68,7 +68,7 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 
     public function getCatalogPromotions(): array
     {
-        return $this->catalogPromotions;
+        return $this->catalogPromotions ?? [];
     }
 
     public function setCatalogPromotions(array $catalogPromotions): void
@@ -104,6 +104,15 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     public function getMessageIds(): array
     {
         return $this->messageIds ?? [];
+    }
+
+    public function addMessageId(string $messageId): void
+    {
+        if (null === $this->messageIds) {
+            $this->messageIds = [];
+        }
+
+        $this->messageIds[] = $messageId;
     }
 
     public function setMessageIds(array $messageIds): void

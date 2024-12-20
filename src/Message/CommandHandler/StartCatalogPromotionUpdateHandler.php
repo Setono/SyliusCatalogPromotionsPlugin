@@ -12,6 +12,7 @@ use Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpd
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class StartCatalogPromotionUpdateHandler
@@ -35,6 +36,10 @@ final class StartCatalogPromotionUpdateHandler
                 static fn (PromotionInterface $promotion): string => (string) $promotion->getCode(),
                 $this->promotionRepository->findForProcessing($message->catalogPromotions),
             );
+        }
+
+        if ([] === $catalogPromotions) {
+            throw new UnrecoverableMessageHandlingException('No catalog promotions found to process');
         }
 
         $catalogPromotionUpdate = $this->catalogPromotionUpdateFactory->createWithCatalogPromotions($catalogPromotions);
