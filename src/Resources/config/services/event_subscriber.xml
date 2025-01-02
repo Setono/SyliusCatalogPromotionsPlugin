@@ -8,6 +8,14 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Setono\SyliusCatalogPromotionPlugin\EventSubscriber\UpdateCatalogPromotionSubscriber">
+            <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
+
+            <tag name="kernel.event_subscriber"/>
+            <tag name="doctrine.event_listener" event="postPersist"/>
+            <tag name="doctrine.event_listener" event="postUpdate"/>
+        </service>
+
         <service id="Setono\SyliusCatalogPromotionPlugin\EventSubscriber\UpdateProductSubscriber">
             <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
 
