@@ -15,6 +15,7 @@
         <field name="state"/>
         <field name="error" type="text" nullable="true"/>
         <field name="catalogPromotions" type="json"/>
+        <field name="products" type="json" nullable="true"/>
         <field name="productsEligibleForUpdate" type="integer" nullable="true"/>
         <field name="productsUpdated" type="integer"/>
         <field name="messageIds" type="json" nullable="true"/>

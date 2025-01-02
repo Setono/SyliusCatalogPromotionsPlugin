@@ -21,6 +21,9 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     /** @var list<string>|null */
     protected ?array $catalogPromotions = null;
 
+    /** @var list<int>|null */
+    protected ?array $products = null;
+
     protected ?int $productsEligibleForUpdate = null;
 
     protected int $productsUpdated = 0;
@@ -74,6 +77,20 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     public function setCatalogPromotions(array $catalogPromotions): void
     {
         $this->catalogPromotions = $catalogPromotions;
+    }
+
+    public function getProducts(): array
+    {
+        return $this->products ?? [];
+    }
+
+    public function setProducts(?array $products): void
+    {
+        if ([] === $products) {
+            $products = null;
+        }
+
+        $this->products = $products;
     }
 
     public function getProductsEligibleForUpdate(): ?int

@@ -27,6 +27,7 @@ final class ProcessCatalogPromotionUpdateHandler
         ManagerRegistry $managerRegistry,
         /** @var class-string<CatalogPromotionUpdateInterface> $catalogPromotionUpdateClass */
         private readonly string $catalogPromotionUpdateClass,
+        private readonly int $bufferSize = 100,
     ) {
         $this->managerRegistry = $managerRegistry;
     }
@@ -51,7 +52,7 @@ final class ProcessCatalogPromotionUpdateHandler
              * @var MessageBuffer<int> $buffer
              */
             $buffer = new MessageBuffer(
-                10, // todo change to 100 or higher
+                $this->bufferSize,
                 fn (array $productIds) => $this->commandBus->dispatch(new UpdateProducts(
                     catalogPromotionUpdate: $catalogPromotionUpdate,
                     productIds: $productIds,
@@ -60,7 +61,7 @@ final class ProcessCatalogPromotionUpdateHandler
             );
 
             $i = 0;
-            foreach ($this->productDataProvider->getIds() as $id) {
+            foreach ($this->productDataProvider->getIds($catalogPromotionUpdate->getProducts()) as $id) {
                 $buffer->push($id);
 
                 ++$i;
@@ -69,7 +70,7 @@ final class ProcessCatalogPromotionUpdateHandler
             $buffer->flush();
 
             // Because we re-fetch the catalog promotion update below, we will save the message ids here
-            // todo would be more clean to do it with middleware I guess, but would require $bufferSize times more calls to the database...
+            // todo would be more clean to do it with middleware I guess, but would require x times more calls to the database...
             $messageIds = $catalogPromotionUpdate->getMessageIds();
 
             // We need to re-fetch the catalog promotion update because it might

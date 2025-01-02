@@ -34,14 +34,14 @@ final class StartCatalogPromotionUpdate
         array $catalogPromotions = [],
         array $products = [],
     ) {
-        $this->catalogPromotions = array_map(
+        $this->catalogPromotions = array_values(array_unique(array_map(
             static fn (string|PromotionInterface $catalogPromotion) => $catalogPromotion instanceof PromotionInterface ? (string) $catalogPromotion->getCode() : $catalogPromotion,
             $catalogPromotions,
-        );
+        )));
 
-        $this->products = array_map(
+        $this->products = array_values(array_unique(array_map(
             static fn (int|ProductInterface $product) => $product instanceof ProductInterface ? (int) $product->getId() : $product,
             $products,
-        );
+        )));
     }
 }

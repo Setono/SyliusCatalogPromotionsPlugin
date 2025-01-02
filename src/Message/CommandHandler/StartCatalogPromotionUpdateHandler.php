@@ -43,6 +43,10 @@ final class StartCatalogPromotionUpdateHandler
         }
 
         $catalogPromotionUpdate = $this->catalogPromotionUpdateFactory->createWithCatalogPromotions($catalogPromotions);
+        if ([] !== $message->products) {
+            $catalogPromotionUpdate->setProducts($message->products);
+        }
+
         $manager = $this->getManager($catalogPromotionUpdate);
         $manager->persist($catalogPromotionUpdate);
         $manager->flush();

@@ -41,6 +41,19 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
     public function setCatalogPromotions(array $catalogPromotions): void;
 
     /**
+     * A list of product ids that the update is for. If empty, all products will be updated
+     *
+     * @return list<int>
+     */
+    public function getProducts(): array;
+
+    /**
+     * @param list<int>|null $products
+     */
+    public function setProducts(?array $products): void;
+
+    /**
+     * todo do we need this?
      * The number of products that are eligible for update. This should be set when the update is created
      */
     public function getProductsEligibleForUpdate(): ?int;
