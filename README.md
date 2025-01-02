@@ -43,9 +43,8 @@ You have requested a non-existent parameter "setono_sylius_catalog_promotion.mod
 
 ```yaml
 # config/routes/setono_sylius_catalog_promotion.yaml
-setono_sylius_catalog_promotion_admin:
-    resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/admin_routing.yaml"
-    prefix: /admin
+setono_sylius_catalog_promotion:
+    resource: "@SetonoSyliusCatalogPromotionPlugin/Resources/config/routes.yaml"
 ```
 
 ### Extend core classes
