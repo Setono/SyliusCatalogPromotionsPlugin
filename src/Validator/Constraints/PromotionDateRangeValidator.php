@@ -7,7 +7,8 @@ namespace Setono\SyliusCatalogPromotionPlugin\Validator\Constraints;
 use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Webmozart\Assert\Assert;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 final class PromotionDateRangeValidator extends ConstraintValidator
 {
@@ -21,8 +22,13 @@ final class PromotionDateRangeValidator extends ConstraintValidator
             return;
         }
 
-        Assert::isInstanceOf($value, PromotionInterface::class);
-        Assert::isInstanceOf($constraint, PromotionDateRange::class);
+        if (!$constraint instanceof PromotionDateRange) {
+            throw new UnexpectedTypeException($constraint, PromotionDateRange::class);
+        }
+
+        if (!$value instanceof PromotionInterface) {
+            throw new UnexpectedValueException($value, PromotionInterface::class);
+        }
 
         $startsAt = $value->getStartsAt();
         $endsAt = $value->getEndsAt();
@@ -31,7 +37,7 @@ final class PromotionDateRangeValidator extends ConstraintValidator
             return;
         }
 
-        if ($startsAt->getTimestamp() > $endsAt->getTimestamp()) {
+        if ($startsAt > $endsAt) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->atPath('endsAt')

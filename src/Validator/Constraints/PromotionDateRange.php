@@ -14,9 +14,4 @@ final class PromotionDateRange extends Constraint
     {
         return self::CLASS_CONSTRAINT;
     }
-
-    public function validatedBy(): string
-    {
-        return 'setono_sylius_catalog_promotion_promotion_date_range_validator';
-    }
 }

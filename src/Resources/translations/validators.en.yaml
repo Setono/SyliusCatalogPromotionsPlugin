@@ -5,4 +5,4 @@ setono_sylius_catalog_promotion:
             regex: Promotion code can only be comprised of letters (a-z), numbers (0-9), dashes (-) and underscores (_).
         discount:
             range: Please enter value between 0% and 100%.
-        end_date_cannot_be_set_prior_start_date: End date cannot be set prior start date.
+        end_date_cannot_be_set_prior_start_date: End date must be set after start date.
