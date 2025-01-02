@@ -1,10 +1,10 @@
 setono_sylius_catalog_promotion:
     ui:
-        promotion: Catalog promotion
-        promotions: Catalog promotions
+        edit_promotion: Edit catalog promotion
         manage_promotions: Manage catalog promotions
         new_promotion: Create new catalog promotion
-        edit_promotion: Edit catalog promotion
+        promotion: Catalog promotion
+        promotions: Catalog promotions
         rules_explanation: If you don't add any rules, the promotion will be applied to all products
     menu:
         admin:
@@ -13,18 +13,18 @@ setono_sylius_catalog_promotion:
                     promotions: Catalog promotions
     form:
         promotion:
-            channels: Apply to channels
-            name: Name
-            manually_discounted_products_excluded: Manually discounted products excluded
-            description: Description
-            exclusive: Exclusive
-            priority: Priority
-            starts_at: Starts at
-            ends_at: Ends at
-            enabled: Enabled
-            rules: Rules
             add_rule: Add rule
+            channels: Apply to channels
+            description: Description
             discount: Discount
+            enabled: Enabled
+            ends_at: Ends at
+            exclusive: Exclusive
+            manually_discounted_products_excluded: Manually discounted products excluded
+            name: Name
+            priority: Priority
+            rules: Rules
+            starts_at: Starts at
         promotion_rule:
             contains_product: Product is
             contains_product_configuration:
