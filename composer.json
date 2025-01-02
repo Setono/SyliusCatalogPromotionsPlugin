@@ -18,7 +18,6 @@
         "knplabs/knp-menu": "^3.0",
         "ocramius/doctrine-batch-utils": "^2.6",
         "psr/clock": "^1.0",
-        "psr/clock-implementation": "*",
         "psr/event-dispatcher": "^1.0",
         "setono/composite-compiler-pass": "^1.2",
         "setono/doctrine-orm-trait": "^1.1",
