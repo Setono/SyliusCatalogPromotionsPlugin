@@ -1,9 +1,0 @@
-{% macro bulkAction(url, message, id, icon, class) %}
-    <form action="{{ url }}" method="post">
-        <input type="hidden" name="_method" value="POST">
-        <button class="ui {% if class is not empty %}{{ class }} {% endif %}{% if message is not empty %}labeled {% endif %}icon button" type="submit" data-bulk-action-requires-confirmation>
-            <i class="icon {{ icon }}"></i> {{ message|trans }}
-        </button>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token(id) }}" />
-    </form>
-{% endmacro %}
