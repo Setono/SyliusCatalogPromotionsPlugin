@@ -3,26 +3,23 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_catalog_promotion.fixture.example_factory.promotion_rule"
-                 class="Setono\SyliusCatalogPromotionPlugin\Fixture\Factory\PromotionRuleExampleFactory">
-            <argument type="service" id="setono_sylius_catalog_promotion.custom_factory.promotion_rule" />
+        <service id="Setono\SyliusCatalogPromotionPlugin\Fixture\Factory\PromotionRuleExampleFactory">
+            <argument type="service" id="setono_sylius_catalog_promotion.factory.promotion_rule"/>
             <argument>%setono_sylius_catalog_promotion.promotion_rules%</argument>
         </service>
 
-        <service id="setono_sylius_catalog_promotion.fixture.example_factory.promotion"
-                 class="Setono\SyliusCatalogPromotionPlugin\Fixture\Factory\PromotionExampleFactory">
-            <argument type="service" id="sylius.repository.channel" />
-            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion" />
-            <argument type="service" id="setono_sylius_catalog_promotion.factory.promotion" />
-            <argument type="service" id="setono_sylius_catalog_promotion.fixture.example_factory.promotion_rule" />
+        <service id="Setono\SyliusCatalogPromotionPlugin\Fixture\Factory\PromotionExampleFactory">
+            <argument type="service" id="sylius.repository.channel"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.factory.promotion"/>
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Fixture\Factory\PromotionRuleExampleFactory"/>
         </service>
 
-        <service id="setono_sylius_catalog_promotion.fixture.promotion"
-                 class="Setono\SyliusCatalogPromotionPlugin\Fixture\PromotionFixture">
-            <argument type="service" id="setono_sylius_catalog_promotion.manager.promotion" />
-            <argument type="service" id="setono_sylius_catalog_promotion.fixture.example_factory.promotion" />
+        <service id="Setono\SyliusCatalogPromotionPlugin\Fixture\PromotionFixture">
+            <argument type="service" id="setono_sylius_catalog_promotion.manager.promotion"/>
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Fixture\Factory\PromotionExampleFactory"/>
 
-            <tag name="sylius_fixtures.fixture" />
+            <tag name="sylius_fixtures.fixture"/>
         </service>
     </services>
 </container>
