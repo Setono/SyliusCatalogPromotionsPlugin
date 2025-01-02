@@ -38,14 +38,17 @@ final class CheckCatalogPromotionUpdateHandler
         $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
 
         if ($catalogPromotionUpdate->getState() !== CatalogPromotionUpdateInterface::STATE_PROCESSING) {
-            throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s is not in the "%s" state', $message->catalogPromotionUpdate, CatalogPromotionUpdateInterface::STATE_PROCESSING));
+            throw new UnrecoverableMessageHandlingException(sprintf(
+                'Catalog promotion update with id %d is not in the "%s" state',
+                $message->catalogPromotionUpdate,
+                CatalogPromotionUpdateInterface::STATE_PROCESSING,
+            ));
         }
 
         try {
             // todo I think the 'retry logic' belongs in some middleware where we can get the retry count from the envelope
             if (!$catalogPromotionUpdate->hasAllMessagesBeenProcessed()) {
                 if ($message->tries >= $this->maxTries) {
-                    // todo transition to failed state on the catalog promotion update
                     throw new UnrecoverableMessageHandlingException(sprintf(
                         'Catalog promotion update with id %s has not processed all messages after %d tries',
                         $message->catalogPromotionUpdate,
@@ -58,9 +61,8 @@ final class CheckCatalogPromotionUpdateHandler
                 $createdAt = \DateTimeImmutable::createFromInterface($createdAt);
 
                 if (($this->clock?->now() ?? new \DateTimeImmutable()) >= $createdAt->add(new \DateInterval(sprintf('PT%dS', $this->maxRetrySeconds)))) {
-                    // todo transition to failed state on the catalog promotion update
                     throw new UnrecoverableMessageHandlingException(sprintf(
-                        'Catalog promotion update with id %s has not processed all messages after %s',
+                        'Catalog promotion update with id %d has not processed all messages after %d seconds',
                         $message->catalogPromotionUpdate,
                         $this->maxRetrySeconds,
                     ));
@@ -89,7 +91,7 @@ final class CheckCatalogPromotionUpdateHandler
     {
         $catalogPromotionUpdate = $this->getManager($this->catalogPromotionUpdateClass)->find($this->catalogPromotionUpdateClass, $id);
         if (null === $catalogPromotionUpdate) {
-            throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s not found', $id));
+            throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %d not found', $id));
         }
 
         return $catalogPromotionUpdate;
