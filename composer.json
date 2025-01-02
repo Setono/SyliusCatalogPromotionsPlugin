@@ -24,7 +24,7 @@
         "setono/doctrine-orm-trait": "^1.1",
         "sylius/channel": "^1.0",
         "sylius/channel-bundle": "^1.0",
-        "sylius/core": "^1.10",
+        "sylius/core": "^1.10.8",
         "sylius/core-bundle": "^1.0",
         "sylius/product-bundle": "^1.0",
         "sylius/promotion-bundle": "^1.0",
