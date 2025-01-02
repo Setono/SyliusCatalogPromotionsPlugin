@@ -95,6 +95,7 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
         $minimumPrice = 0;
 
         if (method_exists($channelPricing, 'getMinimumPrice')) {
+            /** @var mixed $minimumPrice */
             $minimumPrice = $channelPricing->getMinimumPrice();
         }
 
