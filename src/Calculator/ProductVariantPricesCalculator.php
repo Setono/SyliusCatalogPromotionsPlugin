@@ -92,10 +92,15 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
 
     private static function getMinimumPrice(ChannelPricingInterface $channelPricing): int
     {
+        $minimumPrice = 0;
+
         if (method_exists($channelPricing, 'getMinimumPrice')) {
-            return $channelPricing->getMinimumPrice();
+            $minimumPrice = $channelPricing->getMinimumPrice();
         }
 
-        return 0;
+        /** @psalm-suppress RedundantCondition */
+        Assert::integer($minimumPrice);
+
+        return $minimumPrice;
     }
 }
