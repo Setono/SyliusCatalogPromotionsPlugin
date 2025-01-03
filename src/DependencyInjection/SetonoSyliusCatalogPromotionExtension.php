@@ -49,6 +49,50 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
 
         $container->prependExtensionConfig('sylius_grid', [
             'grids' => [
+                'setono_sylius_catalog_promotion_admin_catalog_promotion_update' => [
+                    'driver' => [
+                        'name' => 'doctrine/orm',
+                        'options' => [
+                            'class' => '%setono_sylius_catalog_promotion.model.catalog_promotion_update.class%',
+                        ],
+                    ],
+                    'sorting' => [
+                        'createdAt' => 'desc',
+                    ],
+                    'limits' => [100, 200, 500],
+                    'fields' => [
+                        'state' => [
+                            'type' => 'string',
+                            'label' => 'sylius.ui.state',
+                            'sortable' => null,
+                        ],
+                        'catalogPromotions' => [
+                            'type' => 'twig',
+                            'label' => 'setono_sylius_catalog_promotion.ui.catalog_promotions',
+                            'options' => [
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/catalog_promotion_list.html.twig',
+                            ],
+                        ],
+                        'createdAt' => [
+                            'type' => 'datetime',
+                            'label' => 'sylius.ui.created_at',
+                            'sortable' => null,
+                        ],
+                        'updatedAt' => [
+                            'type' => 'datetime',
+                            'label' => 'setono_sylius_catalog_promotion.ui.updated_at',
+                            'sortable' => null,
+                        ],
+                    ],
+// todo add show action
+//                    'actions' => [
+//                        'item' => [
+//                            'show' => [
+//                                'type' => 'show',
+//                            ],
+//                        ],
+//                    ],
+                ],
                 'setono_sylius_catalog_promotion_admin_promotion' => [
                     'driver' => [
                         'name' => 'doctrine/orm',

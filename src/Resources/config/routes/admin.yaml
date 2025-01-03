@@ -1,3 +1,15 @@
+setono_sylius_catalog_promotion_admin_catalog_promotion_update:
+    resource: |
+        alias: setono_sylius_catalog_promotion.catalog_promotion_update
+        section: admin
+        templates: '@SyliusAdmin\\Crud'
+        grid: setono_sylius_catalog_promotion_admin_catalog_promotion_update
+        permission: true
+        vars:
+            index:
+                icon: in cart
+    type: sylius.resource
+
 setono_sylius_catalog_promotion_admin_promotion:
     resource: |
         alias: setono_sylius_catalog_promotion.promotion

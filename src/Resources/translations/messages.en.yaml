@@ -1,16 +1,4 @@
 setono_sylius_catalog_promotion:
-    ui:
-        edit_promotion: Edit catalog promotion
-        manage_promotions: Manage catalog promotions
-        new_promotion: Create new catalog promotion
-        promotion: Catalog promotion
-        promotions: Catalog promotions
-        rules_explanation: If you don't add any rules, the promotion will be applied to all products
-    menu:
-        admin:
-            main:
-                marketing:
-                    promotions: Catalog promotions
     form:
         promotion:
             add_rule: Add rule
@@ -40,3 +28,18 @@ setono_sylius_catalog_promotion:
                 taxons: Taxons
             taxonomy: Taxonomy
             type: Type
+    menu:
+        admin:
+            main:
+                marketing:
+                    promotions: Catalog promotions
+    ui:
+        catalog_promotions: Catalog promotions
+        edit_promotion: Edit catalog promotion
+        manage_promotions: Manage catalog promotions
+        new_promotion: Create new catalog promotion
+        promotion: Catalog promotion
+        promotions: Catalog promotions
+        rules_explanation: If you don't add any rules, the promotion will be applied to all products
+        updated_at: Updated at
+        catalog_promotion_updates: Catalog promotion updates
