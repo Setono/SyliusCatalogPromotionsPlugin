@@ -12,7 +12,8 @@ interface CatalogPromotionUpdateFactoryInterface extends FactoryInterface
     public function createNew(): CatalogPromotionUpdateInterface;
 
     /**
-     * @param non-empty-list<string> $catalogPromotions
+     * @param list<string> $catalogPromotions
+     * @param list<int> $products
      */
-    public function createWithCatalogPromotions(array $catalogPromotions): CatalogPromotionUpdateInterface;
+    public function createWithCatalogPromotionsAndProducts(array $catalogPromotions, array $products): CatalogPromotionUpdateInterface;
 }

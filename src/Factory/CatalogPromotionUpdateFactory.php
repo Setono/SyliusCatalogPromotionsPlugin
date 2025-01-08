@@ -22,10 +22,11 @@ final class CatalogPromotionUpdateFactory implements CatalogPromotionUpdateFacto
         return $obj;
     }
 
-    public function createWithCatalogPromotions(array $catalogPromotions): CatalogPromotionUpdateInterface
+    public function createWithCatalogPromotionsAndProducts(array $catalogPromotions, array $products): CatalogPromotionUpdateInterface
     {
         $obj = $this->createNew();
         $obj->setCatalogPromotions($catalogPromotions);
+        $obj->setProducts($products);
 
         return $obj;
     }

@@ -36,9 +36,9 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
     public function getCatalogPromotions(): array;
 
     /**
-     * @param non-empty-list<string> $catalogPromotions
+     * @param list<string>|null $catalogPromotions
      */
-    public function setCatalogPromotions(array $catalogPromotions): void;
+    public function setCatalogPromotions(?array $catalogPromotions): void;
 
     /**
      * A list of product ids that the update is for. If empty, all products will be updated

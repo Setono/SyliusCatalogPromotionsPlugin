@@ -16,26 +16,15 @@ final class UpdateProducts implements AsyncCommandInterface
 
     public readonly string $messageId;
 
-    /** @var non-empty-list<string> */
-    public readonly array $catalogPromotions;
-
-    /**
-     * @param list<string> $catalogPromotions
-     */
     public function __construct(
         CatalogPromotionUpdateInterface $catalogPromotionUpdate,
-        /** @var list<int> $productIds */
+        /** @var non-empty-list<int> $productIds */
         public readonly array $productIds,
-        array $catalogPromotions,
+        /** @var list<string> $catalogPromotions */
+        public readonly array $catalogPromotions,
     ) {
         $this->catalogPromotionUpdate = (int) $catalogPromotionUpdate->getId();
         $this->messageId = (string) Uuid::v7();
         $catalogPromotionUpdate->addMessageId($this->messageId);
-
-        if ([] === $catalogPromotions) {
-            throw new \InvalidArgumentException('The catalog promotions array must not be empty');
-        }
-
-        $this->catalogPromotions = $catalogPromotions;
     }
 }

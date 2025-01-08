@@ -74,8 +74,12 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
         return $this->catalogPromotions ?? [];
     }
 
-    public function setCatalogPromotions(array $catalogPromotions): void
+    public function setCatalogPromotions(?array $catalogPromotions): void
     {
+        if ([] === $catalogPromotions) {
+            $catalogPromotions = null;
+        }
+
         $this->catalogPromotions = $catalogPromotions;
     }
 
