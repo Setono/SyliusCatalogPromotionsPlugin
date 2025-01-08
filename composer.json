@@ -13,7 +13,7 @@
     "require": {
         "php": "^8.0",
         "beberlei/doctrineextensions": "^1.2",
-        "sylius/sylius": "~1.11 || ~1.12 || ~1.13",
+        "sylius/sylius": "^1.12",
         "sylius/resource-bundle": "^1.6",
         "symfony/config": "^5.4 || ^6.0",
         "symfony/lock": "^5.4 || ^6.0",
@@ -55,8 +55,7 @@
         "doctrine/persistence": "^2.5 || ^3.0"
     },
     "conflict": {
-        "behat/mink-selenium2-driver": ">=1.7.0",
-        "doctrine/annotations": ">1.15"
+        "behat/mink-selenium2-driver": ">=1.7.0"
     },
     "config": {
         "sort-packages": true,
