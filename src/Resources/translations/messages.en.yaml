@@ -34,6 +34,7 @@ setono_sylius_catalog_promotion:
                 marketing:
                     promotions: Catalog promotions
     ui:
+        catalog_promotion_updates: Catalog promotion updates
         catalog_promotions: Catalog promotions
         edit_promotion: Edit catalog promotion
         manage_promotions: Manage catalog promotions
@@ -41,5 +42,5 @@ setono_sylius_catalog_promotion:
         promotion: Catalog promotion
         promotions: Catalog promotions
         rules_explanation: If you don't add any rules, the promotion will be applied to all products
+        triggered_by: Triggered by
         updated_at: Updated at
-        catalog_promotion_updates: Catalog promotion updates

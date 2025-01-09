@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Factory;
 
+use Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Webmozart\Assert\Assert;
@@ -22,11 +23,12 @@ final class CatalogPromotionUpdateFactory implements CatalogPromotionUpdateFacto
         return $obj;
     }
 
-    public function createWithCatalogPromotionsAndProducts(array $catalogPromotions, array $products): CatalogPromotionUpdateInterface
+    public function createFromMessage(StartCatalogPromotionUpdate $message): CatalogPromotionUpdateInterface
     {
         $obj = $this->createNew();
-        $obj->setCatalogPromotions($catalogPromotions);
-        $obj->setProducts($products);
+        $obj->setCatalogPromotions($message->catalogPromotions);
+        $obj->setProducts($message->products);
+        $obj->setTriggeredBy($message->triggeredBy);
 
         return $obj;
     }

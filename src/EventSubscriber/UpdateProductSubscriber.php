@@ -12,10 +12,9 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Contracts\Service\ResetInterface;
 use Webmozart\Assert\Assert;
 
-final class UpdateProductSubscriber implements EventSubscriberInterface, ResetInterface
+final class UpdateProductSubscriber implements EventSubscriberInterface
 {
     /**
      * A list of products to update
@@ -72,11 +71,14 @@ final class UpdateProductSubscriber implements EventSubscriberInterface, ResetIn
             return;
         }
 
-        $this->commandBus->dispatch(new StartCatalogPromotionUpdate(products: $this->products));
-    }
+        $this->commandBus->dispatch(new StartCatalogPromotionUpdate(
+            products: $this->products,
+            triggeredBy: sprintf(
+                'The update/creation of the following products: "%s"',
+                implode('", "', array_map(static fn (ProductInterface $product): string => (string) ($product->getName() ?? $product->getCode()), $this->products)),
+            ),
+        ));
 
-    public function reset(): void
-    {
         $this->products = [];
     }
 }

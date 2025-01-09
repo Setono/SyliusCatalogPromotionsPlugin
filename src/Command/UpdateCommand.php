@@ -23,7 +23,7 @@ final class UpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->commandBus->dispatch(new StartCatalogPromotionUpdate());
+        $this->commandBus->dispatch(new StartCatalogPromotionUpdate(triggeredBy: sprintf('Symfony command "%s"', (string) self::$defaultName)));
 
         return 0;
     }

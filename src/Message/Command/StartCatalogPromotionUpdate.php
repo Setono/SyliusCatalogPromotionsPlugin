@@ -33,6 +33,10 @@ final class StartCatalogPromotionUpdate
     public function __construct(
         array $catalogPromotions = [],
         array $products = [],
+        /**
+         * If you want to give information about what started the update, you can provide a string here
+         */
+        public readonly ?string $triggeredBy = null,
     ) {
         $this->catalogPromotions = array_values(array_unique(array_map(
             static fn (string|PromotionInterface $catalogPromotion) => $catalogPromotion instanceof PromotionInterface ? (string) $catalogPromotion->getCode() : $catalogPromotion,

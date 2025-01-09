@@ -28,7 +28,7 @@ final class StartCatalogPromotionUpdateHandler
 
     public function __invoke(StartCatalogPromotionUpdate $message): CatalogPromotionUpdateInterface
     {
-        $catalogPromotionUpdate = $this->catalogPromotionUpdateFactory->createWithCatalogPromotionsAndProducts($message->catalogPromotions, $message->products);
+        $catalogPromotionUpdate = $this->catalogPromotionUpdateFactory->createFromMessage($message);
 
         $manager = $this->getManager($catalogPromotionUpdate);
         $manager->persist($catalogPromotionUpdate);
