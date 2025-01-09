@@ -27,15 +27,13 @@ final class StartCatalogPromotionUpdate
     public readonly array $products;
 
     /**
-     * @param list<string|CatalogPromotionInterface> $catalogPromotions
-     * @param list<int|ProductInterface> $products
+     * @param array<array-key, string|CatalogPromotionInterface> $catalogPromotions
+     * @param array<array-key, int|ProductInterface> $products
      */
     public function __construct(
         array $catalogPromotions = [],
         array $products = [],
-        /**
-         * If you want to give information about what started the update, you can provide a string here
-         */
+        /** If you want to give information about what started the update, you can provide a string here */
         public readonly ?string $triggeredBy = null,
     ) {
         $this->catalogPromotions = array_values(array_unique(array_map(

@@ -21,7 +21,6 @@
 
             <tag name="kernel.event_subscriber"/>
             <tag name="doctrine.event_listener" event="postPersist"/>
-            <tag name="doctrine.event_listener" event="postUpdate"/>
         </service>
     </services>
 </container>

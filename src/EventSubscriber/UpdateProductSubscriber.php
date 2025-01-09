@@ -12,14 +12,17 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Webmozart\Assert\Assert;
 
+/**
+ * NOTICE that we don't handle the Doctrine postUpdate event because products are updated when processing a catalog promotion
+ * and hence this would lead to a lot of double work
+ */
 final class UpdateProductSubscriber implements EventSubscriberInterface
 {
     /**
-     * A list of products to update
+     * An array  of products to update index by id
      *
-     * @var list<ProductInterface>
+     * @var array<int, ProductInterface>
      */
     private array $products = [];
 
@@ -39,30 +42,12 @@ final class UpdateProductSubscriber implements EventSubscriberInterface
 
     public function updateProduct(ResourceControllerEvent $event): void
     {
-        $product = $event->getSubject();
-        Assert::isInstanceOf($product, ProductInterface::class);
-
-        $this->products[] = $product;
+        $this->addProduct($event->getSubject());
     }
 
     public function postPersist(LifecycleEventArgs $eventArgs): void
     {
-        $obj = $eventArgs->getObject();
-        if (!$obj instanceof ProductInterface) {
-            return;
-        }
-
-        $this->products[] = $obj;
-    }
-
-    public function postUpdate(LifecycleEventArgs $eventArgs): void
-    {
-        $obj = $eventArgs->getObject();
-        if (!$obj instanceof ProductInterface) {
-            return;
-        }
-
-        $this->products[] = $obj;
+        $this->addProduct($eventArgs->getObject());
     }
 
     public function dispatch(): void
@@ -80,5 +65,14 @@ final class UpdateProductSubscriber implements EventSubscriberInterface
         ));
 
         $this->products = [];
+    }
+
+    private function addProduct(mixed $product): void
+    {
+        if (!$product instanceof ProductInterface) {
+            return;
+        }
+
+        $this->products[(int) $product->getId()] = $product;
     }
 }

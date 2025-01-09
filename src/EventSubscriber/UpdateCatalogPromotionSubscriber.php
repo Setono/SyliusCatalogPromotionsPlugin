@@ -12,7 +12,6 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Webmozart\Assert\Assert;
 
 /**
  * Notice that we don't need to handle the removal of catalog promotions because although the catalog promotion
@@ -21,9 +20,9 @@ use Webmozart\Assert\Assert;
 final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
 {
     /**
-     * A list of catalog promotions to update
+     * An array of catalog promotions to update indexed by code
      *
-     * @var list<CatalogPromotionInterface>
+     * @var array<string, CatalogPromotionInterface>
      */
     private array $catalogPromotions = [];
 
@@ -43,30 +42,17 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
 
     public function update(ResourceControllerEvent $event): void
     {
-        $obj = $event->getSubject();
-        Assert::isInstanceOf($obj, CatalogPromotionInterface::class);
-
-        $this->catalogPromotions[] = $obj;
+        $this->addCatalogPromotion($event->getSubject());
     }
 
     public function postPersist(LifecycleEventArgs $eventArgs): void
     {
-        $obj = $eventArgs->getObject();
-        if (!$obj instanceof CatalogPromotionInterface) {
-            return;
-        }
-
-        $this->catalogPromotions[] = $obj;
+        $this->addCatalogPromotion($eventArgs->getObject());
     }
 
     public function postUpdate(LifecycleEventArgs $eventArgs): void
     {
-        $obj = $eventArgs->getObject();
-        if (!$obj instanceof CatalogPromotionInterface) {
-            return;
-        }
-
-        $this->catalogPromotions[] = $obj;
+        $this->addCatalogPromotion($eventArgs->getObject());
     }
 
     public function dispatch(): void
@@ -84,5 +70,14 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
         ));
 
         $this->catalogPromotions = [];
+    }
+
+    private function addCatalogPromotion(mixed $catalogPromotion): void
+    {
+        if (!$catalogPromotion instanceof CatalogPromotionInterface) {
+            return;
+        }
+
+        $this->catalogPromotions[(string) $catalogPromotion->getCode()] = $catalogPromotion;
     }
 }
