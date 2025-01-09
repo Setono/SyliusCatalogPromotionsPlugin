@@ -3,9 +3,3 @@
 {% if data.productsUpdated < data.estimatedNumberOfProductsToUpdate and data.state == constant('Setono\\SyliusCatalogPromotionPlugin\\Model\\CatalogPromotionUpdateInterface::STATE_COMPLETED') %}
     <i class="blue info circle icon" data-content="{{ 'setono_sylius_catalog_promotion.ui.products_updated_less_than_estimated'|trans }}"></i>
 {% endif %}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('[data-content]').popup();
-    });
-</script>

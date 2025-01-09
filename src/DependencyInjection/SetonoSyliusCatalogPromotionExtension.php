@@ -177,5 +177,17 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                 ],
             ],
         ]);
+
+        $container->prependExtensionConfig('sylius_ui', [
+            'events' => [
+                'setono_sylius_catalog_promotion.admin.catalog_promotion_update.index.javascripts' => [
+                    'blocks' => [
+                        'javascripts' => [
+                            'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/catalog_promotion_update/_javascripts.html.twig',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 }
