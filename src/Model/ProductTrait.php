@@ -50,6 +50,7 @@ trait ProductTrait
      */
     private static function sanitizeCodes(array $codes): array
     {
+        // The reason for sorting is that we use the imploded string as a cache key elsewhere
         sort($codes, \SORT_STRING);
 
         return array_values(array_unique($codes));
