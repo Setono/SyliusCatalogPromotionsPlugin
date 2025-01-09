@@ -62,9 +62,15 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                     'limits' => [100, 200, 500],
                     'fields' => [
                         'state' => [
-                            'type' => 'string',
+                            'type' => 'twig',
                             'label' => 'sylius.ui.state',
                             'sortable' => null,
+                            'options' => [
+                                'template' => '@SyliusUi/Grid/Field/state.html.twig',
+                                'vars' => [
+                                    'labels' => '@SetonoSyliusCatalogPromotionPlugin/Admin/catalog_promotion_update/label/state',
+                                ],
+                            ],
                         ],
                         'triggeredBy' => [
                             'type' => 'string',
