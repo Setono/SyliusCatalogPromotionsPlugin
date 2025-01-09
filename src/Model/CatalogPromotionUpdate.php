@@ -6,6 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Model;
 
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
+// todo we need a timestamp for completed at and failed at
 class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 {
     use TimestampableTrait;
