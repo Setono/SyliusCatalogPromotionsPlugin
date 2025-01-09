@@ -10,11 +10,11 @@
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionUpdateFactory.inner"/>
         </service>
 
-        <service id="Setono\SyliusCatalogPromotionPlugin\Factory\PromotionRuleFactory"
-                 decorates="setono_sylius_catalog_promotion.factory.promotion_rule"
+        <service id="Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionRuleFactory"
+                 decorates="setono_sylius_catalog_promotion.factory.catalog_promotion_rule"
                  decoration-priority="64">
-            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Factory\PromotionRuleFactory.inner"/>
-            <argument>%setono_sylius_catalog_promotion.promotion_rules%</argument>
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionRuleFactory.inner"/>
+            <argument>%setono_sylius_catalog_promotion.catalog_promotion_rules%</argument>
         </service>
     </services>
 </container>

@@ -10,7 +10,7 @@ use Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionUpdateFactoryInt
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\ProcessCatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
-use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class StartCatalogPromotionUpdateHandler
@@ -18,7 +18,7 @@ final class StartCatalogPromotionUpdateHandler
     use ORMTrait;
 
     public function __construct(
-        private readonly PromotionRepositoryInterface $promotionRepository,
+        private readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
         private readonly CatalogPromotionUpdateFactoryInterface $catalogPromotionUpdateFactory,
         private readonly MessageBusInterface $commandBus,
         ManagerRegistry $managerRegistry,

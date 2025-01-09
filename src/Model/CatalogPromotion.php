@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Channel\Model\ChannelInterface as BaseChannelInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
-class Promotion implements PromotionInterface
+class CatalogPromotion implements CatalogPromotionInterface
 {
     use TimestampableTrait;
 
@@ -40,7 +40,7 @@ class Promotion implements PromotionInterface
 
     protected bool $enabled = true;
 
-    /** @var Collection<array-key, PromotionRuleInterface> */
+    /** @var Collection<array-key, CatalogPromotionRuleInterface> */
     protected Collection $rules;
 
     /**
@@ -174,22 +174,22 @@ class Promotion implements PromotionInterface
         return !$this->rules->isEmpty();
     }
 
-    public function hasRule(PromotionRuleInterface $rule): bool
+    public function hasRule(CatalogPromotionRuleInterface $rule): bool
     {
         return $this->rules->contains($rule);
     }
 
-    public function addRule(PromotionRuleInterface $rule): void
+    public function addRule(CatalogPromotionRuleInterface $rule): void
     {
         if (!$this->hasRule($rule)) {
-            $rule->setPromotion($this);
+            $rule->setCatalogPromotion($this);
             $this->rules->add($rule);
         }
     }
 
-    public function removeRule(PromotionRuleInterface $rule): void
+    public function removeRule(CatalogPromotionRuleInterface $rule): void
     {
-        $rule->setPromotion(null);
+        $rule->setCatalogPromotion(null);
         $this->rules->removeElement($rule);
     }
 

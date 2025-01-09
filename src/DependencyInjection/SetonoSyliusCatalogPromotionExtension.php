@@ -126,18 +126,18 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                                 'icon' => 'chevron left',
                                 'options' => [
                                     'link' => [
-                                        'route' => 'setono_sylius_catalog_promotion_admin_promotion_index',
+                                        'route' => 'setono_sylius_catalog_promotion_admin_catalog_promotion_index',
                                     ],
                                 ],
                             ],
                         ],
                     ],
                 ],
-                'setono_sylius_catalog_promotion_admin_promotion' => [
+                'setono_sylius_catalog_promotion_admin_catalog_promotion' => [
                     'driver' => [
                         'name' => 'doctrine/orm',
                         'options' => [
-                            'class' => '%setono_sylius_catalog_promotion.model.promotion.class%',
+                            'class' => '%setono_sylius_catalog_promotion.model.catalog_promotion.class%',
                         ],
                     ],
                     'sorting' => [

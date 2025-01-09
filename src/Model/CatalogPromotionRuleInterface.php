@@ -6,7 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Model;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-interface PromotionRuleInterface extends ResourceInterface
+interface CatalogPromotionRuleInterface extends ResourceInterface
 {
     public function getId(): ?int;
 
@@ -18,7 +18,7 @@ interface PromotionRuleInterface extends ResourceInterface
 
     public function setConfiguration(array $configuration): void;
 
-    public function getPromotion(): ?PromotionInterface;
+    public function getCatalogPromotion(): ?CatalogPromotionInterface;
 
-    public function setPromotion(?PromotionInterface $promotion): void;
+    public function setCatalogPromotion(?CatalogPromotionInterface $catalogPromotion): void;
 }

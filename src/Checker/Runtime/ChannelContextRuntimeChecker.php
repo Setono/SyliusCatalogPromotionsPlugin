@@ -6,7 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Checker\Runtime;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 
 final class ChannelContextRuntimeChecker implements RuntimeCheckerInterface
@@ -15,7 +15,7 @@ final class ChannelContextRuntimeChecker implements RuntimeCheckerInterface
     {
     }
 
-    public function isEligible(PromotionInterface $catalogPromotion): bool
+    public function isEligible(CatalogPromotionInterface $catalogPromotion): bool
     {
         $channel = $this->channelContext->getChannel();
 

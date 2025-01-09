@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Validator\Constraints;
 
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-final class PromotionDateRangeValidator extends ConstraintValidator
+final class CatalogPromotionDateRangeValidator extends ConstraintValidator
 {
     /**
-     * @param PromotionInterface|mixed $value
-     * @param PromotionDateRange|Constraint $constraint
+     * @param CatalogPromotionInterface|mixed $value
+     * @param CatalogPromotionDateRange|Constraint $constraint
      */
     public function validate($value, Constraint $constraint): void
     {
@@ -22,12 +22,12 @@ final class PromotionDateRangeValidator extends ConstraintValidator
             return;
         }
 
-        if (!$constraint instanceof PromotionDateRange) {
-            throw new UnexpectedTypeException($constraint, PromotionDateRange::class);
+        if (!$constraint instanceof CatalogPromotionDateRange) {
+            throw new UnexpectedTypeException($constraint, CatalogPromotionDateRange::class);
         }
 
-        if (!$value instanceof PromotionInterface) {
-            throw new UnexpectedValueException($value, PromotionInterface::class);
+        if (!$value instanceof CatalogPromotionInterface) {
+            throw new UnexpectedValueException($value, CatalogPromotionInterface::class);
         }
 
         $startsAt = $value->getStartsAt();

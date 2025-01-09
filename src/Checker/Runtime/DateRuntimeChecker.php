@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Checker\Runtime;
 
 use Psr\Clock\ClockInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 
 final class DateRuntimeChecker implements RuntimeCheckerInterface
 {
@@ -13,7 +13,7 @@ final class DateRuntimeChecker implements RuntimeCheckerInterface
     {
     }
 
-    public function isEligible(PromotionInterface $catalogPromotion): bool
+    public function isEligible(CatalogPromotionInterface $catalogPromotion): bool
     {
         $now = $this->clock?->now() ?? new \DateTimeImmutable();
 

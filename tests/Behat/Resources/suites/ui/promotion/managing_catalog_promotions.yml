@@ -10,7 +10,7 @@ default:
                 - sylius.behat.context.transform.lexical
                 - sylius.behat.context.transform.payment
                 - sylius.behat.context.transform.product
-                - setono_sylius_catalog_promotion.behat.context.transform.promotion
+                - setono_sylius_catalog_promotion.behat.context.transform.catalog_promotion
                 - sylius.behat.context.transform.shared_storage
                 - sylius.behat.context.transform.shipping_method
                 - sylius.behat.context.transform.taxon
@@ -20,7 +20,7 @@ default:
                 - sylius.behat.context.setup.payment
                 - sylius.behat.context.setup.product
                 - sylius.behat.context.setup.product_taxon
-                - setono_sylius_catalog_promotion.behat.context.setup.promotion
+                - setono_sylius_catalog_promotion.behat.context.setup.catalog_promotion
                 - sylius.behat.context.setup.admin_security
                 - sylius.behat.context.setup.shipping
                 - sylius.behat.context.setup.taxonomy

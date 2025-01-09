@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Message\Command;
 
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 
 /**
@@ -27,7 +27,7 @@ final class StartCatalogPromotionUpdate
     public readonly array $products;
 
     /**
-     * @param list<string|PromotionInterface> $catalogPromotions
+     * @param list<string|CatalogPromotionInterface> $catalogPromotions
      * @param list<int|ProductInterface> $products
      */
     public function __construct(
@@ -39,7 +39,7 @@ final class StartCatalogPromotionUpdate
         public readonly ?string $triggeredBy = null,
     ) {
         $this->catalogPromotions = array_values(array_unique(array_map(
-            static fn (string|PromotionInterface $catalogPromotion) => $catalogPromotion instanceof PromotionInterface ? (string) $catalogPromotion->getCode() : $catalogPromotion,
+            static fn (string|CatalogPromotionInterface $catalogPromotion) => $catalogPromotion instanceof CatalogPromotionInterface ? (string) $catalogPromotion->getCode() : $catalogPromotion,
             $catalogPromotions,
         )));
 

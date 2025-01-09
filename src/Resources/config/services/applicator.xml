@@ -8,7 +8,7 @@
                  alias="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicator"/>
 
         <service id="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicator">
-            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.repository.catalog_promotion"/>
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface"/>
         </service>
     </services>

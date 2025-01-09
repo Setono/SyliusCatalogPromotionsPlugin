@@ -4,13 +4,13 @@
                     xmlns="http://symfony.com/schema/dic/constraint-mapping"
                     xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd"
 >
-    <class name="Setono\SyliusCatalogPromotionPlugin\Model\Promotion">
+    <class name="Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotion">
         <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
             <option name="fields">code</option>
-            <option name="message">setono_sylius_catalog_promotion.promotion.code.unique</option>
+            <option name="message">setono_sylius_catalog_promotion.catalog_promotion.code.unique</option>
             <option name="groups">setono_sylius_catalog_promotion</option>
         </constraint>
-        <constraint name="Setono\SyliusCatalogPromotionPlugin\Validator\Constraints\PromotionDateRange">
+        <constraint name="Setono\SyliusCatalogPromotionPlugin\Validator\Constraints\CatalogPromotionDateRange">
             <option name="groups">setono_sylius_catalog_promotion</option>
         </constraint>
         <property name="code">
@@ -18,7 +18,7 @@
                 <option name="groups">setono_sylius_catalog_promotion</option>
             </constraint>
             <constraint name="Regex">
-                <option name="message">setono_sylius_catalog_promotion.promotion.code.regex</option>
+                <option name="message">setono_sylius_catalog_promotion.catalog_promotion.code.regex</option>
                 <option name="pattern">/^[\w-]*$/</option>
                 <option name="groups">setono_sylius_catalog_promotion</option>
             </constraint>
@@ -47,7 +47,7 @@
             <constraint name="Range">
                 <option name="min">0</option>
                 <option name="max">1</option>
-                <option name="notInRangeMessage">setono_sylius_catalog_promotion.promotion.discount.range</option>
+                <option name="notInRangeMessage">setono_sylius_catalog_promotion.catalog_promotion.discount.range</option>
                 <option name="groups">setono_sylius_catalog_promotion</option>
             </constraint>
         </property>

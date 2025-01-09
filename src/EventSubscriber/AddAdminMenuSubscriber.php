@@ -29,10 +29,10 @@ final class AddAdminMenuSubscriber implements EventSubscriberInterface
         $marketingSubmenu
             // This will override the Sylius menu item with the same name
             ->addChild('catalog_promotions', [
-                'route' => 'setono_sylius_catalog_promotion_admin_promotion_index',
+                'route' => 'setono_sylius_catalog_promotion_admin_catalog_promotion_index',
             ])
             ->setAttribute('type', 'link')
-            ->setLabel('setono_sylius_catalog_promotion.menu.admin.main.marketing.promotions')
+            ->setLabel('setono_sylius_catalog_promotion.menu.admin.main.marketing.catalog_promotions')
             ->setLabelAttributes([
                 'icon' => 'tasks',
             ])

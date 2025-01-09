@@ -6,8 +6,8 @@ namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Domain;
 
 use Behat\Behat\Context\Context;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
-use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Webmozart\Assert\Assert;
 
@@ -16,10 +16,10 @@ final class ManagingPromotionsContext implements Context
     /** @var SharedStorageInterface */
     private $sharedStorage;
 
-    /** @var PromotionRepositoryInterface */
+    /** @var CatalogPromotionRepositoryInterface */
     private $promotionRepository;
 
-    public function __construct(SharedStorageInterface $sharedStorage, PromotionRepositoryInterface $promotionRepository)
+    public function __construct(SharedStorageInterface $sharedStorage, CatalogPromotionRepositoryInterface $promotionRepository)
     {
         $this->sharedStorage = $sharedStorage;
         $this->promotionRepository = $promotionRepository;
@@ -28,7 +28,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @When /^I delete a ("([^"]+)" catalog promotion)$/
      */
-    public function iDeleteCatalogPromotion(PromotionInterface $promotion): void
+    public function iDeleteCatalogPromotion(CatalogPromotionInterface $promotion): void
     {
         $this->promotionRepository->remove($promotion);
     }
@@ -36,7 +36,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @When /^I try to delete a ("([^"]+)" catalog promotion)$/
      */
-    public function iTryToDeleteCatalogPromotion(PromotionInterface $promotion): void
+    public function iTryToDeleteCatalogPromotion(CatalogPromotionInterface $promotion): void
     {
         try {
             $this->promotionRepository->remove($promotion);
@@ -48,7 +48,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Then /^(this catalog promotion) should no longer exist in the catalog promotion registry$/
      */
-    public function specialShouldNotExistInTheRegistry(PromotionInterface $promotion): void
+    public function specialShouldNotExistInTheRegistry(CatalogPromotionInterface $promotion): void
     {
         Assert::null($this->promotionRepository->findOneBy(['code' => $promotion->getCode()]));
     }
@@ -56,7 +56,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Then catalog promotion :special should still exist in the registry
      */
-    public function catalogPromotionShouldStillExistInTheRegistry(PromotionInterface $promotion): void
+    public function catalogPromotionShouldStillExistInTheRegistry(CatalogPromotionInterface $promotion): void
     {
         Assert::notNull($this->promotionRepository->find($promotion->getId()));
     }

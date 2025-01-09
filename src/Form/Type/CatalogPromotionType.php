@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-final class PromotionType extends AbstractResourceType
+final class CatalogPromotionType extends AbstractResourceType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,52 +23,52 @@ final class PromotionType extends AbstractResourceType
             ->add('channels', ChannelChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.channels',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.channels',
                 'required' => false,
             ])
             ->add('name', TextType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.name',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.name',
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.description',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.description',
                 'required' => false,
             ])
             ->add('discount', PercentType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.discount',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.discount',
                 'scale' => 3,
                 'required' => true,
             ])
             ->add('exclusive', CheckboxType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.exclusive',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.exclusive',
                 'required' => false,
             ])
             ->add('manuallyDiscountedProductsExcluded', CheckboxType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.manually_discounted_products_excluded',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.manually_discounted_products_excluded',
                 'required' => false,
             ])
             ->add('startsAt', DateTimeType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.starts_at',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.starts_at',
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'required' => false,
             ])
             ->add('endsAt', DateTimeType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.ends_at',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.ends_at',
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'required' => false,
             ])
             ->add('enabled', CheckboxType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.enabled',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.enabled',
                 'required' => false,
             ])
             ->add('priority', IntegerType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.priority',
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.priority',
                 'required' => false,
             ])
-            ->add('rules', PromotionRuleCollectionType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion.rules',
-                'button_add_label' => 'setono_sylius_catalog_promotion.form.promotion.add_rule',
+            ->add('rules', CatalogPromotionRuleCollectionType::class, [
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.rules',
+                'button_add_label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.add_rule',
                 'required' => false,
             ])
             ->addEventSubscriber(new AddCodeFormSubscriber())
@@ -77,6 +77,6 @@ final class PromotionType extends AbstractResourceType
 
     public function getBlockPrefix(): string
     {
-        return 'setono_sylius_catalog_promotion_promotion';
+        return 'setono_sylius_catalog_promotion__catalog_promotion';
     }
 }

@@ -10,9 +10,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\Rule\RuleCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\RulesPreQualificationChecker;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionRuleInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -34,10 +34,10 @@ final class RulesPreQualificationCheckerTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_true_if_promotion_has_no_rules(): void
+    public function it_returns_true_if_catalog_promotion_has_no_rules(): void
     {
         $product = $this->prophesize(ProductInterface::class);
-        $promotion = $this->prophesize(PromotionInterface::class);
+        $promotion = $this->prophesize(CatalogPromotionInterface::class);
         $promotion->hasRules()->willReturn(false);
 
         self::assertTrue($this->checker->isPreQualified($product->reveal(), $promotion->reveal()));
@@ -49,8 +49,8 @@ final class RulesPreQualificationCheckerTest extends TestCase
     public function it_returns_true_if_all_rules_are_eligible(): void
     {
         $product = $this->prophesize(ProductInterface::class);
-        $promotion = $this->prophesize(PromotionInterface::class);
-        $rule = $this->prophesize(PromotionRuleInterface::class);
+        $promotion = $this->prophesize(CatalogPromotionInterface::class);
+        $rule = $this->prophesize(CatalogPromotionRuleInterface::class);
         $checker = $this->prophesize(RuleCheckerInterface::class);
 
         $promotion->hasRules()->willReturn(true);
@@ -69,8 +69,8 @@ final class RulesPreQualificationCheckerTest extends TestCase
     public function it_returns_false_if_any_rule_is_not_eligible(): void
     {
         $product = $this->prophesize(ProductInterface::class);
-        $promotion = $this->prophesize(PromotionInterface::class);
-        $rule = $this->prophesize(PromotionRuleInterface::class);
+        $promotion = $this->prophesize(CatalogPromotionInterface::class);
+        $rule = $this->prophesize(CatalogPromotionRuleInterface::class);
         $checker = $this->prophesize(RuleCheckerInterface::class);
 
         $promotion->hasRules()->willReturn(true);
@@ -91,8 +91,8 @@ final class RulesPreQualificationCheckerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $product = $this->prophesize(ProductInterface::class);
-        $promotion = $this->prophesize(PromotionInterface::class);
-        $rule = $this->prophesize(PromotionRuleInterface::class);
+        $promotion = $this->prophesize(CatalogPromotionInterface::class);
+        $rule = $this->prophesize(CatalogPromotionRuleInterface::class);
 
         $promotion->hasRules()->willReturn(true);
         $promotion->getRules()->willReturn(new ArrayCollection([$rule->reveal()]));

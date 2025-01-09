@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Applicator;
 
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
-use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 
 final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorInterface
 {
     /** @var array<string, float> */
     private array $multiplierCache = [];
 
-    /** @var array<string, PromotionInterface|null> */
+    /** @var array<string, CatalogPromotionInterface|null> */
     private array $catalogPromotionCache = [];
 
     public function __construct(
-        private readonly PromotionRepositoryInterface $promotionRepository,
+        private readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
         private readonly RuntimeCheckerInterface $runtimeChecker,
     ) {
     }
@@ -41,8 +41,8 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
         if (!isset($this->multiplierCache[$cacheKey])) {
             $multiplier = 1.0;
 
-            foreach ($this->getEligiblePromotions($catalogPromotions, $manuallyDiscounted) as $promotion) {
-                $multiplier *= $promotion->getMultiplier();
+            foreach ($this->getEligibleCatalogPromotions($catalogPromotions, $manuallyDiscounted) as $catalogPromotion) {
+                $multiplier *= $catalogPromotion->getMultiplier();
             }
 
             $this->multiplierCache[$cacheKey] = $multiplier;
@@ -54,16 +54,16 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
     /**
      * @param list<string> $catalogPromotions
      *
-     * @return \Generator<array-key, PromotionInterface>
+     * @return \Generator<array-key, CatalogPromotionInterface>
      */
-    private function getEligiblePromotions(array $catalogPromotions, bool $manuallyDiscounted): \Generator
+    private function getEligibleCatalogPromotions(array $catalogPromotions, bool $manuallyDiscounted): \Generator
     {
         $eligiblePromotions = [];
         $eligibleExclusivePromotions = [];
 
         foreach ($catalogPromotions as $catalogPromotion) {
             if (!array_key_exists($catalogPromotion, $this->catalogPromotionCache)) {
-                $this->catalogPromotionCache[$catalogPromotion] = $this->promotionRepository->findOneByCode($catalogPromotion);
+                $this->catalogPromotionCache[$catalogPromotion] = $this->catalogPromotionRepository->findOneByCode($catalogPromotion);
             }
 
             if (null === $this->catalogPromotionCache[$catalogPromotion]) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Model;
 
-class PromotionRule implements PromotionRuleInterface
+class CatalogPromotionRule implements CatalogPromotionRuleInterface
 {
     protected ?int $id = null;
 
@@ -12,7 +12,7 @@ class PromotionRule implements PromotionRuleInterface
 
     protected array $configuration = [];
 
-    protected ?PromotionInterface $promotion = null;
+    protected ?CatalogPromotionInterface $catalogPromotion = null;
 
     public function getId(): ?int
     {
@@ -39,13 +39,13 @@ class PromotionRule implements PromotionRuleInterface
         $this->configuration = $configuration;
     }
 
-    public function getPromotion(): ?PromotionInterface
+    public function getCatalogPromotion(): ?CatalogPromotionInterface
     {
-        return $this->promotion;
+        return $this->catalogPromotion;
     }
 
-    public function setPromotion(?PromotionInterface $promotion): void
+    public function setCatalogPromotion(?CatalogPromotionInterface $catalogPromotion): void
     {
-        $this->promotion = $promotion;
+        $this->catalogPromotion = $catalogPromotion;
     }
 }

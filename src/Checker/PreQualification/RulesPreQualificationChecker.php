@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification;
 
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\Rule\RuleCheckerInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionRuleInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Webmozart\Assert\Assert;
 
@@ -17,7 +17,7 @@ final class RulesPreQualificationChecker implements PreQualificationCheckerInter
     {
     }
 
-    public function isPreQualified(ProductInterface $product, PromotionInterface $catalogPromotion): bool
+    public function isPreQualified(ProductInterface $product, CatalogPromotionInterface $catalogPromotion): bool
     {
         if (!$catalogPromotion->hasRules()) {
             return true;
@@ -32,7 +32,7 @@ final class RulesPreQualificationChecker implements PreQualificationCheckerInter
         return true;
     }
 
-    private function isEligibleToRule(ProductInterface $product, PromotionRuleInterface $rule): bool
+    private function isEligibleToRule(ProductInterface $product, CatalogPromotionRuleInterface $rule): bool
     {
         /** @var RuleCheckerInterface|object $checker */
         $checker = $this->ruleRegistry->get((string) $rule->getType());

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Form\Type;
 
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionRuleInterface;
 use Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistryInterface;
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
-final class PromotionRuleType extends AbstractResourceType
+final class CatalogPromotionRuleType extends AbstractResourceType
 {
     /**
      * @param array<array-key, string> $validationGroups
@@ -27,8 +27,8 @@ final class PromotionRuleType extends AbstractResourceType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('type', PromotionRuleChoiceType::class, [
-                'label' => 'setono_sylius_catalog_promotion.form.promotion_rule.type',
+            ->add('type', CatalogPromotionRuleChoiceType::class, [
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion_rule.type',
                 'attr' => [
                     'data-form-collection' => 'update',
                 ],
@@ -77,7 +77,7 @@ final class PromotionRuleType extends AbstractResourceType
 
     public function getBlockPrefix(): string
     {
-        return 'setono_sylius_catalog_promotion_promotion_rule';
+        return 'setono_sylius_catalog_promotion__catalog_promotion_rule';
     }
 
     protected function addConfigurationFields(FormInterface $form, string $configurationType): void
@@ -92,7 +92,7 @@ final class PromotionRuleType extends AbstractResourceType
      */
     protected function getRegistryIdentifier(FormInterface $form, $data = null): ?string
     {
-        if ($data instanceof PromotionRuleInterface && null !== $data->getType()) {
+        if ($data instanceof CatalogPromotionRuleInterface && null !== $data->getType()) {
             return $data->getType();
         }
 

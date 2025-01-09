@@ -9,7 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class PromotionRuleChoiceType extends AbstractType
+final class CatalogPromotionRuleChoiceType extends AbstractType
 {
     private array $rules;
 
@@ -32,6 +32,6 @@ final class PromotionRuleChoiceType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'setono_sylius_catalog_promotion_promotion_rule_choice';
+        return 'setono_sylius_catalog_promotion__catalog_promotion_rule_choice';
     }
 }

@@ -84,16 +84,16 @@ class CreatePage extends BaseCreatePage implements CreatePageInterface
     {
         $timestamp = $dateTime->getTimestamp();
 
-        $this->getDocument()->fillField('setono_sylius_catalog_promotion_promotion_startsAt_date', date('Y-m-d', $timestamp));
-        $this->getDocument()->fillField('setono_sylius_catalog_promotion_promotion_startsAt_time', date('H:i', $timestamp));
+        $this->getDocument()->fillField('setono_sylius_catalog_promotion__catalog_promotion_startsAt_date', date('Y-m-d', $timestamp));
+        $this->getDocument()->fillField('setono_sylius_catalog_promotion__catalog_promotion_startsAt_time', date('H:i', $timestamp));
     }
 
     public function setEndsAt(\DateTimeInterface $dateTime): void
     {
         $timestamp = $dateTime->getTimestamp();
 
-        $this->getDocument()->fillField('setono_sylius_catalog_promotion_promotion_endsAt_date', date('Y-m-d', $timestamp));
-        $this->getDocument()->fillField('setono_sylius_catalog_promotion_promotion_endsAt_time', date('H:i', $timestamp));
+        $this->getDocument()->fillField('setono_sylius_catalog_promotion__catalog_promotion_endsAt_date', date('Y-m-d', $timestamp));
+        $this->getDocument()->fillField('setono_sylius_catalog_promotion__catalog_promotion_endsAt_time', date('H:i', $timestamp));
     }
 
     private function getLastCollectionItem(string $collection): NodeElement
