@@ -1,0 +1,11 @@
+{# @var data string|null #}
+{% if data %}
+    {% set truncated = data|u.truncate(20, '...', false) %}
+    {% if data == truncated %}
+        {{ data }}
+    {% else %}
+        <span data-content="{{ data }}">{{ truncated }}</span>
+    {% endif %}
+{% else %}
+    <em>{{ 'setono_sylius_catalog_promotion.ui.no_error'|trans }}</em>
+{% endif %}

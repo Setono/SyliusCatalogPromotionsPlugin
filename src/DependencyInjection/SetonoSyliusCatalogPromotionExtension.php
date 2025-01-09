@@ -100,6 +100,13 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                                 'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/product_list.html.twig',
                             ],
                         ],
+                        'error' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.error',
+                            'options' => [
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/error.html.twig',
+                            ],
+                        ],
                         'createdAt' => [
                             'type' => 'datetime',
                             'label' => 'sylius.ui.created_at',

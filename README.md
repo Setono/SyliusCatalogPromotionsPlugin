@@ -17,6 +17,9 @@ Plugin for Sylius to define permanent or time-limited promotions for products an
 composer require setono/sylius-catalog-promotion-plugin
 ```
 
+**NOTICE** that this plugin uses the `twig/string-extra` and `twig/extra-bundle` internally to do string manipulation in Twig.
+It should work out of the box with the Symfony Flex recipe, but if you're not using Symfony Flex, you should install the bundle manually.
+
 ### Register plugin
 
 ```php
