@@ -43,7 +43,10 @@ class Promotion implements PromotionInterface
     /** @var Collection<array-key, PromotionRuleInterface> */
     protected Collection $rules;
 
-    protected float $discount = 0.0;
+    /**
+     * The discount is saved as a decimal type in Doctrine to avoid floating point issues
+     */
+    protected string $discount = '0.0';
 
     /** @var Collection<array-key, BaseChannelInterface> */
     protected Collection $channels;
@@ -205,7 +208,7 @@ class Promotion implements PromotionInterface
 
     public function getDiscount(): float
     {
-        return $this->discount;
+        return (float) $this->discount;
     }
 
     public function getDisplayableDiscount(): float
@@ -215,7 +218,7 @@ class Promotion implements PromotionInterface
 
     public function setDiscount(float $discount): void
     {
-        $this->discount = $discount;
+        $this->discount = (string) $discount;
     }
 
     public function getChannels(): Collection
