@@ -23,10 +23,10 @@ setono_sylius_catalog_promotion_admin_catalog_promotion:
             all:
                 subheader: setono_sylius_catalog_promotion.ui.manage_catalog_promotions
                 templates:
-                    form: "@SetonoSyliusCatalogPromotionPlugin/Admin/Promotion/_form.html.twig"
+                    form: "@SetonoSyliusCatalogPromotionPlugin/admin/catalog_promotion/_form.html.twig"
             index:
                 icon: in cart
             update:
                 templates:
-                    form: "@SetonoSyliusCatalogPromotionPlugin/Admin/Promotion/_form.html.twig"
+                    form: "@SetonoSyliusCatalogPromotionPlugin/admin/catalog_promotion/_form.html.twig"
     type: sylius.resource
