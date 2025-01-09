@@ -49,6 +49,6 @@ setono_sylius_catalog_promotion:
         no_start_date: No start date
         products_updated: Products updated
         products_updated_less_than_estimated: The number of products updated is less than the estimated number of products to update. This may be due to the fact that some products were filtered/edited/removed after the initial processing started.
-        rules_explanation: If you don't add any rules, the promotion will be applied to all products
+        rules_explanation: If you don't add any rules, the catalog promotion will be applied to all products
         triggered_by: Triggered by
         updated_at: Updated at
