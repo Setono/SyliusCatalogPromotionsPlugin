@@ -96,14 +96,6 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'sortable' => null,
                         ],
                     ],
-// todo add show action
-//                    'actions' => [
-//                        'item' => [
-//                            'show' => [
-//                                'type' => 'show',
-//                            ],
-//                        ],
-//                    ],
                 ],
                 'setono_sylius_catalog_promotion_admin_promotion' => [
                     'driver' => [
