@@ -70,7 +70,12 @@ bin/console sylius:install:assets
 ### Configure cron (optional)
 
 ```bash
+# Will process _all_ catalog promotions for _all_ products
+# You can run this once a day as a fallback for events triggering the update process
 php bin/console setono:sylius-catalog-promotion:process
+
+# Will prune/remove catalog promotion updates older then the given threshold
+php bin/console setono:sylius-catalog-promotion:prune-catalog-promotion-updates
 ```
 
 [ico-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/stable

@@ -4,6 +4,13 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="Setono\SyliusCatalogPromotionPlugin\Command\PruneCatalogPromotionUpdatesCommand">
+            <argument type="service" id="doctrine"/>
+            <argument>%setono_sylius_catalog_promotion.model.catalog_promotion_update.class%</argument>
+
+            <tag name="console.command"/>
+        </service>
+
         <service id="Setono\SyliusCatalogPromotionPlugin\Command\UpdateCommand">
             <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
 
