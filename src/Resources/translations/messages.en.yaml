@@ -35,11 +35,14 @@ setono_sylius_catalog_promotion:
                     promotions: Catalog promotions
     ui:
         all: All
+        back_to_catalog_promotions: Back to catalog promotions
         catalog_promotion_updates: Catalog promotion updates
         catalog_promotions: Catalog promotions
         edit_promotion: Edit catalog promotion
+        list_of_updates: List of updates
         manage_promotions: Manage catalog promotions
         new_promotion: Create new catalog promotion
+        no_error: No error
         products_updated: Products updated
         products_updated_less_than_estimated: The number of products updated is less than the estimated number of products to update. This may be due to the fact that some products were filtered/edited/removed after the initial processing started.
         promotion: Catalog promotion
@@ -47,4 +50,3 @@ setono_sylius_catalog_promotion:
         rules_explanation: If you don't add any rules, the promotion will be applied to all products
         triggered_by: Triggered by
         updated_at: Updated at
-        no_error: No error

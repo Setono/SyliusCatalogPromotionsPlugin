@@ -118,6 +118,20 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'sortable' => null,
                         ],
                     ],
+                    'actions' => [
+                        'main' => [
+                            'back_to_catalog_promotions' => [
+                                'type' => 'default',
+                                'label' => 'setono_sylius_catalog_promotion.ui.back_to_catalog_promotions',
+                                'icon' => 'chevron left',
+                                'options' => [
+                                    'link' => [
+                                        'route' => 'setono_sylius_catalog_promotion_admin_promotion_index',
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ]
                 ],
                 'setono_sylius_catalog_promotion_admin_promotion' => [
                     'driver' => [
@@ -156,6 +170,16 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                     ],
                     'actions' => [
                         'main' => [
+                            'list_of_updates' => [
+                                'type' => 'default',
+                                'label' => 'setono_sylius_catalog_promotion.ui.list_of_updates',
+                                'icon' => 'list',
+                                'options' => [
+                                    'link' => [
+                                        'route' => 'setono_sylius_catalog_promotion_admin_catalog_promotion_update_index',
+                                    ]
+                                ]
+                            ],
                             'create' => [
                                 'type' => 'create',
                             ],
