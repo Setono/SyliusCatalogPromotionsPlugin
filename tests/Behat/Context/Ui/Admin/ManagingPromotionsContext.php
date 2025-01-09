@@ -6,7 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
 use DateTimeInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion\CreatePageInterface;
 use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion\IndexPageInterface;
 use Setono\SyliusCatalogPromotionPlugin\Tests\Behat\Page\Admin\Promotion\UpdatePageInterface;
@@ -250,7 +250,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Then the :catalogPromotion catalog promotion should be exclusive
      */
-    public function theDiscountShouldBeExclusive(PromotionInterface $catalogPromotion): void
+    public function theDiscountShouldBeExclusive(CatalogPromotionInterface $catalogPromotion): void
     {
         $this->assertIfFieldIsTrue($catalogPromotion, 'exclusive');
     }
@@ -269,7 +269,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Then the :catalogPromotion catalog promotion should be applicable for the :channelName channel
      */
-    public function theDiscountShouldBeApplicableForTheChannel(PromotionInterface $catalogPromotion, string $channelName): void
+    public function theDiscountShouldBeApplicableForTheChannel(CatalogPromotionInterface $catalogPromotion, string $channelName): void
     {
         $this->iWantToModifyADiscount($catalogPromotion);
 
@@ -281,7 +281,7 @@ final class ManagingPromotionsContext implements Context
      * @Given /^I want to modify (this catalog promotion)$/
      * @Then I should be able to modify a :catalogPromotion catalog promotion
      */
-    public function iWantToModifyADiscount(PromotionInterface $catalogPromotion): void
+    public function iWantToModifyADiscount(CatalogPromotionInterface $catalogPromotion): void
     {
         $this->updatePage->open(['id' => $catalogPromotion->getId()]);
     }
@@ -307,7 +307,7 @@ final class ManagingPromotionsContext implements Context
      * @When /^I delete a ("([^"]+)" catalog promotion)$/
      * @When /^I try to delete a ("([^"]+)" catalog promotion)$/
      */
-    public function iDeleteDiscount(PromotionInterface $promotion): void
+    public function iDeleteDiscount(CatalogPromotionInterface $promotion): void
     {
         $this->sharedStorage->set('catalog_promotion', $promotion);
 
@@ -318,7 +318,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Then /^(this catalog promotion) should no longer exist in the catalog promotion registry$/
      */
-    public function promotionShouldNotExistInTheRegistry(PromotionInterface $promotion): void
+    public function promotionShouldNotExistInTheRegistry(CatalogPromotionInterface $promotion): void
     {
         $this->indexPage->open();
 
@@ -351,7 +351,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Then the :catalogPromotion catalog promotion should be available from :startsDate to :endsDate
      */
-    public function theDiscountShouldBeAvailableFromTo(PromotionInterface $catalogPromotion, DateTimeInterface $startsDate, DateTimeInterface $endsDate): void
+    public function theDiscountShouldBeAvailableFromTo(CatalogPromotionInterface $catalogPromotion, DateTimeInterface $startsDate, DateTimeInterface $endsDate): void
     {
         $this->iWantToModifyADiscount($catalogPromotion);
 
@@ -440,7 +440,7 @@ final class ManagingPromotionsContext implements Context
     /**
      * @Given the :catalogPromotion catalog promotion should have priority :priority
      */
-    public function theDiscountsShouldHavePriority(PromotionInterface $catalogPromotion, string $priority): void
+    public function theDiscountsShouldHavePriority(CatalogPromotionInterface $catalogPromotion, string $priority): void
     {
         $this->iWantToModifyADiscount($catalogPromotion);
 
@@ -455,7 +455,7 @@ final class ManagingPromotionsContext implements Context
         Assert::same($currentPage->getValidationMessage($element), $expectedMessage);
     }
 
-    private function assertIfFieldIsTrue(PromotionInterface $promotion, string $field): void
+    private function assertIfFieldIsTrue(CatalogPromotionInterface $promotion, string $field): void
     {
         $this->iWantToModifyADiscount($promotion);
 

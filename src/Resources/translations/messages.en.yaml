@@ -1,6 +1,6 @@
 setono_sylius_catalog_promotion:
     form:
-        promotion:
+        catalog_promotion:
             add_rule: Add rule
             channels: Apply to channels
             description: Description
@@ -13,7 +13,7 @@ setono_sylius_catalog_promotion:
             priority: Priority
             rules: Rules
             starts_at: Starts at
-        promotion_rule:
+        catalog_promotion_rule:
             contains_product: Product is
             contains_product_configuration:
                 product: Product
@@ -32,24 +32,23 @@ setono_sylius_catalog_promotion:
         admin:
             main:
                 marketing:
-                    promotions: Catalog promotions
+                    catalog_promotions: Catalog promotions
     ui:
         all: All
         back_to_catalog_promotions: Back to catalog promotions
+        catalog_promotion: Catalog promotion
         catalog_promotion_updates: Catalog promotion updates
         catalog_promotions: Catalog promotions
-        edit_promotion: Edit catalog promotion
+        edit_catalog_promotion: Edit catalog promotion
         list_of_updates: List of updates
-        manage_promotions: Manage catalog promotions
+        manage_catalog_promotions: Manage catalog promotions
         manually_discounted_products_excluded: Manually discounted products excluded
-        new_promotion: Create new catalog promotion
+        new_catalog_promotion: Create new catalog promotion
         no_end_date: No end date
         no_error: No error
         no_start_date: No start date
         products_updated: Products updated
         products_updated_less_than_estimated: The number of products updated is less than the estimated number of products to update. This may be due to the fact that some products were filtered/edited/removed after the initial processing started.
-        promotion: Catalog promotion
-        promotions: Catalog promotions
         rules_explanation: If you don't add any rules, the promotion will be applied to all products
         triggered_by: Triggered by
         updated_at: Updated at

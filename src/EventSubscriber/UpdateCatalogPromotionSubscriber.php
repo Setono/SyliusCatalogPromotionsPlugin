@@ -6,7 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\EventSubscriber;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpdate;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,7 +23,7 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
     /**
      * A list of catalog promotions to update
      *
-     * @var list<PromotionInterface>
+     * @var list<CatalogPromotionInterface>
      */
     private array $catalogPromotions = [];
 
@@ -34,8 +34,8 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'setono_sylius_catalog_promotion.promotion.post_create' => 'update',
-            'setono_sylius_catalog_promotion.promotion.post_update' => 'update',
+            'setono_sylius_catalog_promotion.catalog_promotion.post_create' => 'update',
+            'setono_sylius_catalog_promotion.catalog_promotion.post_update' => 'update',
             KernelEvents::TERMINATE => 'dispatch',
             ConsoleEvents::TERMINATE => 'dispatch',
         ];
@@ -44,7 +44,7 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
     public function update(ResourceControllerEvent $event): void
     {
         $obj = $event->getSubject();
-        Assert::isInstanceOf($obj, PromotionInterface::class);
+        Assert::isInstanceOf($obj, CatalogPromotionInterface::class);
 
         $this->catalogPromotions[] = $obj;
     }
@@ -52,7 +52,7 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
     public function postPersist(LifecycleEventArgs $eventArgs): void
     {
         $obj = $eventArgs->getObject();
-        if (!$obj instanceof PromotionInterface) {
+        if (!$obj instanceof CatalogPromotionInterface) {
             return;
         }
 
@@ -62,7 +62,7 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
     public function postUpdate(LifecycleEventArgs $eventArgs): void
     {
         $obj = $eventArgs->getObject();
-        if (!$obj instanceof PromotionInterface) {
+        if (!$obj instanceof CatalogPromotionInterface) {
             return;
         }
 
@@ -79,7 +79,7 @@ final class UpdateCatalogPromotionSubscriber implements EventSubscriberInterface
             catalogPromotions: $this->catalogPromotions,
             triggeredBy: sprintf(
                 'The update/creation of the following catalog promotions: "%s"',
-                implode('", "', array_map(static fn (PromotionInterface $promotion): string => (string) ($promotion->getName() ?? $promotion->getCode()), $this->catalogPromotions)),
+                implode('", "', array_map(static fn (CatalogPromotionInterface $catalogPromotion): string => (string) ($catalogPromotion->getName() ?? $catalogPromotion->getCode()), $this->catalogPromotions)),
             ),
         ));
 

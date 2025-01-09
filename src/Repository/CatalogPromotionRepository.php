@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Repository;
 
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Webmozart\Assert\Assert;
 
-class PromotionRepository extends EntityRepository implements PromotionRepositoryInterface
+class CatalogPromotionRepository extends EntityRepository implements CatalogPromotionRepositoryInterface
 {
     public function findForProcessing(array $catalogPromotions = []): array
     {
@@ -21,16 +21,16 @@ class PromotionRepository extends EntityRepository implements PromotionRepositor
 
         $objs = $qb->getQuery()->getResult();
         Assert::isArray($objs);
-        Assert::allIsInstanceOf($objs, PromotionInterface::class);
+        Assert::allIsInstanceOf($objs, CatalogPromotionInterface::class);
         Assert::isList($objs);
 
         return $objs;
     }
 
-    public function findOneByCode(string $code): ?PromotionInterface
+    public function findOneByCode(string $code): ?CatalogPromotionInterface
     {
         $obj = $this->findOneBy(['code' => $code]);
-        Assert::nullOrIsInstanceOf($obj, PromotionInterface::class);
+        Assert::nullOrIsInstanceOf($obj, CatalogPromotionInterface::class);
 
         return $obj;
     }

@@ -24,7 +24,7 @@
         </service>
 
         <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\StartCatalogPromotionUpdateHandler">
-            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.repository.catalog_promotion"/>
             <argument type="service" id="setono_sylius_catalog_promotion.factory.catalog_promotion_update"/>
             <argument type="service" id="setono_sylius_catalog_promotion.command_bus"/>
             <argument type="service" id="doctrine"/>
@@ -34,7 +34,7 @@
 
         <service id="Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler\UpdateProductsHandler">
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface"/>
-            <argument type="service" id="setono_sylius_catalog_promotion.repository.promotion"/>
+            <argument type="service" id="setono_sylius_catalog_promotion.repository.catalog_promotion"/>
             <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\PreQualificationCheckerInterface"/>
             <argument type="service" id="state_machine.setono_sylius_catalog_promotion__catalog_promotion_update"/>
             <argument type="service" id="doctrine"/>

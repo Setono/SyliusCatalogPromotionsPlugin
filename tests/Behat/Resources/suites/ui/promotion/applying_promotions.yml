@@ -12,14 +12,14 @@ default:
                 - sylius.behat.context.transform.channel
                 - sylius.behat.context.transform.product
                 - sylius.behat.context.transform.taxon
-                - setono_sylius_catalog_promotion.behat.context.transform.promotion
+                - setono_sylius_catalog_promotion.behat.context.transform.catalog_promotion
 
                 - sylius.behat.context.setup.channel
                 - sylius.behat.context.setup.currency
                 - sylius.behat.context.setup.product
                 - sylius.behat.context.setup.product_taxon
                 - sylius.behat.context.setup.taxonomy
-                - setono_sylius_catalog_promotion.behat.context.setup.promotion
+                - setono_sylius_catalog_promotion.behat.context.setup.catalog_promotion
 
                 - sylius.behat.context.ui.channel
             filters:

@@ -10,19 +10,18 @@ setono_sylius_catalog_promotion_admin_catalog_promotion_update:
                 icon: in cart
     type: sylius.resource
 
-setono_sylius_catalog_promotion_admin_promotion:
+setono_sylius_catalog_promotion_admin_catalog_promotion:
     resource: |
-        alias: setono_sylius_catalog_promotion.promotion
-        path: catalog-promotions
+        alias: setono_sylius_catalog_promotion.catalog_promotion
         section: admin
         templates: '@SyliusAdmin\\Crud'
         except: ['show']
         redirect: update
-        grid: setono_sylius_catalog_promotion_admin_promotion
+        grid: setono_sylius_catalog_promotion_admin_catalog_promotion
         permission: true
         vars:
             all:
-                subheader: setono_sylius_catalog_promotion.ui.manage_promotions
+                subheader: setono_sylius_catalog_promotion.ui.manage_catalog_promotions
                 templates:
                     form: "@SetonoSyliusCatalogPromotionPlugin/Admin/Promotion/_form.html.twig"
             index:

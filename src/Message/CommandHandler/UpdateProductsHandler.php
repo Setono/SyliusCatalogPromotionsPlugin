@@ -10,7 +10,7 @@ use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\PreQualificatio
 use Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\UpdateProducts;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
-use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 use Setono\SyliusCatalogPromotionPlugin\Workflow\CatalogPromotionUpdateWorkflow;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Workflow\WorkflowInterface;
@@ -21,7 +21,7 @@ final class UpdateProductsHandler
 
     public function __construct(
         private readonly ProductDataProviderInterface $productDataProvider,
-        private readonly PromotionRepositoryInterface $promotionRepository,
+        private readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
         private readonly PreQualificationCheckerInterface $preQualificationChecker,
         private readonly WorkflowInterface $catalogPromotionUpdateWorkflow,
         ManagerRegistry $managerRegistry,
@@ -39,7 +39,7 @@ final class UpdateProductsHandler
         }
 
         try {
-            $catalogPromotions = $this->promotionRepository->findForProcessing($message->catalogPromotions);
+            $catalogPromotions = $this->catalogPromotionRepository->findForProcessing($message->catalogPromotions);
 
             $i = 0;
             foreach ($this->productDataProvider->getProducts($message->productIds) as $product) {

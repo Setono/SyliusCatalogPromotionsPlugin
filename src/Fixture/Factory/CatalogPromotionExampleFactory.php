@@ -7,9 +7,9 @@ namespace Setono\SyliusCatalogPromotionPlugin\Fixture\Factory;
 use DateTime;
 use DateTimeInterface;
 use Faker\Generator;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface;
-use Setono\SyliusCatalogPromotionPlugin\Repository\PromotionRepositoryInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionRuleInterface;
+use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\OptionsResolver\LazyOption;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
@@ -19,80 +19,67 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
-class PromotionExampleFactory extends AbstractExampleFactory
+class CatalogPromotionExampleFactory extends AbstractExampleFactory
 {
-    protected ChannelRepositoryInterface $channelRepository;
-
-    protected PromotionRepositoryInterface $promotionRepository;
-
-    protected Factory $promotionFactory;
-
-    protected PromotionRuleExampleFactory $promotionRuleExampleFactory;
-
     protected Generator $faker;
 
     protected OptionsResolver $optionsResolver;
 
     public function __construct(
-        ChannelRepositoryInterface $channelRepository,
-        PromotionRepositoryInterface $promotionRepository,
-        Factory $promotionFactory,
-        PromotionRuleExampleFactory $promotionRuleExampleFactory,
+        protected readonly ChannelRepositoryInterface $channelRepository,
+        protected readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
+        protected readonly Factory $catalogPromotionFactory,
+        protected readonly CatalogPromotionRuleExampleFactory $catalogPromotionRuleExampleFactory,
     ) {
-        $this->channelRepository = $channelRepository;
-        $this->promotionRepository = $promotionRepository;
-        $this->promotionFactory = $promotionFactory;
-        $this->promotionRuleExampleFactory = $promotionRuleExampleFactory;
-
         $this->faker = \Faker\Factory::create();
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
     }
 
-    public function create(array $options = []): PromotionInterface
+    public function create(array $options = []): CatalogPromotionInterface
     {
         $options = $this->optionsResolver->resolve($options);
 
-        /** @var PromotionInterface|null $promotion */
-        $promotion = $this->promotionRepository->findOneBy(['code' => $options['code']]);
-        if (null === $promotion) {
-            /** @var PromotionInterface $promotion */
-            $promotion = $this->promotionFactory->createNew();
+        /** @var CatalogPromotionInterface|null $catalogPromotion */
+        $catalogPromotion = $this->catalogPromotionRepository->findOneBy(['code' => $options['code']]);
+        if (null === $catalogPromotion) {
+            /** @var CatalogPromotionInterface $catalogPromotion */
+            $catalogPromotion = $this->catalogPromotionFactory->createNew();
         }
 
-        $promotion->setCode($options['code']);
-        $promotion->setName($options['name']);
-        $promotion->setDescription($options['description']);
+        $catalogPromotion->setCode($options['code']);
+        $catalogPromotion->setName($options['name']);
+        $catalogPromotion->setDescription($options['description']);
 
-        $promotion->setPriority((int) $options['priority']);
-        $promotion->setExclusive($options['exclusive']);
+        $catalogPromotion->setPriority((int) $options['priority']);
+        $catalogPromotion->setExclusive($options['exclusive']);
 
         if (isset($options['starts_at'])) {
-            $promotion->setStartsAt(new DateTime($options['starts_at']));
+            $catalogPromotion->setStartsAt(new DateTime($options['starts_at']));
         }
 
         if (isset($options['ends_at'])) {
-            $promotion->setEndsAt(new DateTime($options['ends_at']));
+            $catalogPromotion->setEndsAt(new DateTime($options['ends_at']));
         }
-        $promotion->setEnabled($options['enabled']);
+        $catalogPromotion->setEnabled($options['enabled']);
 
         foreach ($options['channels'] as $channel) {
-            $promotion->addChannel($channel);
+            $catalogPromotion->addChannel($channel);
         }
 
         foreach ($options['rules'] as $ruleOptions) {
-            /** @var PromotionRuleInterface $promotionRule */
-            $promotionRule = $this->promotionRuleExampleFactory->create($ruleOptions);
-            $promotion->addRule($promotionRule);
+            /** @var CatalogPromotionRuleInterface $catalogPromotionRule */
+            $catalogPromotionRule = $this->catalogPromotionRuleExampleFactory->create($ruleOptions);
+            $catalogPromotion->addRule($catalogPromotionRule);
         }
 
-        $promotion->setDiscount($options['discount']);
+        $catalogPromotion->setDiscount($options['discount']);
 
-        $promotion->setCreatedAt($options['created_at']);
-        $promotion->setUpdatedAt($options['updated_at']);
+        $catalogPromotion->setCreatedAt($options['created_at']);
+        $catalogPromotion->setUpdatedAt($options['updated_at']);
 
-        return $promotion;
+        return $catalogPromotion;
     }
 
     protected function configureOptions(OptionsResolver $resolver): void

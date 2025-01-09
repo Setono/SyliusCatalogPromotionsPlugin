@@ -39,7 +39,7 @@ return [
 Otherwise, you'll see exception like this:
 
 ```bash
-You have requested a non-existent parameter "setono_sylius_catalog_promotion.model.promotion.class".  
+You have requested a non-existent parameter "setono_sylius_catalog_promotion.model.catalog_promotion.class".  
 ```
 
 ### Add routing

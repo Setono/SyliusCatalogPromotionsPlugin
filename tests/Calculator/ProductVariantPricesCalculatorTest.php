@@ -51,7 +51,7 @@ final class ProductVariantPricesCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function it_calculates_promotion(): void
+    public function it_calculates_catalog_promotion(): void
     {
         $channel = new Channel();
 

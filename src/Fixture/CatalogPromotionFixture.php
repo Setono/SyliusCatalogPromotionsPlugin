@@ -7,7 +7,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\Fixture;
 use Sylius\Bundle\CoreBundle\Fixture\AbstractResourceFixture;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-final class PromotionFixture extends AbstractResourceFixture
+final class CatalogPromotionFixture extends AbstractResourceFixture
 {
     public function getName(): string
     {

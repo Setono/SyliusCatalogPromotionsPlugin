@@ -4,34 +4,29 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Fixture\Factory;
 
-use Setono\SyliusCatalogPromotionPlugin\Factory\PromotionRuleFactoryInterface;
-use Setono\SyliusCatalogPromotionPlugin\Model\PromotionRuleInterface;
+use Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionRuleFactoryInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionRuleInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PromotionRuleExampleFactory extends AbstractExampleFactory
+class CatalogPromotionRuleExampleFactory extends AbstractExampleFactory
 {
-    protected PromotionRuleFactoryInterface $promotionRuleFactory;
-
-    protected array $promotionRules;
-
     protected OptionsResolver $optionsResolver;
 
-    public function __construct(PromotionRuleFactoryInterface $promotionRuleFactory, array $promotionRules)
-    {
-        $this->promotionRuleFactory = $promotionRuleFactory;
-        $this->promotionRules = $promotionRules;
-
+    public function __construct(
+        protected readonly CatalogPromotionRuleFactoryInterface $catalogPromotionRuleFactory,
+        protected readonly array $catalogPromotionRules,
+    ) {
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
     }
 
-    public function create(array $options = []): PromotionRuleInterface
+    public function create(array $options = []): CatalogPromotionRuleInterface
     {
         $options = $this->optionsResolver->resolve($options);
 
-        return $this->promotionRuleFactory->createByType(
+        return $this->catalogPromotionRuleFactory->createByType(
             $options['type'],
             $options['configuration'],
         );
@@ -41,9 +36,9 @@ class PromotionRuleExampleFactory extends AbstractExampleFactory
     {
         $resolver
             ->setDefault('type', function (): string {
-                $promotionRuleCodes = array_keys($this->promotionRules);
+                $codes = array_keys($this->catalogPromotionRules);
 
-                return $promotionRuleCodes[array_rand($promotionRuleCodes)];
+                return $codes[array_rand($codes)];
             })
             ->setDefined('configuration')
             ->setAllowedTypes('configuration', ['string', 'array'])

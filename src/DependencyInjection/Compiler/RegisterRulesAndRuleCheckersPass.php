@@ -41,6 +41,6 @@ final class RegisterRulesAndRuleCheckersPass implements CompilerPassInterface
             }
         }
 
-        $container->setParameter('setono_sylius_catalog_promotion.promotion_rules', $formToLabelMap);
+        $container->setParameter('setono_sylius_catalog_promotion.catalog_promotion_rules', $formToLabelMap);
     }
 }
