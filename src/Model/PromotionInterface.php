@@ -11,18 +11,11 @@ use Sylius\Component\Resource\Model\CodeAwareInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 
-interface PromotionInterface extends ChannelsAwareInterface, CodeAwareInterface, TimestampableInterface, ResourceInterface
+interface PromotionInterface extends ChannelsAwareInterface, CodeAwareInterface, TimestampableInterface, ResourceInterface, \Stringable
 {
     public function getId(): ?int;
 
-    public function __toString(): string;
-
     public function getMultiplier(): float;
-
-    /**
-     * @return string[]
-     */
-    public function getChannelCodes(): array;
 
     public function getName(): ?string;
 
@@ -71,8 +64,6 @@ interface PromotionInterface extends ChannelsAwareInterface, CodeAwareInterface,
     public function removeRule(PromotionRuleInterface $rule): void;
 
     public function getDiscount(): float;
-
-    public function getDisplayableDiscount(): float;
 
     public function setDiscount(float $discount): void;
 }

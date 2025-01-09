@@ -61,25 +61,12 @@ class Promotion implements PromotionInterface
 
     public function __toString(): string
     {
-        $name = (string) $this->getName();
-
-        if ('' === $name) {
-            return (string) $this->getId();
-        }
-
-        return $name;
+        return (string) ($this->getName() ?? $this->getCode() ?? $this->getId());
     }
 
     public function getMultiplier(): float
     {
         return 1 - $this->getDiscount();
-    }
-
-    public function getChannelCodes(): array
-    {
-        return $this->channels->map(static function (BaseChannelInterface $channel): string {
-            return (string) $channel->getCode();
-        })->toArray();
     }
 
     public function getId(): ?int
@@ -209,11 +196,6 @@ class Promotion implements PromotionInterface
     public function getDiscount(): float
     {
         return (float) $this->discount;
-    }
-
-    public function getDisplayableDiscount(): float
-    {
-        return $this->getDiscount() * 100;
     }
 
     public function setDiscount(float $discount): void
