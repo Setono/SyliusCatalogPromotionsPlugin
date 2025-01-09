@@ -76,7 +76,7 @@ final class ProcessCatalogPromotionUpdateHandler
             // We need to re-fetch the catalog promotion update because it might
             // have become detached from the UnitOfWork inside the data provider above
             $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
-            $catalogPromotionUpdate->setProductsEligibleForUpdate($i);
+            $catalogPromotionUpdate->setEstimatedNumberOfProductsToUpdate($i);
             $catalogPromotionUpdate->setMessageIds($messageIds);
 
             $this->commandBus->dispatch(new CheckCatalogPromotionUpdate($catalogPromotionUpdate));

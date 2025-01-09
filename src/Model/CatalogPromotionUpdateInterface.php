@@ -59,13 +59,9 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
 
     public function setTriggeredBy(?string $triggeredBy): void;
 
-    /**
-     * todo do we need this?
-     * The number of products that are eligible for update. This should be set when the update is created
-     */
-    public function getProductsEligibleForUpdate(): ?int;
+    public function getEstimatedNumberOfProductsToUpdate(): ?int;
 
-    public function setProductsEligibleForUpdate(int $productsEligibleForUpdate): void;
+    public function setEstimatedNumberOfProductsToUpdate(int $estimatedNumberOfProductsToUpdate): void;
 
     public function getProductsUpdated(): int;
 

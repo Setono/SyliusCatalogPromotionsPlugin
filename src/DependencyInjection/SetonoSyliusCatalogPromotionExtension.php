@@ -77,6 +77,15 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'label' => 'setono_sylius_catalog_promotion.ui.triggered_by',
                             'sortable' => null,
                         ],
+                        'productsUpdated' => [
+                            'type' => 'twig',
+                            'label' => 'setono_sylius_catalog_promotion.ui.products_updated',
+                            'sortable' => 'productsUpdated',
+                            'path' => '.',
+                            'options' => [
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/products_updated.html.twig',
+                            ],
+                        ],
                         'catalogPromotions' => [
                             'type' => 'twig',
                             'label' => 'setono_sylius_catalog_promotion.ui.catalog_promotions',

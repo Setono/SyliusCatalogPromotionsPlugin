@@ -26,7 +26,7 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
 
     protected ?string $triggeredBy = null;
 
-    protected ?int $productsEligibleForUpdate = null;
+    protected ?int $estimatedNumberOfProductsToUpdate = null;
 
     protected int $productsUpdated = 0;
 
@@ -109,14 +109,14 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
         $this->triggeredBy = $triggeredBy;
     }
 
-    public function getProductsEligibleForUpdate(): ?int
+    public function getEstimatedNumberOfProductsToUpdate(): ?int
     {
-        return $this->productsEligibleForUpdate;
+        return $this->estimatedNumberOfProductsToUpdate;
     }
 
-    public function setProductsEligibleForUpdate(int $productsEligibleForUpdate): void
+    public function setEstimatedNumberOfProductsToUpdate(int $estimatedNumberOfProductsToUpdate): void
     {
-        $this->productsEligibleForUpdate = $productsEligibleForUpdate;
+        $this->estimatedNumberOfProductsToUpdate = $estimatedNumberOfProductsToUpdate;
     }
 
     public function getProductsUpdated(): int

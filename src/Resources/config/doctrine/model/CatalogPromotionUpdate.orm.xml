@@ -17,7 +17,7 @@
         <field name="catalogPromotions" type="json" nullable="true"/>
         <field name="products" type="json" nullable="true"/>
         <field name="triggeredBy" type="text" nullable="true"/>
-        <field name="productsEligibleForUpdate" type="integer" nullable="true"/>
+        <field name="estimatedNumberOfProductsToUpdate" type="integer" nullable="true"/>
         <field name="productsUpdated" type="integer"/>
         <field name="messageIds" type="json" nullable="true"/>
         <field name="processedMessageIds" type="json" nullable="true"/>

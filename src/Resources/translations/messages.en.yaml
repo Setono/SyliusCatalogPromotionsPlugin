@@ -34,14 +34,16 @@ setono_sylius_catalog_promotion:
                 marketing:
                     promotions: Catalog promotions
     ui:
+        all: All
         catalog_promotion_updates: Catalog promotion updates
         catalog_promotions: Catalog promotions
         edit_promotion: Edit catalog promotion
         manage_promotions: Manage catalog promotions
         new_promotion: Create new catalog promotion
+        products_updated: Products updated
+        products_updated_less_than_estimated: The number of products updated is less than the estimated number of products to update. This may be due to the fact that some products were filtered/edited/removed after the initial processing started.
         promotion: Catalog promotion
         promotions: Catalog promotions
         rules_explanation: If you don't add any rules, the promotion will be applied to all products
         triggered_by: Triggered by
         updated_at: Updated at
-        all: All
