@@ -41,8 +41,11 @@ setono_sylius_catalog_promotion:
         edit_promotion: Edit catalog promotion
         list_of_updates: List of updates
         manage_promotions: Manage catalog promotions
+        manually_discounted_products_excluded: Manually discounted products excluded
         new_promotion: Create new catalog promotion
+        no_end_date: No end date
         no_error: No error
+        no_start_date: No start date
         products_updated: Products updated
         products_updated_less_than_estimated: The number of products updated is less than the estimated number of products to update. This may be due to the fact that some products were filtered/edited/removed after the initial processing started.
         promotion: Catalog promotion

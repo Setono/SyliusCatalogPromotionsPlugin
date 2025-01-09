@@ -127,11 +127,11 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                                 'options' => [
                                     'link' => [
                                         'route' => 'setono_sylius_catalog_promotion_admin_promotion_index',
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'setono_sylius_catalog_promotion_admin_promotion' => [
                     'driver' => [
@@ -141,10 +141,33 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                         ],
                     ],
                     'sorting' => [
+                        'exclusive' => 'desc',
                         'priority' => 'desc',
                     ],
                     'limits' => [100, 200, 500],
                     'fields' => [
+                        'name' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.name',
+                            'path' => '.',
+                            'sortable' => null,
+                            'options' => [
+                                'template' => '@SyliusUi/Grid/Field/nameAndDescription.html.twig',
+                            ],
+                        ],
+                        'code' => [
+                            'type' => 'string',
+                            'label' => 'sylius.ui.code',
+                            'sortable' => null,
+                        ],
+                        'discount' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.discount',
+                            'sortable' => null,
+                            'options' => [
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/discount.html.twig',
+                            ],
+                        ],
                         'priority' => [
                             'type' => 'twig',
                             'label' => 'sylius.ui.priority',
@@ -153,18 +176,51 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                                 'template' => '@SyliusUi/Grid/Field/position.html.twig',
                             ],
                         ],
-                        'code' => [
-                            'type' => 'string',
-                            'label' => 'sylius.ui.code',
-                            'sortable' => null,
-                        ],
-                        'name' => [
+                        'exclusive' => [
                             'type' => 'twig',
-                            'label' => 'sylius.ui.name',
-                            'path' => '.',
+                            'label' => 'sylius.ui.exclusive',
                             'sortable' => null,
                             'options' => [
-                                'template' => '@SyliusUi/Grid/Field/nameAndDescription.html.twig',
+                                'template' => '@SyliusUi/Grid/Field/yesNo.html.twig',
+                            ],
+                        ],
+                        'manuallyDiscountedProductsExcluded' => [
+                            'type' => 'twig',
+                            'label' => 'setono_sylius_catalog_promotion.ui.manually_discounted_products_excluded',
+                            'sortable' => null,
+                            'options' => [
+                                'template' => '@SyliusUi/Grid/Field/yesNo.html.twig',
+                            ],
+                        ],
+                        'channels' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.channels',
+                            'options' => [
+                                'template' => '@SyliusAdmin/Grid/Field/_channels.html.twig',
+                            ],
+                        ],
+                        'enabled' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.enabled',
+                            'sortable' => null,
+                            'options' => [
+                                'template' => '@SyliusUi/Grid/Field/enabled.html.twig',
+                            ],
+                        ],
+                        'startsAt' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.starts_at',
+                            'sortable' => null,
+                            'options' => [
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/starts_at.html.twig',
+                            ],
+                        ],
+                        'endsAt' => [
+                            'type' => 'twig',
+                            'label' => 'sylius.ui.ends_at',
+                            'sortable' => null,
+                            'options' => [
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/Admin/grid/field/ends_at.html.twig',
                             ],
                         ],
                     ],
@@ -177,8 +233,8 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                                 'options' => [
                                     'link' => [
                                         'route' => 'setono_sylius_catalog_promotion_admin_catalog_promotion_update_index',
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
                             'create' => [
                                 'type' => 'create',
