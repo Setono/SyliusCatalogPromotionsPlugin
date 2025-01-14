@@ -40,12 +40,12 @@ final class ProcessCatalogPromotionUpdateHandler
             throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s is not in the "%s" state', $message->catalogPromotionUpdate, CatalogPromotionUpdateInterface::STATE_PENDING));
         }
 
-        $this->catalogPromotionUpdateWorkflow->apply($catalogPromotionUpdate, CatalogPromotionUpdateWorkflow::TRANSITION_PROCESS);
-
         $manager = $this->getManager($this->catalogPromotionUpdateClass);
-        $manager->flush();
 
         try {
+            $this->catalogPromotionUpdateWorkflow->apply($catalogPromotionUpdate, CatalogPromotionUpdateWorkflow::TRANSITION_PROCESS);
+            $manager->flush();
+
             /**
              * @psalm-suppress MixedArgumentTypeCoercion
              *
