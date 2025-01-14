@@ -142,7 +142,6 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'type' => 'date',
                             'label' => 'sylius.ui.created_at',
                             'options' => [
-                                'field' => 'createdAt',
                                 'inclusive_from' => true,
                             ],
                         ],
@@ -250,6 +249,53 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'sortable' => null,
                             'options' => [
                                 'template' => '@SetonoSyliusCatalogPromotionPlugin/admin/grid/field/ends_at.html.twig',
+                            ],
+                        ],
+                    ],
+                    'filters' => [
+                        'search' => [
+                            'type' => 'string',
+                            'label' => 'setono_sylius_catalog_promotion.ui.name_or_code',
+                            'options' => [
+                                'fields' => [
+                                    'name', 'code',
+                                ],
+                            ],
+                        ],
+                        'exclusive' => [
+                            'type' => 'boolean',
+                            'label' => 'sylius.ui.exclusive',
+                        ],
+                        'manuallyDiscountedProductsExcluded' => [
+                            'type' => 'boolean',
+                            'label' => 'setono_sylius_catalog_promotion.ui.manually_discounted_products_excluded',
+                        ],
+                        'enabled' => [
+                            'type' => 'boolean',
+                            'label' => 'sylius.ui.enabled',
+                        ],
+                        'channel' => [
+                            'type' => 'entities',
+                            'label' => 'sylius.ui.channel',
+                            'form_options' => [
+                                'class' => '%sylius.model.channel.class%',
+                            ],
+                            'options' => [
+                                'field' => 'channels.id',
+                            ],
+                        ],
+                        'startsAt' => [
+                            'type' => 'date',
+                            'label' => 'sylius.ui.starts_at',
+                            'options' => [
+                                'inclusive_from' => true,
+                            ],
+                        ],
+                        'endsAt' => [
+                            'type' => 'date',
+                            'label' => 'sylius.ui.ends_at',
+                            'options' => [
+                                'inclusive_from' => true,
                             ],
                         ],
                     ],

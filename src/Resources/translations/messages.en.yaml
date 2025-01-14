@@ -56,3 +56,4 @@ setono_sylius_catalog_promotion:
         rules_explanation: If you don't add any rules, the catalog promotion will be applied to all products
         triggered_by: Triggered by
         updated_at: Updated at
+        name_or_code: Name or code
