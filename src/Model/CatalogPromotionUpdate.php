@@ -62,6 +62,19 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
         $this->state = $state;
     }
 
+    /**
+     * @return list<string>
+     */
+    public static function getStates(): array
+    {
+        return [
+            self::STATE_PENDING,
+            self::STATE_PROCESSING,
+            self::STATE_COMPLETED,
+            self::STATE_FAILED,
+        ];
+    }
+
     public function getError(): ?string
     {
         return $this->error;

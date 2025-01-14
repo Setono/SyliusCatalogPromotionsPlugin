@@ -6,6 +6,7 @@ namespace Setono\SyliusCatalogPromotionPlugin\DependencyInjection;
 
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\Rule\RuleCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Workflow\CatalogPromotionUpdateWorkflow;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -116,6 +117,34 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'type' => 'datetime',
                             'label' => 'setono_sylius_catalog_promotion.ui.updated_at',
                             'sortable' => null,
+                        ],
+                    ],
+                    'filters' => [
+                        'state' => [
+                            'type' => 'select',
+                            'label' => 'sylius.ui.state',
+                            'form_options' => [
+                                'choices' => array_combine(
+                                    array_map(static fn (string $state) => sprintf('setono_sylius_catalog_promotion.ui.%s', $state), CatalogPromotionUpdate::getStates()),
+                                    CatalogPromotionUpdate::getStates(),
+                                ),
+                            ],
+                        ],
+                        'triggeredBy' => [
+                            'type' => 'string',
+                            'label' => 'setono_sylius_catalog_promotion.ui.triggered_by',
+                        ],
+                        'error' => [
+                            'type' => 'string',
+                            'label' => 'sylius.ui.error',
+                        ],
+                        'createdAt' => [
+                            'type' => 'date',
+                            'label' => 'sylius.ui.created_at',
+                            'options' => [
+                                'field' => 'createdAt',
+                                'inclusive_from' => true,
+                            ],
                         ],
                     ],
                     'actions' => [
