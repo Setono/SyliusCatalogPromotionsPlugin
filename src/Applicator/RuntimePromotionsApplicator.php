@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Applicator;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
+use Setono\SyliusCatalogPromotionPlugin\Event\CatalogPromotionAppliedEvent;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 
 final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorInterface
@@ -19,16 +22,25 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
     public function __construct(
         private readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
         private readonly RuntimeCheckerInterface $runtimeChecker,
+        // todo make this optional to speed up the application process
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
-    public function apply(array $catalogPromotions, int $price, bool $manuallyDiscounted): int
+    public function apply(ProductInterface $product, int $price, bool $manuallyDiscounted): int
     {
+        $catalogPromotions = $product->getPreQualifiedCatalogPromotions();
+
         if ([] === $catalogPromotions) {
             return $price;
         }
 
-        return (int) floor($this->getMultiplier($catalogPromotions, $manuallyDiscounted) * $price);
+        $appliedPrice = (int) floor($this->getMultiplier($catalogPromotions, $manuallyDiscounted) * $price);
+        if ($appliedPrice !== $price) {
+            $this->eventDispatcher->dispatch(new CatalogPromotionAppliedEvent($product));
+        }
+
+        return $appliedPrice;
     }
 
     /**

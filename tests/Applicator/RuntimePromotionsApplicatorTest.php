@@ -8,10 +8,12 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicator;
 use Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicatorInterface;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 
 final class RuntimePromotionsApplicatorTest extends TestCase
@@ -28,9 +30,11 @@ final class RuntimePromotionsApplicatorTest extends TestCase
 
     protected function setUp(): void
     {
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+
         $this->promotionRepository = $this->prophesize(CatalogPromotionRepositoryInterface::class);
         $this->runtimeChecker = $this->prophesize(RuntimeCheckerInterface::class);
-        $this->applicator = new RuntimePromotionsApplicator($this->promotionRepository->reveal(), $this->runtimeChecker->reveal());
+        $this->applicator = new RuntimePromotionsApplicator($this->promotionRepository->reveal(), $this->runtimeChecker->reveal(), $eventDispatcher->reveal());
     }
 
     /**
@@ -38,11 +42,14 @@ final class RuntimePromotionsApplicatorTest extends TestCase
      */
     public function it_does_not_apply_catalog_promotions(): void
     {
+        $product = $this->prophesize(ProductInterface::class);
+        $product->getPreQualifiedCatalogPromotions()->willReturn([]);
+
         $this->runtimeChecker->isEligible(Argument::any())->shouldNotBeCalled();
         $this->promotionRepository->findOneByCode(Argument::any())->shouldNotBeCalled();
 
         $price = 1000;
-        $result = $this->applicator->apply([], $price, false);
+        $result = $this->applicator->apply($product->reveal(), $price, false);
         $this->assertSame($price, $result);
     }
 
@@ -51,6 +58,9 @@ final class RuntimePromotionsApplicatorTest extends TestCase
      */
     public function it_applies_catalog_promotions(): void
     {
+        $product = $this->prophesize(ProductInterface::class);
+        $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1']);
+
         $promotion = $this->prophesize(CatalogPromotionInterface::class);
         $promotion->getMultiplier()->willReturn(0.9);
         $promotion->isManuallyDiscountedProductsExcluded()->willReturn(false);
@@ -60,7 +70,7 @@ final class RuntimePromotionsApplicatorTest extends TestCase
         $this->runtimeChecker->isEligible($promotion->reveal())->willReturn(true);
 
         $price = 1000;
-        $result = $this->applicator->apply(['PROMO1'], $price, false);
+        $result = $this->applicator->apply($product->reveal(), $price, false);
         $this->assertSame(900, $result);
     }
 
@@ -69,6 +79,9 @@ final class RuntimePromotionsApplicatorTest extends TestCase
      */
     public function it_applies_with_exclusive_catalog_promotion(): void
     {
+        $product = $this->prophesize(ProductInterface::class);
+        $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1', 'PROMO2', 'PROMO3']);
+
         $promotion1 = $this->prophesize(CatalogPromotionInterface::class);
         $promotion1->getMultiplier()->willReturn(0.8);
         $promotion1->isManuallyDiscountedProductsExcluded()->willReturn(false);
@@ -94,7 +107,7 @@ final class RuntimePromotionsApplicatorTest extends TestCase
         $this->runtimeChecker->isEligible($promotion3->reveal())->willReturn(true);
 
         $price = 1000;
-        $result = $this->applicator->apply(['PROMO1', 'PROMO2', 'PROMO3'], $price, false);
+        $result = $this->applicator->apply($product->reveal(), $price, false);
         $this->assertSame(850, $result);
     }
 
@@ -103,6 +116,9 @@ final class RuntimePromotionsApplicatorTest extends TestCase
      */
     public function it_applies_with_manually_discounted_exclusion(): void
     {
+        $product = $this->prophesize(ProductInterface::class);
+        $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1']);
+
         $promotion = $this->prophesize(CatalogPromotionInterface::class);
         $promotion->getMultiplier()->willReturn(0.9);
         $promotion->isManuallyDiscountedProductsExcluded()->willReturn(true);
@@ -111,7 +127,7 @@ final class RuntimePromotionsApplicatorTest extends TestCase
         $this->runtimeChecker->isEligible($promotion->reveal())->willReturn(true);
 
         $price = 1000;
-        $result = $this->applicator->apply(['PROMO1'], $price, true);
+        $result = $this->applicator->apply($product->reveal(), $price, true);
         $this->assertSame($price, $result);
     }
 }

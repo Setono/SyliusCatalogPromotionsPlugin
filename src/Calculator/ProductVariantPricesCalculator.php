@@ -50,7 +50,7 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
         }
 
         return max($prices['minimumPrice'], $this->runtimePromotionsApplicator->apply(
-            $product->getPreQualifiedCatalogPromotions(),
+            $product,
             $prices['price'],
             $prices['price'] < $prices['originalPrice'],
         ));
