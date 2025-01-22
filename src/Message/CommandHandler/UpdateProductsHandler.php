@@ -19,6 +19,13 @@ final class UpdateProductsHandler
 {
     use ORMTrait;
 
+    /**
+     * A cache of catalog promotions telling if the code (the key of the array) exists (the value)
+     *
+     * @var array<string, bool>
+     */
+    private array $catalogPromotions = [];
+
     public function __construct(
         private readonly ProductDataProviderInterface $productDataProvider,
         private readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
@@ -43,10 +50,13 @@ final class UpdateProductsHandler
 
             $i = 0;
             foreach ($this->productDataProvider->getProducts($message->productIds) as $product) {
-                // Remove the catalog promotions we are processing from the pre-qualified catalog promotions
+                // Remove the catalog promotions
+                // - we are processing and
+                // - the ones that doesn't exist anymore
+                // from the pre-qualified catalog promotions before we start the actual processing
                 $preQualifiedCatalogPromotions = array_filter(
                     $product->getPreQualifiedCatalogPromotions(),
-                    static fn (string $code) => !in_array($code, $message->catalogPromotions, true),
+                    fn (string $code) => !in_array($code, $message->catalogPromotions, true) && $this->catalogPromotionExists($code),
                 );
 
                 foreach ($catalogPromotions as $catalogPromotion) {
@@ -80,5 +90,14 @@ final class UpdateProductsHandler
         }
 
         return $catalogPromotionUpdate;
+    }
+
+    private function catalogPromotionExists(string $code): bool
+    {
+        if (!array_key_exists($code, $this->catalogPromotions)) {
+            $this->catalogPromotions[$code] = null !== $this->catalogPromotionRepository->findOneBy(['code' => $code]);
+        }
+
+        return $this->catalogPromotions[$code];
     }
 }
