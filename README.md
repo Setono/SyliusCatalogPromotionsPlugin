@@ -78,6 +78,42 @@ php bin/console setono:sylius-catalog-promotion:process
 php bin/console setono:sylius-catalog-promotion:prune-catalog-promotion-updates
 ```
 
+## Apply catalog promotions outside request/response life cycle
+Most likely you need to apply catalog promotions outside a request/response lifecycle at some point. A good example could
+be the generation of product feeds. To do that you need to set the channel context to the respective channel you are processing.
+
+You do this using the `\Setono\SyliusCatalogPromotionPlugin\Context\StaticChannelContext`:
+
+```php
+<?php
+
+use Setono\SyliusCatalogPromotionPlugin\Context\StaticChannelContext;
+use Sylius\Component\Channel\Model\ChannelInterface;
+
+class YourFeedProcessor
+{
+    public function __construct(private readonly StaticChannelContext $staticChannelContext) {
+    
+    }
+    
+    public function process(): void
+    {
+        /**
+         * A list of channels you need to process
+         * 
+         * @var list<ChannelInterface> $channels 
+         */
+        $channels = [];
+        
+        foreach ($channels as $channel) {
+            $this->staticChannelContext->setChannel($channel);
+            
+            // do your processing...
+        }
+    }
+}
+```
+
 [ico-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/stable
 [ico-unstable-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/unstable
 [ico-license]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/license
