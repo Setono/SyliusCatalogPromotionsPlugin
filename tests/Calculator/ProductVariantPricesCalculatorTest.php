@@ -69,7 +69,7 @@ final class ProductVariantPricesCalculatorTest extends TestCase
         $productVariant->getProduct()->willReturn($product->reveal());
 
         $runtimePromotionsApplicator = $this->prophesize(RuntimePromotionsApplicatorInterface::class);
-        $runtimePromotionsApplicator->apply(['promo1', 'promo2'], 800, true)->willReturn(600);
+        $runtimePromotionsApplicator->apply($product->reveal(), 800, true)->willReturn(600);
 
         $calculator = new ProductVariantPricesCalculator($runtimePromotionsApplicator->reveal());
 
@@ -103,7 +103,7 @@ final class ProductVariantPricesCalculatorTest extends TestCase
         $productVariant->getProduct()->willReturn($product->reveal());
 
         $runtimePromotionsApplicator = $this->prophesize(RuntimePromotionsApplicatorInterface::class);
-        $runtimePromotionsApplicator->apply(['promo1'], 800, false)->willReturn(600);
+        $runtimePromotionsApplicator->apply($product->reveal(), 800, false)->willReturn(600);
 
         $calculator = new ProductVariantPricesCalculator($runtimePromotionsApplicator->reveal());
 
