@@ -93,4 +93,11 @@ interface CatalogPromotionUpdateInterface extends ResourceInterface, Timestampab
      * Returns true if the processed list of message ids is equal to the list of message ids
      */
     public function hasAllMessagesBeenProcessed(): bool;
+
+    /**
+     * The time the update either completed or failed
+     */
+    public function getFinishedAt(): ?\DateTimeImmutable;
+
+    public function setFinishedAt(\DateTimeImmutable $finishedAt): void;
 }

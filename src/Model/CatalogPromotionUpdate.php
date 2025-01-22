@@ -37,6 +37,8 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
     /** @var list<string> */
     protected ?array $processedMessageIds = null;
 
+    protected ?\DateTimeImmutable $finishedAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -191,5 +193,15 @@ class CatalogPromotionUpdate implements CatalogPromotionUpdateInterface
         }
 
         return [] === array_diff($this->messageIds, $this->processedMessageIds);
+    }
+
+    public function getFinishedAt(): ?\DateTimeImmutable
+    {
+        return $this->finishedAt;
+    }
+
+    public function setFinishedAt(\DateTimeImmutable $finishedAt): void
+    {
+        $this->finishedAt = $finishedAt;
     }
 }
