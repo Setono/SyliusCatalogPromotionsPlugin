@@ -114,6 +114,40 @@ class YourFeedProcessor
 }
 ```
 
+## Check if a product is on sale
+If you want to check if a product is on sale, e.g. if you want to have a `Sale` category on your store, we have included
+a `\Setono\SyliusCatalogPromotionPlugin\Checker\OnSale\OnSaleCheckerInterface` service that checks exactly that:
+
+```php
+<?php
+
+use Setono\SyliusCatalogPromotionPlugin\Checker\OnSale\OnSaleCheckerInterface;
+use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
+
+class YourFeedProcessor
+{
+    public function __construct(private readonly OnSaleCheckerInterface $onSaleChecker) {
+    
+    }
+    
+    public function process(): void
+    {
+        /**
+         * A list of products you are processing
+         * 
+         * @var list<ProductInterface> $products 
+         */
+        $products = [];
+        
+        foreach ($products as $product) {
+            if($this->onSaleChecker->onSale($product)) {
+                // the product is on sale
+            }
+        }
+    }
+}
+```
+
 [ico-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/stable
 [ico-unstable-version]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/v/unstable
 [ico-license]: https://poser.pugx.org/setono/sylius-catalog-promotion-plugin/license

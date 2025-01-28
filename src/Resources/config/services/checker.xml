@@ -68,5 +68,14 @@
         <service id="Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\EnabledRuntimeChecker">
             <tag name="setono_sylius_catalog_promotion.runtime_checker"/>
         </service>
+
+        <!-- On sale checker -->
+        <service id="Setono\SyliusCatalogPromotionPlugin\Checker\OnSale\OnSaleCheckerInterface"
+                 alias="Setono\SyliusCatalogPromotionPlugin\Checker\OnSale\OnSaleChecker"/>
+
+        <service id="Setono\SyliusCatalogPromotionPlugin\Checker\OnSale\OnSaleChecker">
+            <argument type="service" id="sylius.context.channel"/>
+            <argument type="service" id="Setono\SyliusCatalogPromotionPlugin\Applicator\RuntimePromotionsApplicatorInterface"/>
+        </service>
     </services>
 </container>
