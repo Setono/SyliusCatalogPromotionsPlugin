@@ -77,6 +77,11 @@ final class UpdateProductsHandler
         } finally {
             $tries = 0;
 
+            $manager = $this->getManager($this->catalogPromotionUpdateClass);
+            if (null !== $error && !$manager->isOpen()) {
+                throw $error;
+            }
+
             start:
             $tries++;
             $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
@@ -89,7 +94,7 @@ final class UpdateProductsHandler
             }
 
             try {
-                $this->getManager($this->catalogPromotionUpdateClass)->flush();
+                $manager->flush();
             } catch (OptimisticLockException $e) {
                 $backOff = new FibonacciBackOffStrategy(1_000_000, 10, 10_000_000);
                 $backOff->backOff($tries, $e);
