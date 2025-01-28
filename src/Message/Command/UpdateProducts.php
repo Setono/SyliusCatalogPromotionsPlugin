@@ -24,7 +24,7 @@ final class UpdateProducts implements AsyncCommandInterface
         public readonly array $catalogPromotions,
     ) {
         $this->catalogPromotionUpdate = (int) $catalogPromotionUpdate->getId();
-        $this->messageId = (string) Uuid::v7();
+        $this->messageId = (string) Uuid::v4();
         $catalogPromotionUpdate->addMessageId($this->messageId);
     }
 }
