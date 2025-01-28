@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler;
 
+use Doctrine\ORM\Exception\EntityManagerClosed;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
 use EventSauce\BackOff\FibonacciBackOffStrategy;
@@ -75,6 +76,15 @@ final class UpdateProductsHandler
         } catch (\Throwable $e) {
             $error = $e;
         } finally {
+            $manager = $this->getManager($this->catalogPromotionUpdateClass);
+            if (!$manager->isOpen()) {
+                if (null !== $error) {
+                    throw $error;
+                }
+
+                throw EntityManagerClosed::create();
+            }
+
             $tries = 0;
 
             start:
