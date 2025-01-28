@@ -224,7 +224,7 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                             'type' => 'twig',
                             'label' => 'sylius.ui.channels',
                             'options' => [
-                                'template' => '@SyliusAdmin/Grid/Field/_channels.html.twig',
+                                'template' => '@SetonoSyliusCatalogPromotionPlugin/admin/grid/field/_channels.html.twig',
                             ],
                         ],
                         'enabled' => [
