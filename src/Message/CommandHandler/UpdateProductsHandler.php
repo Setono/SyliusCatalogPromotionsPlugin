@@ -77,6 +77,8 @@ final class UpdateProductsHandler
             $error = $e;
         } finally {
             $manager = $this->getManager($this->catalogPromotionUpdateClass);
+
+            // If the entity manager isn't open it means we encountered some kind of ORM exception before
             if (!$manager->isOpen()) {
                 if (null !== $error) {
                     throw $error;
@@ -99,7 +101,7 @@ final class UpdateProductsHandler
             }
 
             try {
-                $this->getManager($this->catalogPromotionUpdateClass)->flush();
+                $manager->flush();
             } catch (OptimisticLockException $e) {
                 $backOff = new FibonacciBackOffStrategy(1_000_000, 10, 10_000_000);
                 $backOff->backOff($tries, $e);
