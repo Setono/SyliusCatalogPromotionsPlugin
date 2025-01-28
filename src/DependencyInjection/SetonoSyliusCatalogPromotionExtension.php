@@ -41,7 +41,9 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
             'messenger' => [
                 'buses' => [
                     'setono_sylius_catalog_promotion.command_bus' => [
-                        'middleware' => null,
+                        'middleware' => [
+                            'doctrine_ping_connection',
+                        ],
                     ],
                 ],
             ],
