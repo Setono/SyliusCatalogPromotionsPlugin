@@ -15,6 +15,7 @@
         "doctrine/collections": "^1.8",
         "doctrine/orm": "^2.10",
         "doctrine/persistence": "^2.5 || ^3.4",
+        "eventsauce/backoff": "^1.2",
         "knplabs/knp-menu": "^3.0",
         "ocramius/doctrine-batch-utils": "^2.4",
         "psr/clock": "^1.0",

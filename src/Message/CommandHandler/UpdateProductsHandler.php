@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Message\CommandHandler;
 
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use EventSauce\BackOff\FibonacciBackOffStrategy;
 use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\PreQualificationCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface;
@@ -45,10 +47,12 @@ final class UpdateProductsHandler
             return;
         }
 
+        $productsUpdated = 0;
+        $error = null;
+
         try {
             $catalogPromotions = $this->catalogPromotionRepository->findForProcessing($message->catalogPromotions);
 
-            $i = 0;
             foreach ($this->productDataProvider->getProducts($message->productIds) as $product) {
                 // Remove the catalog promotions
                 // - we are processing and
@@ -66,28 +70,47 @@ final class UpdateProductsHandler
                 }
 
                 $product->setPreQualifiedCatalogPromotions($preQualifiedCatalogPromotions);
-                ++$i;
+                ++$productsUpdated;
+            }
+        } catch (\Throwable $e) {
+            $error = $e;
+        } finally {
+            $tries = 0;
+
+            start:
+            $tries++;
+            $catalogPromotionUpdate = $this->getCatalogPromotionUpdate($message->catalogPromotionUpdate);
+            $catalogPromotionUpdate->incrementProductsUpdated($productsUpdated);
+            $catalogPromotionUpdate->addProcessedMessageId($message->messageId);
+
+            if (null !== $error) {
+                $this->catalogPromotionUpdateWorkflow->apply($catalogPromotionUpdate, CatalogPromotionUpdateWorkflow::TRANSITION_FAIL);
+                $catalogPromotionUpdate->setError($error->getMessage());
             }
 
-            $catalogPromotionUpdate->incrementProductsUpdated($i);
-            $catalogPromotionUpdate->addProcessedMessageId($message->messageId);
-        } catch (\Throwable $e) {
-            $this->catalogPromotionUpdateWorkflow->apply($catalogPromotionUpdate, CatalogPromotionUpdateWorkflow::TRANSITION_FAIL);
-            $catalogPromotionUpdate->setError($e->getMessage());
+            try {
+                $this->getManager($this->catalogPromotionUpdateClass)->flush();
+            } catch (OptimisticLockException $e) {
+                $backOff = new FibonacciBackOffStrategy(1_000_000, 10, 10_000_000);
+                $backOff->backOff($tries, $e);
+                goto start;
+            }
 
-            throw $e;
-        } finally {
-            // todo catch optimistic lock exception
-            $this->getManager($this->catalogPromotionUpdateClass)->flush();
+            if (null !== $error) {
+                throw $error;
+            }
         }
     }
 
     private function getCatalogPromotionUpdate(int $id): CatalogPromotionUpdateInterface
     {
         $catalogPromotionUpdate = $this->getManager($this->catalogPromotionUpdateClass)->find($this->catalogPromotionUpdateClass, $id);
+
         if (null === $catalogPromotionUpdate) {
             throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s not found', $id));
         }
+
+        $this->getManager($this->catalogPromotionUpdateClass)->refresh($catalogPromotionUpdate);
 
         return $catalogPromotionUpdate;
     }
