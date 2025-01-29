@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusCatalogPromotionPlugin\Applicator;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\Event\CatalogPromotionAppliedEvent;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
@@ -13,6 +15,8 @@ use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInt
 
 final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorInterface
 {
+    use ORMTrait;
+
     /** @var array<string, float> */
     private array $multiplierCache = [];
 
@@ -20,11 +24,14 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
     private array $catalogPromotionCache = [];
 
     public function __construct(
-        private readonly CatalogPromotionRepositoryInterface $catalogPromotionRepository,
+        ManagerRegistry $managerRegistry,
         private readonly RuntimeCheckerInterface $runtimeChecker,
         // todo make this optional to speed up the application process
         private readonly EventDispatcherInterface $eventDispatcher,
+        /** @var class-string<CatalogPromotionInterface> $catalogPromotionClass */
+        private readonly string $catalogPromotionClass,
     ) {
+        $this->managerRegistry = $managerRegistry;
     }
 
     public function apply(ProductInterface $product, int $price, bool $manuallyDiscounted): int
@@ -74,9 +81,7 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
         $eligibleExclusivePromotions = [];
 
         foreach ($catalogPromotions as $catalogPromotion) {
-            if (!array_key_exists($catalogPromotion, $this->catalogPromotionCache)) {
-                $this->catalogPromotionCache[$catalogPromotion] = $this->catalogPromotionRepository->findOneByCode($catalogPromotion);
-            }
+            $this->ensureCatalogPromotionCache($catalogPromotion);
 
             if (null === $this->catalogPromotionCache[$catalogPromotion]) {
                 continue;
@@ -103,5 +108,21 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
         } else {
             yield from $eligiblePromotions;
         }
+    }
+
+    private function ensureCatalogPromotionCache(string $catalogPromotion): void
+    {
+        if (array_key_exists($catalogPromotion, $this->catalogPromotionCache)) {
+            if (null === $this->catalogPromotionCache[$catalogPromotion]) {
+                return;
+            }
+
+            // If the entity is still managed, we don't need to do anything
+            if ($this->getManager($this->catalogPromotionClass)->contains($this->catalogPromotionCache[$catalogPromotion])) {
+                return;
+            }
+        }
+
+        $this->catalogPromotionCache[$catalogPromotion] = $this->getRepository($this->catalogPromotionClass, CatalogPromotionRepositoryInterface::class)->findOneByCode($catalogPromotion);
     }
 }
