@@ -8,7 +8,8 @@ setono_sylius_catalog_promotion:
             enabled: Enabled
             ends_at: Ends at
             exclusive: Exclusive
-            manually_discounted_products_excluded: Manually discounted products excluded
+            manually_discounted_products_excluded: Exclude manually discounted products
+            using_original_price_as_base: Use original price as base
             name: Name
             priority: Priority
             rules: Rules
@@ -50,6 +51,11 @@ setono_sylius_catalog_promotion:
         no_error: No error
         no_start_date: No start date
         pending: Pending
+        using_original_price_as_base_information: |
+            When calculating discounts, the discount is based on the existing price by default, however, you can choose to use the original price instead. For example, if a product is on sale for $80 (original price: $100) and a 30% discount is applied:<br><br>
+            - Using the price as base (default): $80 - 30% = $56<br>
+            - Using the original price as the base: $100 - 30% = $70.<br><br>
+            <strong>NOTICE</strong> that if you check the "Use original price as base" all other catalog promotions applied to a product will also use the original price.
         processing: Processing
         products_updated: Products updated
         products_updated_less_than_estimated: The number of products updated is less than the estimated number of products to update. This may be due to the fact that some products were filtered/edited/removed after the initial processing started.

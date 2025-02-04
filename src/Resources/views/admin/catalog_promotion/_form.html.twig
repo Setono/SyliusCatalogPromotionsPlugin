@@ -1,3 +1,4 @@
+{# @var resource \Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface #}
 <div class="ui two column stackable grid">
     <div class="column">
         {{ form_errors(form) }}
@@ -15,6 +16,15 @@
                 {{ form_row(form.priority) }}
                 {{ form_row(form.exclusive) }}
                 {{ form_row(form.manuallyDiscountedProductsExcluded) }}
+                <div id="using-original-price-as-base-row" style="{{ resource.manuallyDiscountedProductsExcluded ? 'display: none' : '' }}">
+                    <div class="ui icon info message">
+                        <i class="info icon"></i>
+                        <div class="content">
+                            {{ 'setono_sylius_catalog_promotion.ui.using_original_price_as_base_information'|trans|raw }}
+                        </div>
+                    </div>
+                    {{ form_row(form.usingOriginalPriceAsBase) }}
+                </div>
             </div>
             <div class="column">
                 {{ form_row(form.channels) }}

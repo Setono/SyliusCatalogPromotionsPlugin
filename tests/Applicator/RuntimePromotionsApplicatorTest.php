@@ -62,7 +62,7 @@ final class RuntimePromotionsApplicatorTest extends TestCase
         $this->catalogPromotionRepository->findOneByCode(Argument::any())->shouldNotBeCalled();
 
         $price = 1000;
-        $result = $this->applicator->apply($product->reveal(), $price, false);
+        $result = $this->applicator->apply($product->reveal(), $price);
         $this->assertSame($price, $result);
     }
 
@@ -74,16 +74,13 @@ final class RuntimePromotionsApplicatorTest extends TestCase
         $product = $this->prophesize(ProductInterface::class);
         $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1']);
 
-        $catalogPromotion = $this->prophesize(CatalogPromotionInterface::class);
-        $catalogPromotion->getMultiplier()->willReturn(0.9);
-        $catalogPromotion->isManuallyDiscountedProductsExcluded()->willReturn(false);
-        $catalogPromotion->isExclusive()->willReturn(false);
+        $catalogPromotion = self::createCatalogPromotion(0.1, false);
 
-        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($catalogPromotion->reveal());
-        $this->runtimeChecker->isEligible($catalogPromotion->reveal())->willReturn(true);
+        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($catalogPromotion);
+        $this->runtimeChecker->isEligible($catalogPromotion)->willReturn(true);
 
         $price = 1000;
-        $result = $this->applicator->apply($product->reveal(), $price, false);
+        $result = $this->applicator->apply($product->reveal(), $price);
         $this->assertSame(900, $result);
     }
 
@@ -95,52 +92,82 @@ final class RuntimePromotionsApplicatorTest extends TestCase
         $product = $this->prophesize(ProductInterface::class);
         $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1', 'PROMO2', 'PROMO3']);
 
-        $catalogPromotion1 = $this->prophesize(CatalogPromotionInterface::class);
-        $catalogPromotion1->getMultiplier()->willReturn(0.8);
-        $catalogPromotion1->isManuallyDiscountedProductsExcluded()->willReturn(false);
-        $catalogPromotion1->isExclusive()->willReturn(true);
-        $catalogPromotion1->getPriority()->willReturn(1);
+        $catalogPromotion1 = self::createCatalogPromotion(0.2, false, true, 1);
+        $catalogPromotion2 = self::createCatalogPromotion(0.15, false, true, 2);
+        $catalogPromotion3 = self::createCatalogPromotion(0.1, false, true);
 
-        $catalogPromotion2 = $this->prophesize(CatalogPromotionInterface::class);
-        $catalogPromotion2->getMultiplier()->willReturn(0.85);
-        $catalogPromotion2->isManuallyDiscountedProductsExcluded()->willReturn(false);
-        $catalogPromotion2->isExclusive()->willReturn(true);
-        $catalogPromotion2->getPriority()->willReturn(2);
-
-        $catalogPromotion3 = $this->prophesize(CatalogPromotionInterface::class);
-        $catalogPromotion3->getMultiplier()->willReturn(0.9);
-        $catalogPromotion3->isManuallyDiscountedProductsExcluded()->willReturn(false);
-        $catalogPromotion3->isExclusive()->willReturn(false);
-
-        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($catalogPromotion1->reveal());
-        $this->catalogPromotionRepository->findOneByCode('PROMO2')->willReturn($catalogPromotion2->reveal());
-        $this->catalogPromotionRepository->findOneByCode('PROMO3')->willReturn($catalogPromotion3->reveal());
-        $this->runtimeChecker->isEligible($catalogPromotion1->reveal())->willReturn(true);
-        $this->runtimeChecker->isEligible($catalogPromotion2->reveal())->willReturn(true);
-        $this->runtimeChecker->isEligible($catalogPromotion3->reveal())->willReturn(true);
+        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($catalogPromotion1);
+        $this->catalogPromotionRepository->findOneByCode('PROMO2')->willReturn($catalogPromotion2);
+        $this->catalogPromotionRepository->findOneByCode('PROMO3')->willReturn($catalogPromotion3);
+        $this->runtimeChecker->isEligible($catalogPromotion1)->willReturn(true);
+        $this->runtimeChecker->isEligible($catalogPromotion2)->willReturn(true);
+        $this->runtimeChecker->isEligible($catalogPromotion3)->willReturn(true);
 
         $price = 1000;
-        $result = $this->applicator->apply($product->reveal(), $price, false);
+        $result = $this->applicator->apply($product->reveal(), $price);
         $this->assertSame(850, $result);
     }
 
     /**
      * @test
      */
-    public function it_applies_with_manually_discounted_exclusion(): void
+    public function it_applies_when_using_original_price_as_base_price(): void
+    {
+        $product = $this->prophesize(ProductInterface::class);
+        $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1', 'PROMO2', 'PROMO3']);
+
+        $catalogPromotion1 = self::createCatalogPromotion(0.2, false);
+        $catalogPromotion2 = self::createCatalogPromotion(0.15, false, false, null, true);
+        $catalogPromotion3 = self::createCatalogPromotion(0.1, false);
+
+        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($catalogPromotion1);
+        $this->catalogPromotionRepository->findOneByCode('PROMO2')->willReturn($catalogPromotion2);
+        $this->catalogPromotionRepository->findOneByCode('PROMO3')->willReturn($catalogPromotion3);
+        $this->runtimeChecker->isEligible($catalogPromotion1)->willReturn(true);
+        $this->runtimeChecker->isEligible($catalogPromotion2)->willReturn(true);
+        $this->runtimeChecker->isEligible($catalogPromotion3)->willReturn(true);
+
+        $price = 1000;
+        $result = $this->applicator->apply($product->reveal(), $price, 2000);
+        $this->assertSame(1224, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_apply_with_manually_discounted_exclusion(): void
     {
         $product = $this->prophesize(ProductInterface::class);
         $product->getPreQualifiedCatalogPromotions()->willReturn(['PROMO1']);
 
-        $promotion = $this->prophesize(CatalogPromotionInterface::class);
-        $promotion->getMultiplier()->willReturn(0.9);
-        $promotion->isManuallyDiscountedProductsExcluded()->willReturn(true);
+        $catalogPromotion = self::createCatalogPromotion(0.1, true);
 
-        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($promotion->reveal());
-        $this->runtimeChecker->isEligible($promotion->reveal())->willReturn(true);
+        $this->catalogPromotionRepository->findOneByCode('PROMO1')->willReturn($catalogPromotion);
+        $this->runtimeChecker->isEligible($catalogPromotion)->willReturn(true);
 
         $price = 1000;
-        $result = $this->applicator->apply($product->reveal(), $price, true);
+        $result = $this->applicator->apply($product->reveal(), $price, 1100);
         $this->assertSame($price, $result);
+    }
+
+    private static function createCatalogPromotion(
+        float $discount,
+        bool $manuallyDiscountedProductsExcluded,
+        bool $exclusive = false,
+        ?int $priority = null,
+        bool $usingOriginalPriceAsBasePrice = false,
+    ): CatalogPromotionInterface {
+        $catalogPromotion = new CatalogPromotion();
+        $catalogPromotion->setDiscount($discount);
+        $catalogPromotion->setManuallyDiscountedProductsExcluded($manuallyDiscountedProductsExcluded);
+        $catalogPromotion->setExclusive($exclusive);
+
+        if (null !== $priority) {
+            $catalogPromotion->setPriority($priority);
+        }
+
+        $catalogPromotion->setUsingOriginalPriceAsBase($usingOriginalPriceAsBasePrice);
+
+        return $catalogPromotion;
     }
 }

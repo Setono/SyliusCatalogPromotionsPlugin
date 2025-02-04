@@ -1,0 +1,13 @@
+<script>
+    (function ($) {
+        $('#rules a[data-form-collection="add"]').on('click', function () {
+            setTimeout(function () {
+                $('select[name^="setono_sylius_catalog_promotion__catalog_promotion[rules]"][name$="[type]"]').last().change();
+            }, 50);
+        });
+
+        $('#setono_sylius_catalog_promotion__catalog_promotion_manuallyDiscountedProductsExcluded').on('change', function () {
+            $('#using-original-price-as-base-row').toggle(!$(this).is(':checked'));
+        });
+    })(jQuery);
+</script>

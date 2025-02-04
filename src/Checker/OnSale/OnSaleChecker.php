@@ -56,8 +56,10 @@ final class OnSaleChecker implements OnSaleCheckerInterface
         $product = $variant->getProduct();
         Assert::isInstanceOf($product, ProductInterface::class);
 
-        $appliedPrice = $this->runtimePromotionsApplicator->apply($product, (int) $channelPricing->getPrice(), false);
+        $price = (int) $channelPricing->getPrice();
 
-        return $appliedPrice < $channelPricing->getPrice();
+        $appliedPrice = $this->runtimePromotionsApplicator->apply($product, $price, $channelPricing->getOriginalPrice());
+
+        return $appliedPrice < $price;
     }
 }

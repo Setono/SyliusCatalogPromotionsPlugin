@@ -34,6 +34,8 @@ class CatalogPromotion implements CatalogPromotionInterface
 
     protected bool $manuallyDiscountedProductsExcluded = true;
 
+    protected bool $usingOriginalPriceAsBase = false;
+
     protected ?DateTimeInterface $startsAt = null;
 
     protected ?DateTimeInterface $endsAt = null;
@@ -62,11 +64,6 @@ class CatalogPromotion implements CatalogPromotionInterface
     public function __toString(): string
     {
         return (string) ($this->getName() ?? $this->getCode() ?? $this->getId());
-    }
-
-    public function getMultiplier(): float
-    {
-        return 1 - $this->getDiscount();
     }
 
     public function getId(): ?int
@@ -132,6 +129,16 @@ class CatalogPromotion implements CatalogPromotionInterface
     public function setManuallyDiscountedProductsExcluded(bool $manuallyDiscountedProductsExcluded): void
     {
         $this->manuallyDiscountedProductsExcluded = $manuallyDiscountedProductsExcluded;
+    }
+
+    public function isUsingOriginalPriceAsBase(): bool
+    {
+        return $this->usingOriginalPriceAsBase;
+    }
+
+    public function setUsingOriginalPriceAsBase(bool $usingOriginalPriceAsBase): void
+    {
+        $this->usingOriginalPriceAsBase = $usingOriginalPriceAsBase;
     }
 
     public function getStartsAt(): ?DateTimeInterface
