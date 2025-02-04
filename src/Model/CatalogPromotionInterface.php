@@ -15,8 +15,6 @@ interface CatalogPromotionInterface extends ChannelsAwareInterface, CodeAwareInt
 {
     public function getId(): ?int;
 
-    public function getMultiplier(): float;
-
     public function getName(): ?string;
 
     public function setName(?string $name): void;
@@ -39,6 +37,10 @@ interface CatalogPromotionInterface extends ChannelsAwareInterface, CodeAwareInt
     public function isManuallyDiscountedProductsExcluded(): bool;
 
     public function setManuallyDiscountedProductsExcluded(bool $manuallyDiscountedProductsExcluded): void;
+
+    public function isUsingOriginalPriceAsBase(): bool;
+
+    public function setUsingOriginalPriceAsBase(bool $usingOriginalPriceAsBase): void;
 
     public function getStartsAt(): ?DateTimeInterface;
 

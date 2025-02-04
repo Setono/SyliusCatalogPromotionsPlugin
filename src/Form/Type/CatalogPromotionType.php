@@ -46,6 +46,10 @@ final class CatalogPromotionType extends AbstractResourceType
                 'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.manually_discounted_products_excluded',
                 'required' => false,
             ])
+            ->add('usingOriginalPriceAsBase', CheckboxType::class, [
+                'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.using_original_price_as_base',
+                'required' => false,
+            ])
             ->add('startsAt', DateTimeType::class, [
                 'label' => 'setono_sylius_catalog_promotion.form.catalog_promotion.starts_at',
                 'date_widget' => 'single_text',

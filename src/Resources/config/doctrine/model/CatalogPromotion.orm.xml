@@ -19,6 +19,7 @@
         </field>
         <field name="exclusive" type="boolean"/>
         <field name="manuallyDiscountedProductsExcluded" type="boolean"/>
+        <field name="usingOriginalPriceAsBase" type="boolean"/>
         <field name="startsAt" column="starts_at" type="datetime" nullable="true"/>
         <field name="endsAt" column="ends_at" type="datetime" nullable="true"/>
         <field name="enabled" type="boolean"/>

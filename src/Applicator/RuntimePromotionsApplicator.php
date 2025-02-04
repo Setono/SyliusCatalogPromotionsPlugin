@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\Checker\Runtime\RuntimeCheckerInterface;
-use Setono\SyliusCatalogPromotionPlugin\Event\CatalogPromotionAppliedEvent;
+use Setono\SyliusCatalogPromotionPlugin\Event\CatalogPromotionsAppliedEvent;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\ProductInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
@@ -16,9 +16,6 @@ use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInt
 final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorInterface
 {
     use ORMTrait;
-
-    /** @var array<string, float> */
-    private array $multiplierCache = [];
 
     /** @var array<string, CatalogPromotionInterface|null> */
     private array $catalogPromotionCache = [];
@@ -34,95 +31,88 @@ final class RuntimePromotionsApplicator implements RuntimePromotionsApplicatorIn
         $this->managerRegistry = $managerRegistry;
     }
 
-    public function apply(ProductInterface $product, int $price, bool $manuallyDiscounted): int
+    public function apply(ProductInterface $product, int $price, int $originalPrice = null): int
     {
+        $originalPrice = $originalPrice ?? $price;
+        $manuallyDiscounted = $price < $originalPrice;
+
         $catalogPromotions = $product->getPreQualifiedCatalogPromotions();
 
         if ([] === $catalogPromotions) {
             return $price;
         }
 
-        $appliedPrice = (int) floor($this->getMultiplier($catalogPromotions, $manuallyDiscounted) * $price);
-        if ($appliedPrice !== $price) {
-            $this->eventDispatcher->dispatch(new CatalogPromotionAppliedEvent($product));
-        }
+        $catalogPromotions = $this->provideEligibleCatalogPromotions($catalogPromotions, $manuallyDiscounted);
+        foreach ($catalogPromotions as $catalogPromotion) {
+            if (!$catalogPromotion->isManuallyDiscountedProductsExcluded() && $catalogPromotion->isUsingOriginalPriceAsBase()) {
+                $price = $originalPrice;
 
-        return $appliedPrice;
-    }
-
-    /**
-     * @param list<string> $catalogPromotions
-     */
-    private function getMultiplier(array $catalogPromotions, bool $manuallyDiscounted): float
-    {
-        $cacheKey = sprintf('%s%d', implode($catalogPromotions), (int) $manuallyDiscounted);
-
-        if (!isset($this->multiplierCache[$cacheKey])) {
-            $multiplier = 1.0;
-
-            foreach ($this->getEligibleCatalogPromotions($catalogPromotions, $manuallyDiscounted) as $catalogPromotion) {
-                $multiplier *= $catalogPromotion->getMultiplier();
+                break;
             }
-
-            $this->multiplierCache[$cacheKey] = $multiplier;
         }
 
-        return $this->multiplierCache[$cacheKey];
+        $multiplier = 1.0;
+
+        $appliedCatalogPromotions = [];
+        foreach ($catalogPromotions as $catalogPromotion) {
+            $multiplier *= 1 - $catalogPromotion->getDiscount();
+
+            $appliedCatalogPromotions[] = $catalogPromotion;
+        }
+
+        if ([] !== $appliedCatalogPromotions) {
+            $this->eventDispatcher->dispatch(new CatalogPromotionsAppliedEvent($product, $appliedCatalogPromotions));
+        }
+
+        return (int) floor($price * $multiplier);
     }
 
     /**
      * @param list<string> $catalogPromotions
      *
-     * @return \Generator<array-key, CatalogPromotionInterface>
+     * @return list<CatalogPromotionInterface>
      */
-    private function getEligibleCatalogPromotions(array $catalogPromotions, bool $manuallyDiscounted): \Generator
+    private function provideEligibleCatalogPromotions(array $catalogPromotions, bool $manuallyDiscounted): array
     {
         $eligiblePromotions = [];
         $eligibleExclusivePromotions = [];
 
         foreach ($catalogPromotions as $catalogPromotion) {
-            $this->ensureCatalogPromotionCache($catalogPromotion);
-
-            if (null === $this->catalogPromotionCache[$catalogPromotion]) {
+            $catalogPromotion = $this->cacheCatalogPromotion($catalogPromotion);
+            if (null === $catalogPromotion) {
                 continue;
             }
 
-            if ($manuallyDiscounted && $this->catalogPromotionCache[$catalogPromotion]->isManuallyDiscountedProductsExcluded()) {
+            if ($manuallyDiscounted && $catalogPromotion->isManuallyDiscountedProductsExcluded()) {
                 continue;
             }
 
-            if (!$this->runtimeChecker->isEligible($this->catalogPromotionCache[$catalogPromotion])) {
+            if (!$this->runtimeChecker->isEligible($catalogPromotion)) {
                 continue;
             }
 
-            $eligiblePromotions[] = $this->catalogPromotionCache[$catalogPromotion];
+            $eligiblePromotions[] = $catalogPromotion;
 
-            if ($this->catalogPromotionCache[$catalogPromotion]->isExclusive()) {
-                $eligibleExclusivePromotions[$this->catalogPromotionCache[$catalogPromotion]->getPriority()] = $this->catalogPromotionCache[$catalogPromotion];
+            if ($catalogPromotion->isExclusive()) {
+                $eligibleExclusivePromotions[$catalogPromotion->getPriority()] = $catalogPromotion;
             }
         }
 
         if ([] !== $eligibleExclusivePromotions) {
             krsort($eligibleExclusivePromotions, \SORT_NUMERIC);
-            yield reset($eligibleExclusivePromotions);
-        } else {
-            yield from $eligiblePromotions;
+
+            return [reset($eligibleExclusivePromotions)];
         }
+
+        return $eligiblePromotions;
     }
 
-    private function ensureCatalogPromotionCache(string $catalogPromotion): void
+    private function cacheCatalogPromotion(string $catalogPromotion): ?CatalogPromotionInterface
     {
-        if (array_key_exists($catalogPromotion, $this->catalogPromotionCache)) {
-            if (null === $this->catalogPromotionCache[$catalogPromotion]) {
-                return;
-            }
-
-            // If the entity is still managed, we don't need to do anything
-            if ($this->getManager($this->catalogPromotionClass)->contains($this->catalogPromotionCache[$catalogPromotion])) {
-                return;
-            }
+        if (!array_key_exists($catalogPromotion, $this->catalogPromotionCache) || (null !== $this->catalogPromotionCache[$catalogPromotion] && !$this->getManager($this->catalogPromotionClass)->contains($this->catalogPromotionCache[$catalogPromotion]))) {
+            $this->catalogPromotionCache[$catalogPromotion] = $this->getRepository($this->catalogPromotionClass, CatalogPromotionRepositoryInterface::class)->findOneByCode($catalogPromotion);
         }
 
-        $this->catalogPromotionCache[$catalogPromotion] = $this->getRepository($this->catalogPromotionClass, CatalogPromotionRepositoryInterface::class)->findOneByCode($catalogPromotion);
+        return $this->catalogPromotionCache[$catalogPromotion];
     }
 }
