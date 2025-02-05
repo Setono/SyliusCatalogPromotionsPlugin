@@ -27,12 +27,12 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
 
     public function calculate(ProductVariantInterface $productVariant, array $context): int
     {
-        $hash = spl_object_hash($productVariant);
-        if (!isset($this->computedPriceCache[$hash])) {
-            $this->computedPriceCache[$hash] = $this->getPrice($productVariant, $context);
+        $cacheKey = self::generateCacheKey($productVariant, $context);
+        if (!array_key_exists($cacheKey, $this->computedPriceCache)) {
+            $this->computedPriceCache[$cacheKey] = $this->getPrice($productVariant, $context);
         }
 
-        return $this->computedPriceCache[$hash];
+        return $this->computedPriceCache[$cacheKey];
     }
 
     public function calculateOriginal(ProductVariantInterface $productVariant, array $context): int
@@ -57,15 +57,14 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
     }
 
     /**
-     * @psalm-assert ChannelInterface $context['channel']
-     *
      * @return array{price: int, originalPrice: int, minimumPrice: int}
      */
     private function getPersistedPrices(ProductVariantInterface $productVariant, array $context): array
     {
-        $hash = spl_object_hash($productVariant);
+        $cacheKey = self::generateCacheKey($productVariant, $context);
 
-        if (!isset($this->persistedPricesCache[$hash])) {
+        if (!isset($this->persistedPricesCache[$cacheKey])) {
+            // todo remove these assertions when this issue is fixed: https://github.com/vimeo/psalm/issues/11248
             Assert::keyExists($context, 'channel');
             Assert::isInstanceOf($context['channel'], ChannelInterface::class);
 
@@ -80,14 +79,14 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
                 throw MissingChannelConfigurationException::createForProductVariantChannelPricing($productVariant, $context['channel']);
             }
 
-            $this->persistedPricesCache[$hash] = [
+            $this->persistedPricesCache[$cacheKey] = [
                 'price' => $price,
                 'originalPrice' => $channelPricing->getOriginalPrice() ?? $price,
                 'minimumPrice' => self::getMinimumPrice($channelPricing),
             ];
         }
 
-        return $this->persistedPricesCache[$hash];
+        return $this->persistedPricesCache[$cacheKey];
     }
 
     private static function getMinimumPrice(ChannelPricingInterface $channelPricing): int
@@ -103,5 +102,16 @@ final class ProductVariantPricesCalculator implements ProductVariantPricesCalcul
         Assert::integer($minimumPrice);
 
         return $minimumPrice;
+    }
+
+    /**
+     * @psalm-assert ChannelInterface $context['channel']
+     */
+    private static function generateCacheKey(ProductVariantInterface $productVariant, array $context): string
+    {
+        Assert::keyExists($context, 'channel');
+        Assert::isInstanceOf($context['channel'], ChannelInterface::class);
+
+        return sprintf('%s%s', (string) $context['channel']->getCode(), (string) $productVariant->getCode());
     }
 }
