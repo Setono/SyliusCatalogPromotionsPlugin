@@ -60,6 +60,8 @@ final class OnSaleChecker implements OnSaleCheckerInterface
 
         $appliedPrice = $this->runtimePromotionsApplicator->apply($product, $price, $channelPricing->getOriginalPrice());
 
-        return $appliedPrice < $price;
+        $comparePrice = $channelPricing->getOriginalPrice() ?? $price;
+
+        return $appliedPrice < $comparePrice;
     }
 }
