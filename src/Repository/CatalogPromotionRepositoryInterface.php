@@ -16,5 +16,7 @@ interface CatalogPromotionRepositoryInterface extends RepositoryInterface
      */
     public function findForProcessing(array $catalogPromotions = []): array;
 
+    public function findOneForProcessing(string $code): ?CatalogPromotionInterface;
+
     public function findOneByCode(string $code): ?CatalogPromotionInterface;
 }
