@@ -12,6 +12,7 @@ use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\Checker\PreQualification\PreQualificationCheckerInterface;
 use Setono\SyliusCatalogPromotionPlugin\DataProvider\ProductDataProviderInterface;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\UpdateProducts;
+use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionInterface;
 use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 use Setono\SyliusCatalogPromotionPlugin\Workflow\CatalogPromotionUpdateWorkflow;
@@ -23,9 +24,9 @@ final class UpdateProductsHandler
     use ORMTrait;
 
     /**
-     * A cache of catalog promotions telling if the code (the key of the array) exists (the value)
+     * A cache of catalog promotions where the index is the code
      *
-     * @var array<string, bool>
+     * @var array<string, CatalogPromotionInterface|null>
      */
     private array $catalogPromotions = [];
 
@@ -52,19 +53,33 @@ final class UpdateProductsHandler
         $error = null;
 
         try {
-            $catalogPromotions = $this->catalogPromotionRepository->findForProcessing($message->catalogPromotions);
+            $initialProcessableCatalogPromotions = $this->catalogPromotionRepository->findForProcessing($message->catalogPromotions);
 
             foreach ($this->productDataProvider->getProducts($message->productIds) as $product) {
-                // Remove the catalog promotions
-                // - we are processing and
-                // - the ones that doesn't exist anymore
-                // from the pre-qualified catalog promotions before we start the actual processing
-                $preQualifiedCatalogPromotions = array_filter(
-                    $product->getPreQualifiedCatalogPromotions(),
-                    fn (string $code) => !in_array($code, $message->catalogPromotions, true) && $this->catalogPromotionExists($code),
-                );
+                $processableCatalogPromotions = $initialProcessableCatalogPromotions;
 
-                foreach ($catalogPromotions as $catalogPromotion) {
+                /**
+                 * This part of the code ensures that, while updating a specified set of catalog promotions,
+                 * we also update the catalog promotions that are already applied to the product.
+                 * While this behavior isn't strictly required as per the given task, it is implemented to achieve a
+                 * higher level of data consistency.
+                 */
+                if ([] !== $message->catalogPromotions) {
+                    $filteredPreQualifiedCatalogPromotions = array_filter(
+                        $product->getPreQualifiedCatalogPromotions(),
+                        static fn (string $code): bool => !in_array($code, $message->catalogPromotions, true),
+                    );
+
+                    foreach ($filteredPreQualifiedCatalogPromotions as $preQualifiedCatalogPromotion) {
+                        $catalogPromotion = $this->getCatalogPromotion($preQualifiedCatalogPromotion);
+                        if (null !== $catalogPromotion) {
+                            $processableCatalogPromotions[] = $catalogPromotion;
+                        }
+                    }
+                }
+
+                $preQualifiedCatalogPromotions = [];
+                foreach ($processableCatalogPromotions as $catalogPromotion) {
                     if ($this->preQualificationChecker->isPreQualified($product, $catalogPromotion)) {
                         $preQualifiedCatalogPromotions[] = (string) $catalogPromotion->getCode();
                     }
@@ -114,6 +129,15 @@ final class UpdateProductsHandler
         }
     }
 
+    private function getCatalogPromotion(string $code): ?CatalogPromotionInterface
+    {
+        if (!array_key_exists($code, $this->catalogPromotions)) {
+            $this->catalogPromotions[$code] = $this->catalogPromotionRepository->findOneForProcessing($code);
+        }
+
+        return $this->catalogPromotions[$code];
+    }
+
     private function getCatalogPromotionUpdate(int $id): CatalogPromotionUpdateInterface
     {
         $catalogPromotionUpdate = $this->getManager($this->catalogPromotionUpdateClass)->find($this->catalogPromotionUpdateClass, $id);
@@ -122,17 +146,9 @@ final class UpdateProductsHandler
             throw new UnrecoverableMessageHandlingException(sprintf('Catalog promotion update with id %s not found', $id));
         }
 
+        // Because the unit of work may have been cleared, we refresh the entity
         $this->getManager($this->catalogPromotionUpdateClass)->refresh($catalogPromotionUpdate);
 
         return $catalogPromotionUpdate;
-    }
-
-    private function catalogPromotionExists(string $code): bool
-    {
-        if (!array_key_exists($code, $this->catalogPromotions)) {
-            $this->catalogPromotions[$code] = null !== $this->catalogPromotionRepository->findOneBy(['code' => $code]);
-        }
-
-        return $this->catalogPromotions[$code];
     }
 }
