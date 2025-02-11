@@ -313,6 +313,16 @@ final class SetonoSyliusCatalogPromotionExtension extends AbstractResourceExtens
                                     ],
                                 ],
                             ],
+                            'update_all' => [
+                                'type' => 'default',
+                                'label' => 'setono_sylius_catalog_promotion.ui.update_all_catalog_promotions',
+                                'icon' => 'redo',
+                                'options' => [
+                                    'link' => [
+                                        'route' => 'setono_sylius_consent_management_admin_update_all_catalog',
+                                    ],
+                                ],
+                            ],
                             'create' => [
                                 'type' => 'create',
                             ],

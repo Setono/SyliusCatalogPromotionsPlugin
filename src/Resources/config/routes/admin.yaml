@@ -30,3 +30,9 @@ setono_sylius_catalog_promotion_admin_catalog_promotion:
                 templates:
                     form: "@SetonoSyliusCatalogPromotionPlugin/admin/catalog_promotion/_form.html.twig"
     type: sylius.resource
+
+setono_sylius_consent_management_admin_update_all_catalog:
+    path: /catalog-promotions/update-all
+    methods: GET
+    defaults:
+        _controller: Setono\SyliusCatalogPromotionPlugin\Controller\UpdateAllAction
