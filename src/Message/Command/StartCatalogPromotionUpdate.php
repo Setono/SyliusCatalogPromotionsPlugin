@@ -10,7 +10,7 @@ use Sylius\Component\Core\Model\ProductInterface;
 /**
  * This is the message you should dispatch when you want to update catalog promotions
  */
-final class StartCatalogPromotionUpdate
+final class StartCatalogPromotionUpdate implements AsyncCommandInterface
 {
     /**
      * A list of catalog promotion codes to process. If empty, all catalog promotions will be processed

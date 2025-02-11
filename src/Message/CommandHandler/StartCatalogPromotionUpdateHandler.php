@@ -9,7 +9,6 @@ use Setono\Doctrine\ORMTrait;
 use Setono\SyliusCatalogPromotionPlugin\Factory\CatalogPromotionUpdateFactoryInterface;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\ProcessCatalogPromotionUpdate;
 use Setono\SyliusCatalogPromotionPlugin\Message\Command\StartCatalogPromotionUpdate;
-use Setono\SyliusCatalogPromotionPlugin\Model\CatalogPromotionUpdateInterface;
 use Setono\SyliusCatalogPromotionPlugin\Repository\CatalogPromotionRepositoryInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -26,7 +25,7 @@ final class StartCatalogPromotionUpdateHandler
         $this->managerRegistry = $managerRegistry;
     }
 
-    public function __invoke(StartCatalogPromotionUpdate $message): CatalogPromotionUpdateInterface
+    public function __invoke(StartCatalogPromotionUpdate $message): void
     {
         $catalogPromotionUpdate = $this->catalogPromotionUpdateFactory->createFromMessage($message);
 
@@ -35,7 +34,5 @@ final class StartCatalogPromotionUpdateHandler
         $manager->flush();
 
         $this->commandBus->dispatch(new ProcessCatalogPromotionUpdate($catalogPromotionUpdate));
-
-        return $catalogPromotionUpdate;
     }
 }
