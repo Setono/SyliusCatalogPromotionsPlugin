@@ -92,7 +92,7 @@ final class UpdateProductSubscriber implements EventSubscriberInterface
             products: $this->products,
             triggeredBy: sprintf(
                 'The update/creation of the following products: "%s"',
-                implode('", "', array_map(static fn (ProductInterface $product): string => (string) ($product->getName() ?? $product->getCode()), $this->products)),
+                implode('", "', array_map(static fn (ProductInterface $product): string => (string) $product->getCode(), $this->products)),
             ),
         ));
 
