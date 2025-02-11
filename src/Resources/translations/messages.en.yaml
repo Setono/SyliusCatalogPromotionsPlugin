@@ -63,3 +63,4 @@ setono_sylius_catalog_promotion:
         triggered_by: Triggered by
         updated_at: Updated at
         name_or_code: Name or code
+        update_all_catalog_promotions: Update all

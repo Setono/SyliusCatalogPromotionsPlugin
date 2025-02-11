@@ -1,0 +1,2 @@
+setono_sylius_catalog_promotion:
+    update_all_success: An update of all catalog promotions was triggered.
